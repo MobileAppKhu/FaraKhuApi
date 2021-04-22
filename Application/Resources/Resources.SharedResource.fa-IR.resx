@@ -21,4 +21,7 @@
     <data name="UserNotFound" xml:space="preserve">
         <value>کاربر یافت نشد</value>
     </data>
+    <data name="DuplicateUser" xml:space="preserve">
+        <value>اطلاعات کاربر تکراری است</value>
+    </data>
 </root>

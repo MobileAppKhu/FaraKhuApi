@@ -3,6 +3,7 @@
     public enum ErrorType
     {
         FirstNameRequired,
-        LastNameRequired
+        LastNameRequired,
+        DuplicateUser
     }
 }

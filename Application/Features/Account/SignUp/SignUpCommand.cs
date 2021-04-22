@@ -1,8 +1,9 @@
 ﻿using Domain.Enum;
+using MediatR;
 
 namespace Application.Features.Account.SignUp
 {
-    public class SignUpCommand
+    public class SignUpCommand : IRequest<SignUpViewModel>
     {
         public string FirstName { get; set; }
         
