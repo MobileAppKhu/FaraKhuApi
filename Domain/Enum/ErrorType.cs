@@ -4,6 +4,7 @@
     {
         FirstNameRequired,
         LastNameRequired,
-        DuplicateUser
+        DuplicateUser,
+        Unexpected
     }
 }

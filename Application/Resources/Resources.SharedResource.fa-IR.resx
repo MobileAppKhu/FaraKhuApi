@@ -24,4 +24,7 @@
     <data name="DuplicateUser" xml:space="preserve">
         <value>اطلاعات کاربر تکراری است</value>
     </data>
+    <data name="Unexpected" xml:space="preserve">
+        <value>خطای غیر منتظره</value>
+    </data>
 </root>
