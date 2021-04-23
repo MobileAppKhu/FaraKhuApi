@@ -6,6 +6,8 @@ using Application;
 using Domain.BaseModels;
 using Infrastructure;
 using Infrastructure.Persistence;
+using Infrastructure.Policy;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -37,16 +39,16 @@ namespace WebApi
                 .AddUserManager<UserManager<BaseUser>>()
                 .AddDefaultTokenProviders();
             
-            /*services.Configure<IdentityOptions>(options =>
+            services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = false;
                 options.Password.RequiredLength = 8;
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
-            });*/
+            });
 
-            /*services.ConfigureApplicationCookie(options =>
+            services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.Name = "token";
                 options.Cookie.HttpOnly = false;
@@ -63,8 +65,18 @@ namespace WebApi
                     context.Response.StatusCode = StatusCodes.Status401Unauthorized;
                     return Task.CompletedTask;
                 };
-            });*/
-
+            });
+            services.AddAuthorization(option =>
+            {
+                option.DefaultPolicy = new AuthorizationPolicyBuilder()
+                    .AddRequirements(new AuthorizationRequirements(new List<string> {"Student", "Instructor"}))
+                    .Build();
+                option.AddPolicy("StudentPolicy", policy =>
+                    policy.AddRequirements(new AuthorizationRequirements(new List<string> {"Student"})));
+                option.AddPolicy("InstructorPolicy", policy =>
+                    policy.AddRequirements(new AuthorizationRequirements(new List<string> {"Instructor"})));
+                
+            });
             services.AddControllers();
         }
 
