@@ -31,7 +31,6 @@
       <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
       <PackageReference Include="Microsoft.AspNetCore.Localization" Version="2.2.0" />
       <PackageReference Include="Microsoft.Extensions.Localization" Version="5.0.5" />
-      <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="5.0.5" />
     </ItemGroup>
 
 </Project>

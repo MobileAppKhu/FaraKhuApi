@@ -2,11 +2,12 @@
 using Application.DTOs.BaseUser;
 using Application.DTOs.Instructor;
 using Application.DTOs.Student;
+using Domain.BaseModels;
 
 namespace Application.Features.Account.SignUp
 {
     public class SignUpViewModel
     {
-        public IQueryable<BaseUserProfileDto> ProfileDto { get; set; }
+        public BaseUserProfileDto ProfileDto { get; set; }
     }
 }

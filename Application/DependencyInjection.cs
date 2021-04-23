@@ -1,12 +1,12 @@
 ﻿using System.Globalization;
 using System.Reflection;
+using Application.Common.Mappings;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
+using Microsoft.AspNetCore.Localization;
 namespace Application
 {
     public static class DependencyInjection
@@ -14,7 +14,7 @@ namespace Application
         public static IServiceCollection AddApplication(this IServiceCollection services,
             IConfiguration configuration)
         {
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            services.AddAutoMapper(expression => expression.AddProfile(new MappingConfig(services.BuildServiceProvider())));
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             

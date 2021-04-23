@@ -1,9 +1,10 @@
 ﻿using Application.Common.Mappings;
 using Application.DTOs.BaseUser;
+using AutoMapper;
 
 namespace Application.DTOs.Instructor
 {
-    public class InstructorProfileDto : BaseUserProfileDto, IMapFrom<Domain.Models.Instructor>
+    public class InstructorProfileDto : BaseUserProfileDto
     {
         public string FirstName { get; set; }
 
@@ -12,5 +13,6 @@ namespace Application.DTOs.Instructor
         public string InstructorId { get; set; }
 
         public string Email { get; set; }
+        
     }
 }

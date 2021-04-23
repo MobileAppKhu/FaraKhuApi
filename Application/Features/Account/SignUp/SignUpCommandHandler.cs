@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
@@ -15,6 +17,7 @@ using Infrastructure.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Features.Account.SignUp
 {
@@ -53,7 +56,7 @@ namespace Application.Features.Account.SignUp
             BaseUser user = null;
             switch (request.UserType)
             {
-                case UserType.Instructor :
+                case UserType.INSTRUCTOR:
                     user = new Instructor
                     {
                         Email = request.Email.EmailNormalize(),
@@ -62,7 +65,7 @@ namespace Application.Features.Account.SignUp
                         InstructorId = request.Id
                     };
                     break;
-                case UserType.Student :
+                case UserType.STUDENT:
                     user = new Student
                     {
                         Email = request.Email.EmailNormalize(),
@@ -73,8 +76,9 @@ namespace Application.Features.Account.SignUp
                     break;
             }
 
-            var result = _userManager.CreateAsync(user);
-            if (!result.IsCompletedSuccessfully)
+            var result = await _userManager.CreateAsync(user, request.Password);
+            
+            if (!result.Succeeded)
             {
                 throw new CustomException(new Error
                 {
@@ -84,16 +88,17 @@ namespace Application.Features.Account.SignUp
             }
 
             await _userManager.AddToRoleAsync(user, request.UserType.ToString());
-            
+
             await _signInManager.SignInAsync(user, false);
-            if(request.UserType == UserType.Instructor)
+            
+            if(request.UserType == UserType.INSTRUCTOR)
                 return new SignUpViewModel
                 {
-                    ProfileDto = _context.Instructors.Where(i => i.InstructorId == request.Id).ProjectTo<InstructorProfileDto>(_mapper.ConfigurationProvider)
+                    ProfileDto = _mapper.Map<InstructorProfileDto>(user)
                 };
             return new SignUpViewModel
             {
-                ProfileDto = _context.Students.Where(i => i.StudentId == request.Id).ProjectTo<StudentProfileDto>(_mapper.ConfigurationProvider)
+                ProfileDto = _mapper.Map<StudentProfileDto>(user)
             };
         }
     }

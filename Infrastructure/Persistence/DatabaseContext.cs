@@ -1,7 +1,5 @@
-﻿using System.Reflection;
-using Domain.BaseModels;
+﻿using Domain.BaseModels;
 using Domain.Models;
-using Infrastructure.Persistence.Configuration;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +11,12 @@ namespace Infrastructure.Persistence
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.ApplyConfigurationsFromAssembly(typeof(DatabaseContext).Assembly);
+        }
+        
         public DbSet<Student> Students { get; set; }
         
         public DbSet<Instructor> Instructors { get; set; }
@@ -20,18 +24,5 @@ namespace Infrastructure.Persistence
         public DbSet<Course> Courses { get; set; }
 
         public DbSet<BaseUser> BaseUsers { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
-
-            builder.ApplyConfiguration(new BaseUserConfiguration());
-            builder.ApplyConfiguration(new CourseConfiguration());
-            builder.ApplyConfiguration(new EventConfiguration());
-            builder.ApplyConfiguration(new InstructorConfiguration());
-            builder.ApplyConfiguration(new StudentConfiguration());
-            builder.ApplyConfiguration(new TimeConfiguration());
-
-        }
     }
 }

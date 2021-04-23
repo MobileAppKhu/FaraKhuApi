@@ -5,6 +5,7 @@ using Application;
 using Domain.BaseModels;
 using Domain.Models;
 using Infrastructure;
+using Infrastructure.Identity;
 using Infrastructure.Persistence;
 using Infrastructure.Policy;
 using Microsoft.AspNetCore.Authorization;
@@ -31,13 +32,17 @@ namespace WebApi
         {
             
             services.AddApplication(Configuration);
+            
             services.AddInfrastructureServices(Configuration);
-
+            
+            services.AddControllers();
 
             services.AddIdentity<BaseUser, IdentityRole>()
                 .AddEntityFrameworkStores<DatabaseContext>()
-                .AddUserManager<UserManager<BaseUser>>()
+                .AddUserManager<CustomUserManager>()
                 .AddDefaultTokenProviders();
+
+            services.AddScoped<IAuthorizationHandler, RoleAuthorizationHandler>();
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -66,6 +71,7 @@ namespace WebApi
                     return Task.CompletedTask;
                 };
             });
+            
             services.AddAuthorization(option =>
             {
                 option.DefaultPolicy = new AuthorizationPolicyBuilder()
@@ -77,7 +83,8 @@ namespace WebApi
                     policy.AddRequirements(new AuthorizationRequirements(new List<string> {"Instructor"})));
                 
             });
-            services.AddControllers();
+            
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
