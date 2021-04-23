@@ -37,8 +37,7 @@ namespace WebApi
             services.AddIdentity<BaseUser, IdentityRole>()
                 .AddEntityFrameworkStores<DatabaseContext>()
                 .AddUserManager<UserManager<BaseUser>>()
-                .AddDefaultTokenProviders()
-                .AddRoleManager<Student>();
+                .AddDefaultTokenProviders();
 
             services.Configure<IdentityOptions>(options =>
             {
