@@ -5,6 +5,7 @@
         FirstNameRequired,
         LastNameRequired,
         DuplicateUser,
-        Unexpected
+        Unexpected,
+        InvalidInput
     }
 }

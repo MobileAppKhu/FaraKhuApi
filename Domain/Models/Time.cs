@@ -4,6 +4,8 @@ namespace Domain.Models
 {
     public class Time
     {
+        public int TimeId { get; set; }
+        
         public Course Course { get; set; }
 
         public int CourseId { get; set; }

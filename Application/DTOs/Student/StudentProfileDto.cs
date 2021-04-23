@@ -1,8 +1,9 @@
-﻿using Application.DTOs.BaseUser;
+﻿using Application.Common.Mappings;
+using Application.DTOs.BaseUser;
 
 namespace Application.DTOs.Student
 {
-    public class StudentProfileDto : BaseUserProfileDto
+    public class StudentProfileDto : BaseUserProfileDto, IMapFrom<Domain.Models.Student>
     {
         public string FirstName { get; set; }
 

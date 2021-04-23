@@ -60,8 +60,6 @@ namespace Application.Features.Account.SignUp
                         Email = request.Email.EmailNormalize(),
                         FirstName = request.FirstName,
                         LastName = request.LastName,
-                        CreatedDate = DateTime.Now,
-                        LastModifiedDate =  DateTime.Now,
                         InstructorId = request.Id
                     };
                     break;
@@ -71,8 +69,6 @@ namespace Application.Features.Account.SignUp
                         Email = request.Email.EmailNormalize(),
                         FirstName = request.FirstName,
                         LastName = request.LastName,
-                        CreatedDate = DateTime.Now,
-                        LastModifiedDate = DateTime.Now,
                         StudentId = request.Id
                     };
                     break;

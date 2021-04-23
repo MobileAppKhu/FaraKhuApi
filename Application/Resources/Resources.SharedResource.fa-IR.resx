@@ -27,4 +27,10 @@
     <data name="Unexpected" xml:space="preserve">
         <value>خطای غیر منتظره</value>
     </data>
+    <data name="FirstnameRequired" xml:space="preserve">
+        <value>نام ضروری است</value>
+    </data>
+    <data name="LastnameRequired" xml:space="preserve">
+        <value>نام خانوادگی ضروری است</value>
+    </data>
 </root>

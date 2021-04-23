@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application;
 using Domain.BaseModels;
+using Infrastructure;
+using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -25,12 +27,45 @@ namespace WebApi
         }
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddApplication(Configuration);
             
+            services.AddApplication(Configuration);
+            services.AddInfrastructureServices(Configuration);
+            
+
             services.AddIdentity<BaseUser, IdentityRole>()
-                //.AddEntityFrameworkStores<DatabaseContext>()
+                .AddEntityFrameworkStores<DatabaseContext>()
                 .AddUserManager<UserManager<BaseUser>>()
                 .AddDefaultTokenProviders();
+            
+            /*services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 8;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+            });*/
+
+            /*services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.Name = "token";
+                options.Cookie.HttpOnly = false;
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.ExpireTimeSpan = TimeSpan.FromDays(365);
+                options.Events.OnRedirectToLogin = context =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    return Task.CompletedTask;
+                };
+                options.Events.OnRedirectToAccessDenied = context =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    return Task.CompletedTask;
+                };
+            });*/
+
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,7 +81,9 @@ namespace WebApi
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context => { await context.Response.WriteAsync("Hello World!"); });
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller}/{action}/{id?}");
             });
         }
     }
