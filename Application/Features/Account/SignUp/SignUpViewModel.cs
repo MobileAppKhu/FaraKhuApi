@@ -2,12 +2,13 @@
 using Application.DTOs.BaseUser;
 using Application.DTOs.Instructor;
 using Application.DTOs.Student;
+using Application.DTOs.User;
 using Domain.BaseModels;
 
 namespace Application.Features.Account.SignUp
 {
     public class SignUpViewModel
     {
-        public BaseUserProfileDto ProfileDto { get; set; }
+        public ProfileDto ProfileDto { get; set; }
     }
 }

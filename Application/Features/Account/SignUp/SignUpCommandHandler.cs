@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.DTOs.Instructor;
 using Application.DTOs.Student;
+using Application.DTOs.User;
 using Application.Resources;
 using Application.Utilities;
 using AutoMapper;
@@ -90,16 +91,14 @@ namespace Application.Features.Account.SignUp
             await _userManager.AddToRoleAsync(user, request.UserType.ToString());
 
             await _signInManager.SignInAsync(user, false);
+
             
-            if(request.UserType == UserType.INSTRUCTOR)
-                return new SignUpViewModel
-                {
-                    ProfileDto = _mapper.Map<InstructorProfileDto>(user)
-                };
+           
             return new SignUpViewModel
             {
-                ProfileDto = _mapper.Map<StudentProfileDto>(user)
+                ProfileDto = _mapper.Map<ProfileDto>(user)
             };
+            
         }
     }
 }

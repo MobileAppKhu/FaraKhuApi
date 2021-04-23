@@ -6,6 +6,7 @@
         LastNameRequired,
         DuplicateUser,
         Unexpected,
-        InvalidInput
+        InvalidInput,
+        UserNotFound
     }
 }

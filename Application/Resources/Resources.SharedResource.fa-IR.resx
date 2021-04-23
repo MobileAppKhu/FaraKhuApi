@@ -33,4 +33,10 @@
     <data name="LastnameRequired" xml:space="preserve">
         <value>نام خانوادگی ضروری است</value>
     </data>
+    <data name="PasswordLength" xml:space="preserve">
+        <value>رمز عبور باید حداقل 6 کاراکتر باشد</value>
+    </data>
+    <data name="PasswordRequired" xml:space="preserve">
+        <value>رمز عبور ضروری است</value>
+    </data>
 </root>

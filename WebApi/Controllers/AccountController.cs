@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using Application.Features.Account.SignIn;
+using Application.Features.Account.SignOut;
 using Application.Features.Account.SignUp;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -22,6 +24,21 @@ namespace WebApi.Controllers
         public async Task<IActionResult> SignUp(SignUpCommand request)
         {
             return Ok(await _mediator.Send(request));
+        }
+        
+        [HttpPost]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(SignInViewModel), 200)]
+        public async Task<IActionResult> SignIn(SignInCommand request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> SignOut(SignOutCommand request)
+        {
+            await _mediator.Send(request);
+            return Ok();
         }
     }
 }

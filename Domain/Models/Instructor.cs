@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Domain.BaseModels;
+using Domain.Enum;
 
 namespace Domain.Models
 {
@@ -7,6 +8,7 @@ namespace Domain.Models
     {
         public string InstructorId { get; set; }
 
+        public UserType UserType { get; set; }
         public ICollection<Course> Courses { get; set; }
     }
 }

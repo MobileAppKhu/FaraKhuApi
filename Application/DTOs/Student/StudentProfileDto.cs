@@ -4,7 +4,7 @@ using AutoMapper;
 
 namespace Application.DTOs.Student
 {
-    public class StudentProfileDto : BaseUserProfileDto
+    public class StudentProfileDto : BaseUserProfileDto, IMapFrom<Domain.Models.Student>
     {
         public string FirstName { get; set; }
 

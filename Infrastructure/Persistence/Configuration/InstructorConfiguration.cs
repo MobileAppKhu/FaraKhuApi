@@ -1,4 +1,5 @@
-﻿using Domain.Models;
+﻿using Domain.Enum;
+using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,6 +10,8 @@ namespace Infrastructure.Persistence.Configuration
         public void Configure(EntityTypeBuilder<Instructor> builder)
         {
             builder.Property(instructor => instructor.InstructorId).IsRequired();
+            builder.Property(instructor  => instructor.UserType).HasDefaultValue(UserType.INSTRUCTOR);
+
         }
     }
 }
