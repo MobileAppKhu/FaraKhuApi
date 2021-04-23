@@ -45,7 +45,7 @@ namespace Application.Features.Account.SignUp
             {
                 throw new CustomException(new Error
                 {
-                    Message = _localizer.GetString(() => Resources_SharedResource_fa_IR.DuplicateUser),
+                    Message = _localizer["DuplicateUser"],
                     ErrorType = ErrorType.DuplicateUser
                 });
             }
@@ -78,7 +78,7 @@ namespace Application.Features.Account.SignUp
             {
                 throw new CustomException(new Error
                 {
-                    Message = _localizer.GetString(() => Resources_SharedResource_fa_IR.Unexpected),
+                    Message = _localizer["Unexpected"],
                     ErrorType = ErrorType.Unexpected
                 });
             }

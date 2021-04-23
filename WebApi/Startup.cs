@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Application;
 using Domain.BaseModels;
+using Domain.Models;
 using Infrastructure;
 using Infrastructure.Persistence;
 using Infrastructure.Policy;
@@ -32,13 +32,14 @@ namespace WebApi
             
             services.AddApplication(Configuration);
             services.AddInfrastructureServices(Configuration);
-            
+
 
             services.AddIdentity<BaseUser, IdentityRole>()
                 .AddEntityFrameworkStores<DatabaseContext>()
                 .AddUserManager<UserManager<BaseUser>>()
-                .AddDefaultTokenProviders();
-            
+                .AddDefaultTokenProviders()
+                .AddRoleManager<Student>();
+
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = false;

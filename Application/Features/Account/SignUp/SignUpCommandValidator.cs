@@ -11,10 +11,10 @@ namespace Application.Features.Account.SignUp
         {
             RuleFor(u => u.FirstName)
                 .NotEmpty()
-                .WithMessage(localizer.GetString(() => Resources_SharedResource_fa_IR.FirstnameRequired));
+                .WithMessage(localizer["FirstnameRequired"]);
             RuleFor(u => u.LastName)
                 .NotEmpty()
-                .WithMessage(localizer.GetString(() => Resources_SharedResource_fa_IR.LastnameRequired));
+                .WithMessage(localizer["LastnameRequired"]);
             RuleFor(u => u.Password)
                 .NotEmpty()
                 .MinimumLength(6)

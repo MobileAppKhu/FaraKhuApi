@@ -44,7 +44,7 @@ namespace Application.Common.Behaviours
                 throw new CustomException(new Error
                 {
                     ErrorType = ErrorType.Unexpected,
-                    Message = _localizer.GetString(() => Resources_SharedResource_fa_IR.Unexpected)
+                    Message = _localizer["Unexpected"]
                 });
             }
         }
