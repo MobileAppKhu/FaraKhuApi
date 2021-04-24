@@ -1,16 +1,14 @@
-﻿using System.Linq;
+﻿
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
-using Application.DTOs.Instructor;
-using Application.DTOs.Student;
+using Application.Common.Interfaces;
 using Application.DTOs.User;
 using Application.Resources;
 using Application.Utilities;
 using AutoMapper;
 using Domain.BaseModels;
 using Domain.Enum;
-using Infrastructure.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
@@ -23,17 +21,14 @@ namespace Application.Features.Account.SignIn
         private UserManager<BaseUser> _userManager { get; }
         private IStringLocalizer<SharedResource> _localizer { get; }
         private SignInManager<BaseUser> _signInManager { get; }
-        private DatabaseContext _context { get; }
 
         public SignInCommandHandler(IMapper mapper, UserManager<BaseUser> userManager,
-            SignInManager<BaseUser> signInManager, IStringLocalizer<SharedResource> localizer
-            , DatabaseContext context)
+            SignInManager<BaseUser> signInManager, IStringLocalizer<SharedResource> localizer)
         {
             _mapper = mapper;
             _userManager = userManager;
             _signInManager = signInManager;
             _localizer = localizer;
-            _context = context;
         }
         public async Task<SignInViewModel> Handle(SignInCommand request, CancellationToken cancellationToken)
         {

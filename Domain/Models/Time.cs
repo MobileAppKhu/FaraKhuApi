@@ -2,7 +2,7 @@
 
 namespace Domain.Models
 {
-    public class Time
+    public class Time : BaseEntity
     {
         public int TimeId { get; set; }
         

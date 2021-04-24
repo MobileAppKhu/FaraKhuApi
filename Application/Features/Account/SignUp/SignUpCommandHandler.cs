@@ -1,30 +1,24 @@
-﻿using System;
-using System.Linq;
-using System.Security.Claims;
+﻿
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
-using Application.DTOs.Instructor;
-using Application.DTOs.Student;
+using Application.Common.Interfaces;
 using Application.DTOs.User;
 using Application.Resources;
 using Application.Utilities;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Domain.BaseModels;
 using Domain.Enum;
 using Domain.Models;
-using Infrastructure.Persistence;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
-using Microsoft.Extensions.Logging;
+
 
 namespace Application.Features.Account.SignUp
 {
     public class SignUpCommandHandler : IRequestHandler<SignUpCommand,SignUpViewModel>
     {
-        private DatabaseContext _context { get; }
         private UserManager<BaseUser> _userManager { get; }
         
         private IStringLocalizer<SharedResource> _localizer { get; }
@@ -34,12 +28,11 @@ namespace Application.Features.Account.SignUp
         private IMapper _mapper { get; }
 
         public SignUpCommandHandler(UserManager<BaseUser> userManager, IStringLocalizer<SharedResource> localizer,
-            SignInManager<BaseUser> signInManager, DatabaseContext context, IMapper mapper)
+            SignInManager<BaseUser> signInManager, IMapper mapper)
         {
             _userManager = userManager;
             _localizer = localizer;
             _signInManager = signInManager;
-            _context = context;
             _mapper = mapper;
         }
         public async Task<SignUpViewModel> Handle(SignUpCommand request, CancellationToken cancellationToken)

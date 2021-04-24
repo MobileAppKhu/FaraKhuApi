@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Resources;
-using Application.Utilities;
 using Domain.BaseModels;
 using Domain.Enum;
 using MediatR;

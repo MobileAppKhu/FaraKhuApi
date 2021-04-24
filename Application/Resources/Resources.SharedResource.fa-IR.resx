@@ -39,4 +39,7 @@
     <data name="PasswordRequired" xml:space="preserve">
         <value>رمز عبور ضروری است</value>
     </data>
+    <data name="Unauthorized" xml:space="preserve">
+        <value>دسترسی مجاز نیست</value>
+    </data>
 </root>

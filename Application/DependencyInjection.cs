@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using System.Reflection;
-using Application.Common.Mappings;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -31,6 +30,7 @@ namespace Application
                 options.SupportedCultures = supportedCultures;
                 options.SupportedUICultures = supportedCultures;
             });
+
             return services;
         }
     }

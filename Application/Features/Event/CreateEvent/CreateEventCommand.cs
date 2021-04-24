@@ -1,13 +1,11 @@
 ﻿using System;
-using Domain.BaseModels;
 using Domain.Enum;
+using MediatR;
 
-namespace Domain.Models
+namespace Application.Features.Event.CreateEvent
 {
-    public class Event : BaseEntity
+    public class CreateEventCommand : IRequest<CreateEventViewModel>
     {
-        public int EventId { get; set; }
-        
         public string EventName { get; set; }
         
         public string EventDescription { get; set; }
@@ -15,9 +13,11 @@ namespace Domain.Models
         public DateTime EventTime { get; set; }
 
         public EventType EventType { get; set; }
-
-        public BaseUser User { get; set; }
-
-        public string UserId { get; set; }
     }
 }
+/*{
+    "EventName" : "Quiz-1",
+    "EventDescription" : "Quiz Instructor 2",
+    "EventTime":"21-4-24",
+    "EventType" : 1
+}*/

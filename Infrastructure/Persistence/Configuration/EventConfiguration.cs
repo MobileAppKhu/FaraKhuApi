@@ -12,6 +12,9 @@ namespace Infrastructure.Persistence.Configuration
             builder.Property(e => e.EventId).ValueGeneratedOnAdd();
             builder.Property(e => e.EventName).IsRequired();
             builder.Property(e => e.EventTime).IsRequired();
+            builder.HasOne(e => e.User)
+                .WithMany(u => u.Events)
+                .HasForeignKey(e => e.UserId);
         }
     }
 }

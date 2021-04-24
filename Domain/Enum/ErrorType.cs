@@ -7,6 +7,7 @@
         DuplicateUser,
         Unexpected,
         InvalidInput,
-        UserNotFound
+        UserNotFound,
+        Unauthorized
     }
 }
