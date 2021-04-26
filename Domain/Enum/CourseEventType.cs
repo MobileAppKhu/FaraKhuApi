@@ -1,6 +1,6 @@
 ﻿namespace Domain.Enum
 {
-    public enum EventType
+    public enum CourseEventType
     {
         Quiz,
         Exam,

@@ -1,5 +1,4 @@
-﻿
-using Application.DTOs.Event;
+﻿using Application.DTOs.Event.PersonalEvent;
 
 namespace Application.Features.Event.Command.CreateEvent
 {

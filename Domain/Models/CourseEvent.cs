@@ -4,18 +4,20 @@ using Domain.Enum;
 
 namespace Domain.Models
 {
-    public class Event : BaseEntity
+    public class CourseEvent
     {
-        public int EventId { get; set; }
+        public int CourseEventId { get; set; }
         
         public string EventName { get; set; }
         
         public string EventDescription { get; set; }
         
         public DateTime EventTime { get; set; }
-        
-        public BaseUser User { get; set; }
 
-        public string UserId { get; set; }
+        public CourseEventType EventType { get; set; }
+
+        public Course Course { get; set; }
+
+        public int CourseId { get; set; }
     }
 }

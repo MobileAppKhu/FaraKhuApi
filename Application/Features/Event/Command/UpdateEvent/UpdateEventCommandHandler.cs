@@ -5,8 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.Common.Interfaces.IServices;
-using Application.DTOs.Event.PersonalEvent;
 using Application.Resources;
 using AutoMapper;
 using Domain.BaseModels;
@@ -16,12 +14,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Event.Command.CreateEvent
+namespace Application.Features.Event.Command.UpdateEvent
 {
-    public class CreateEventCommandHandler : IRequestHandler<CreateEventCommand, CreateEventViewModel>
+    public class UpdateEventCommandHandler : IRequestHandler<UpdateEventCommand, UpdateEventViewModel>
     {
-        /*private readonly IEventServices _eventServices;
-        private readonly IUserServices _userServices;*/
         private readonly IDatabaseContext _context;
         
         private IStringLocalizer<SharedResource> Localizer { get; }
@@ -31,23 +27,19 @@ namespace Application.Features.Event.Command.CreateEvent
         private UserManager<BaseUser> UserManager { get; }
         private IMapper _mapper { get; }
 
-        public CreateEventCommandHandler(IEventServices eventServices, IStringLocalizer<SharedResource> localizer,
+        public UpdateEventCommandHandler(IStringLocalizer<SharedResource> localizer,
             IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
-            , IUserServices userServices, IDatabaseContext context)
+            , IDatabaseContext context)
         {
             _context = context;
-            //_eventServices = eventServices;
             Localizer = localizer;
             HttpContextAccessor = httpContextAccessor;
             UserManager = userManager;
             _mapper = mapper;
-            //_userServices = userServices;
         }
-
-        public async Task<CreateEventViewModel> Handle(CreateEventCommand request, CancellationToken cancellationToken)
+        public async Task<UpdateEventViewModel> Handle(UpdateEventCommand request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            //var user = _userServices.GetUser(userId);
             BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
             if(user == null)
                 throw new CustomException(new Error
@@ -55,20 +47,17 @@ namespace Application.Features.Event.Command.CreateEvent
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            var eventObj = new Domain.Models.Event()
+            var eventObj = _context.Events.FirstOrDefault(e => e.EventId == request.EventId);
+            if (eventObj != null)
+                _context.Events.Update(new Domain.Models.Event
+                {
+                    EventDescription = request.EventDescription,
+                    EventId = request.EventId,
+                    EventName = request.EventName,
+                    EventTime = DateTimeOffset.Parse(request.EventTime).Date,
+                });
+            return new UpdateEventViewModel
             {
-                EventName = request.EventName,
-                EventDescription = request.EventDescription,
-                EventTime = DateTimeOffset.Parse(request.EventTime).Date,
-                User =  user,
-                UserId = user.Id
-            };
-            //_eventServices.AddEvent(eventObj);
-            await _context.Events.AddAsync(eventObj, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
-            return new CreateEventViewModel
-            {
-                EventDto = _mapper.Map<EventShortDto>(eventObj)
             };
         }
     }

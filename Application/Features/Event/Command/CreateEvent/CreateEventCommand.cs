@@ -10,8 +10,7 @@ namespace Application.Features.Event.Command.CreateEvent
         public string EventDescription { get; set; }
         
         public string EventTime { get; set; }
-
-        public EventType EventType { get; set; }
+        
     }
 }
 /*{

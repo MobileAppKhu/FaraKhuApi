@@ -13,8 +13,6 @@ namespace Application.Features.Event.Command.CreateEvent
                 .NotEmpty();
             RuleFor(e => e.EventTime)
                 .NotEmpty();
-            RuleFor(e => e.EventType)
-                .NotEmpty();
         }
     }
 }

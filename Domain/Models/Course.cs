@@ -15,5 +15,7 @@ namespace Domain.Models
         public string InstructorId { get; set; }
         
         public Instructor Instructor { get; set; }
+
+        public ICollection<CourseEvent> CourseEvents { get; set; }
     }
 }
