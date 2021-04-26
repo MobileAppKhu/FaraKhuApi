@@ -1,4 +1,6 @@
-﻿using Domain.BaseModels;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Domain.BaseModels;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,5 +18,9 @@ namespace Application.Common.Interfaces
 
         public DbSet<Event> Events { get; set; }
         
+        
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+
+
     }
 }

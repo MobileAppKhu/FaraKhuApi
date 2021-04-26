@@ -10,6 +10,7 @@ namespace Infrastructure.Persistence
 {
     public class DatabaseContext : IdentityDbContext<BaseUser>, IDatabaseContext
     {
+        
         public DatabaseContext(DbContextOptions<DatabaseContext> option) : base(option)
         {
         }
@@ -25,5 +26,14 @@ namespace Infrastructure.Persistence
         public DbSet<Course> Courses { get; set; }
         public DbSet<BaseUser> BaseUsers { get; set; }
         public DbSet<Event> Events { get; set; }
+        
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+
+            var result = await base.SaveChangesAsync(cancellationToken);
+            
+
+            return result;
+        }
     }
 }

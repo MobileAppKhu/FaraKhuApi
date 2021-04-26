@@ -15,6 +15,10 @@ namespace Infrastructure.Persistence.Configuration
             builder.HasOne(e => e.User)
                 .WithMany(u => u.Events)
                 .HasForeignKey(e => e.UserId);
+            builder.Property(user => user.CreatedDate).
+                HasDefaultValueSql("now() at time zone 'utc'").ValueGeneratedOnAdd();
+            builder.Property(user => user.LastModifiedDate).HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAddOrUpdate();
         }
     }
 }

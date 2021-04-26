@@ -1,8 +1,7 @@
-﻿using System;
-using Domain.Enum;
+﻿using Domain.Enum;
 using MediatR;
 
-namespace Application.Features.Event.CreateEvent
+namespace Application.Features.Event.Command.CreateEvent
 {
     public class CreateEventCommand : IRequest<CreateEventViewModel>
     {
@@ -10,7 +9,7 @@ namespace Application.Features.Event.CreateEvent
         
         public string EventDescription { get; set; }
         
-        public DateTime EventTime { get; set; }
+        public string EventTime { get; set; }
 
         public EventType EventType { get; set; }
     }

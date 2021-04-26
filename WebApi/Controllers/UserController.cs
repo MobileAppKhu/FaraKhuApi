@@ -1,27 +1,25 @@
 ﻿using System.Threading.Tasks;
-using Application.Features.Event.Command.CreateEvent;
+using Application.Features.User.Queries.ViewAllEvents;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
-    
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class EventController : ControllerBase
+    public class UserController : ControllerBase
     {
         private IMediator _mediator;
-        public EventController(IMediator mediator)
+        public UserController(IMediator mediator)
         {
             _mediator = mediator;
         }
+        
         [HttpPost]
-        [ProducesResponseType(typeof(CreateEventViewModel),200)]
-        public async Task<IActionResult> CreateEvent(CreateEventCommand request)
+        [ProducesResponseType(typeof(ViewAllEventsViewModel),200)]
+        public async Task<IActionResult> GetAllEvents(ViewAllEventsQuery request)
         {
             return Ok(await _mediator.Send(request));
         }
-        
     }
-    
 }

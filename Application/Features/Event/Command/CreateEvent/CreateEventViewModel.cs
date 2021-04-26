@@ -1,6 +1,7 @@
-﻿using Application.DTOs;
+﻿
+using Application.DTOs.Event;
 
-namespace Application.Features.Event.CreateEvent
+namespace Application.Features.Event.Command.CreateEvent
 {
     public class CreateEventViewModel
     {

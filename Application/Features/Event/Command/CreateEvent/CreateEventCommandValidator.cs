@@ -3,7 +3,7 @@ using Application.Resources;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Event.CreateEvent
+namespace Application.Features.Event.Command.CreateEvent
 {
     public class CreateEventCommandValidator : AbstractValidator<CreateEventCommand>
     {

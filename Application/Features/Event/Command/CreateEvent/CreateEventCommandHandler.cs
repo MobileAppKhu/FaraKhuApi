@@ -1,11 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Interfaces.IServices;
-using Application.DTOs;
+using Application.DTOs.Event;
 using Application.Resources;
 using AutoMapper;
 using Domain.BaseModels;
@@ -15,7 +16,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Event.CreateEvent
+namespace Application.Features.Event.Command.CreateEvent
 {
     public class CreateEventCommandHandler : IRequestHandler<CreateEventCommand, CreateEventViewModel>
     {
@@ -47,7 +48,7 @@ namespace Application.Features.Event.CreateEvent
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             //var user = _userServices.GetUser(userId);
-            var user = (BaseUser)_context.BaseUsers.Where(u => u.Id == userId);
+            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
             if(user == null)
                 throw new CustomException(new Error
                 {
@@ -59,12 +60,13 @@ namespace Application.Features.Event.CreateEvent
                 EventName = request.EventName,
                 EventType = request.EventType,
                 EventDescription = request.EventDescription,
-                EventTime = request.EventTime,
+                EventTime = DateTimeOffset.Parse(request.EventTime).Date,
                 User =  user,
                 UserId = user.Id
             };
             //_eventServices.AddEvent(eventObj);
-            await _context.Events.AddAsync(eventObj);
+            await _context.Events.AddAsync(eventObj, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
             return new CreateEventViewModel
             {
                 EventDto = _mapper.Map<EventShortDto>(eventObj)
