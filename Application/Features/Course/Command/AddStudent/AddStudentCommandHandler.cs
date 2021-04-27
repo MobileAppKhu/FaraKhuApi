@@ -53,9 +53,9 @@ namespace Application.Features.Course.Command.AddStudent
             var student = _context.Students.Include(s => s.Courses).
                 FirstOrDefault(s => s.StudentId == request.StudentId);
             
-            course?.Students.Add(student);
-            student?.Courses.Add(course);
-
+            course?.Students.Add(student);/*
+            student?.Courses.Add(course);*/
+            await _context.SaveChangesAsync(cancellationToken);
             return new AddStudentViewModel {};
         }
     }
