@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.Common.Interfaces.IServices;
 using Application.Resources;
 using AutoMapper;
 using Domain.BaseModels;
@@ -12,7 +11,6 @@ using Domain.Enum;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace Application.Features.Event.Command.DeleteEvent

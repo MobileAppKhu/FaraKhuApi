@@ -2,7 +2,7 @@
 {
     public enum UserType
     {
-        INSTRUCTOR,
-        STUDENT
+        Instructor,
+        Student
     }
 }

@@ -14,7 +14,6 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Localization;
 
 namespace Application.Features.User.Queries.ViewAllEvents
@@ -54,7 +53,7 @@ namespace Application.Features.User.Queries.ViewAllEvents
                 });
             ICollection<string> roles = await UserManager.GetRolesAsync(user);
             BaseUser baseUser;
-            if (roles.First() == UserType.STUDENT.ToString())
+            if (roles.First() == UserType.Student.ToString())
                 baseUser = _context.Students.Include(s => s.Courses).
                     Include(s => s.Events).
                     FirstOrDefault(s => s.Id == userId);

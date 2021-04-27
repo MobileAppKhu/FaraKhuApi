@@ -1,9 +1,4 @@
-﻿using System.Linq;
-using Application.DTOs.BaseUser;
-using Application.DTOs.Instructor;
-using Application.DTOs.Student;
-using Application.DTOs.User;
-using Domain.BaseModels;
+﻿using Application.DTOs.User;
 
 namespace Application.Features.Account.SignUp
 {

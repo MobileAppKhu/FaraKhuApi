@@ -12,7 +12,7 @@ namespace Application.DTOs.User
     {
         public ICollection<EventShortDto> Events { get; set; }
         public ICollection<CourseEventShortDto> CourseEvents { get; set; }
-        public ICollection<Time> Times { get; set; }
+        public ICollection<Domain.Models.Time> Times { get; set; }
 
         public void Mapping(Profile profile)
         {

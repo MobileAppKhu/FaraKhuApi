@@ -12,7 +12,7 @@ namespace Infrastructure.Persistence.Configuration
             builder.Property(student => student.StudentId).IsRequired();
             builder.HasMany(student => student.Courses).
                 WithMany(course => course.Students);
-            builder.Property(student => student.UserType).HasDefaultValue(UserType.STUDENT);
+            builder.Property(student => student.UserType).HasDefaultValue(UserType.Student);
         }
     }
 }

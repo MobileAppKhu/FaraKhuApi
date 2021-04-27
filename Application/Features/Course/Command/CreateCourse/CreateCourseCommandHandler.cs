@@ -1,25 +1,24 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.DTOs.Event.PersonalEvent;
+using Application.DTOs.Course;
 using Application.Resources;
 using AutoMapper;
 using Domain.BaseModels;
 using Domain.Enum;
+using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Event.Command.CreateEvent
+namespace Application.Features.Course.Command.CreateCourse
 {
-    public class CreateEventCommandHandler : IRequestHandler<CreateEventCommand, CreateEventViewModel>
+    public class CreateCourseCommandHandler : IRequestHandler<CreateCourseCommand, CreateCourseViewModel>
     {
-        
         private readonly IDatabaseContext _context;
         
         private IStringLocalizer<SharedResource> Localizer { get; }
@@ -29,7 +28,7 @@ namespace Application.Features.Event.Command.CreateEvent
         private UserManager<BaseUser> UserManager { get; }
         private IMapper _mapper { get; }
 
-        public CreateEventCommandHandler( IStringLocalizer<SharedResource> localizer,
+        public CreateCourseCommandHandler( IStringLocalizer<SharedResource> localizer,
             IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
             , IDatabaseContext context)
         {
@@ -39,30 +38,28 @@ namespace Application.Features.Event.Command.CreateEvent
             UserManager = userManager;
             _mapper = mapper;
         }
-
-        public async Task<CreateEventViewModel> Handle(CreateEventCommand request, CancellationToken cancellationToken)
+        public async Task<CreateCourseViewModel> Handle(CreateCourseCommand request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
+            Instructor user = _context.Instructors.FirstOrDefault(u => u.Id == userId);
             if(user == null)
                 throw new CustomException(new Error
                 {
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            var eventObj = new Domain.Models.Event()
+            
+            Domain.Models.Course courseObj = new Domain.Models.Course
             {
-                EventName = request.EventName,
-                EventDescription = request.EventDescription,
-                EventTime = DateTimeOffset.Parse(request.EventTime).Date,
-                User =  user,
-                UserId = user.Id
+                CourseTitle = request.CourseTitle,
+                Instructor = user,
+                InstructorId = userId
             };
-            await _context.Events.AddAsync(eventObj, cancellationToken);
+            await _context.Courses.AddAsync(courseObj, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
-            return new CreateEventViewModel
+            return new CreateCourseViewModel
             {
-                EventDto = _mapper.Map<EventShortDto>(eventObj)
+                Course = _mapper.Map<ViewCourseDto>(courseObj)
             };
         }
     }

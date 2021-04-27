@@ -1,8 +1,5 @@
 ﻿using System;
-using Application.Common.Interfaces;
-using Application.Common.Interfaces.IServices;
 using Infrastructure.Persistence;
-using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

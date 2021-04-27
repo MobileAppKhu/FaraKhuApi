@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application;
 using Application.Common.Interfaces;
-using Application.Common.Interfaces.IServices;
 using Domain.BaseModels;
-using Domain.Models;
 using Infrastructure;
 using Infrastructure.Identity;
 using Infrastructure.MiddleWare;
 using Infrastructure.Persistence;
 using Infrastructure.Policy;
-using Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,9 +37,7 @@ namespace WebApi
             services.AddInfrastructureServices(Configuration);
 
             services.AddScoped<IDatabaseContext, DatabaseContext>();
-            services.AddScoped<IEventServices, EventServices>();
-            services.AddScoped<IUserServices, UserServices>();
-            
+
             services.AddControllers();
 
             services.AddIdentity<BaseUser, IdentityRole>()

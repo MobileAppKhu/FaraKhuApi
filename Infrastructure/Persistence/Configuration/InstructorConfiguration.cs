@@ -10,7 +10,7 @@ namespace Infrastructure.Persistence.Configuration
         public void Configure(EntityTypeBuilder<Instructor> builder)
         {
             builder.Property(instructor => instructor.InstructorId).IsRequired();
-            builder.Property(instructor  => instructor.UserType).HasDefaultValue(UserType.INSTRUCTOR);
+            builder.Property(instructor  => instructor.UserType).HasDefaultValue(UserType.Instructor);
 
         }
     }

@@ -50,7 +50,7 @@ namespace Application.Features.Account.SignUp
             BaseUser user = null;
             switch (request.UserType)
             {
-                case UserType.INSTRUCTOR:
+                case UserType.Instructor:
                     user = new Instructor
                     {
                         Email = request.Email.EmailNormalize(),
@@ -59,7 +59,7 @@ namespace Application.Features.Account.SignUp
                         InstructorId = request.Id
                     };
                     break;
-                case UserType.STUDENT:
+                case UserType.Student:
                     user = new Student
                     {
                         Email = request.Email.EmailNormalize(),
