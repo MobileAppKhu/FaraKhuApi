@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Application.Features.Course.Command.AddStudent;
 using Application.Features.Course.Command.CreateCourse;
+using Application.Features.Course.Command.RemoveStudent;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +31,13 @@ namespace WebApi.Controllers
         //[Authorize(Policy = "InstructorPolicy")]
         [ProducesResponseType(typeof(AddStudentViewModel),200)]
         public async Task<IActionResult> AddStudent(AddStudentCommand request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(RemoveStudentViewModel), 200)]
+        public async Task<IActionResult> RemoveStudent(RemoveStudentCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
