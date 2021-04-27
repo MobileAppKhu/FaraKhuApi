@@ -12,6 +12,7 @@ using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace Application.Features.Course.Command.AddStudent
@@ -47,8 +48,10 @@ namespace Application.Features.Course.Command.AddStudent
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            var course = _context.Courses.FirstOrDefault(c => c.CourseId == request.CourseId);
-            var student = _context.Students.FirstOrDefault(s => s.StudentId == request.StudentId);
+            var course = _context.Courses.Include(c => c.Students).
+                FirstOrDefault(c => c.CourseId == request.CourseId);
+            var student = _context.Students.Include(s => s.Courses).
+                FirstOrDefault(s => s.StudentId == request.StudentId);
             
             course?.Students.Add(student);
             student?.Courses.Add(course);
