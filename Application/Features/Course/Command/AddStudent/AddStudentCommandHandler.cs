@@ -56,6 +56,7 @@ namespace Application.Features.Course.Command.AddStudent
             course?.Students.Add(student);/*
             student?.Courses.Add(course);*/
             await _context.SaveChangesAsync(cancellationToken);
+
             return new AddStudentViewModel {};
         }
     }
