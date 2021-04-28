@@ -52,8 +52,9 @@ namespace Application.Features.Course.Command.RemoveStudent
             var student = _context.Students.FirstOrDefault(s => s.StudentId == request.StudentId);
 
             course?.Students.Remove(student);
-            student?.Courses.Remove(course);
+            /*student?.Courses.Remove(course);*/
 
+            await _context.SaveChangesAsync(cancellationToken);
             return new RemoveStudentViewModel { };
         }
     }
