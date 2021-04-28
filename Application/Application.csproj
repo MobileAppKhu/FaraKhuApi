@@ -17,9 +17,9 @@
 
     <ItemGroup>
       <Compile Update="Resources\Resources.SharedResource.fa-IR.Designer.cs">
-        <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>Resources.SharedResource.fa-IR.resx</DependentUpon>
+        <DesignTime>True</DesignTime>
       </Compile>
     </ItemGroup>
 

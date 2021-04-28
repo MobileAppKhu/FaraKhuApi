@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace WebApi
 {
@@ -25,15 +26,16 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         private IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
+
         public void ConfigureServices(IServiceCollection services)
         {
-            
             services.AddApplication(Configuration);
-            
+
             services.AddInfrastructureServices(Configuration);
 
             services.AddScoped<IDatabaseContext, DatabaseContext>();
@@ -74,7 +76,7 @@ namespace WebApi
                     return Task.CompletedTask;
                 };
             });
-            
+
             services.AddAuthorization(option =>
             {
                 option.DefaultPolicy = new AuthorizationPolicyBuilder()
@@ -84,10 +86,7 @@ namespace WebApi
                     policy.AddRequirements(new AuthorizationRequirements(new List<string> {"Student"})));
                 option.AddPolicy("InstructorPolicy", policy =>
                     policy.AddRequirements(new AuthorizationRequirements(new List<string> {"Instructor"})));
-                
             });
-            
-            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -99,12 +98,16 @@ namespace WebApi
             }
 
             app.UseRouting();
+
+            var options = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
+            if (options != null) app.UseRequestLocalization(options.Value);
+
             app.UseAuthentication();
             app.UseAuthorization();
-            
+
             app.UseMiddleware<CustomExceptionMiddleWare>();
 
-            
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
