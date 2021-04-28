@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.Features.Course.Command.RemoveStudent;
 using Application.Resources;
 using AutoMapper;
 using Domain.BaseModels;
@@ -15,9 +14,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Course.Command.RemoveStudent
+namespace Application.Features.Course.Command.UpdateCourse
 {
-    public class RemoveStudentCommandHandler : IRequestHandler<RemoveStudentCommand, RemoveStudentViewModel>
+    public class UpdateCourseCommandHandler : IRequestHandler<UpdateCourseCommand>
     {
         private readonly IDatabaseContext _context;
 
@@ -27,7 +26,7 @@ namespace Application.Features.Course.Command.RemoveStudent
 
         private UserManager<BaseUser> UserManager { get; }
 
-        public RemoveStudentCommandHandler(IStringLocalizer<SharedResource> localizer,
+        public UpdateCourseCommandHandler(IStringLocalizer<SharedResource> localizer,
             IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
             , IDatabaseContext context)
         {
@@ -36,7 +35,7 @@ namespace Application.Features.Course.Command.RemoveStudent
             HttpContextAccessor = httpContextAccessor;
             UserManager = userManager;
         }
-        public async Task<RemoveStudentViewModel> Handle(RemoveStudentCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdateCourseCommand request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             Instructor user = _context.Instructors.FirstOrDefault(u => u.Id == userId);
@@ -46,14 +45,14 @@ namespace Application.Features.Course.Command.RemoveStudent
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            var course = _context.Courses.FirstOrDefault(c => c.CourseId == request.CourseId);
-            var student = _context.Students.FirstOrDefault(s => s.StudentId == request.StudentId);
-
-            course?.Students.Remove(student);
-            /*student?.Courses.Remove(course);*/
-
+            Domain.Models.Course courseObj = new Domain.Models.Course
+            {
+                CourseId = request.CourseId,
+                CourseTitle = request.CourseTitle
+            };
+            _context.Courses.Update(courseObj);
             await _context.SaveChangesAsync(cancellationToken);
-            return new RemoveStudentViewModel { };
+            return Unit.Value;
         }
     }
 }
