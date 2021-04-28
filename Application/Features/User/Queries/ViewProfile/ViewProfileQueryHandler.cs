@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,12 +12,11 @@ using Domain.Enum;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.User.Queries.ViewAllEvents
+namespace Application.Features.User.Queries.ViewProfile
 {
-    public class ViewAllEventsHandler : IRequestHandler<ViewAllEventsQuery, ViewAllEventsViewModel>
+    public class ViewProfileQueryHandler : IRequestHandler<ViewProfileQuery, ViewProfileViewModel>
     {
         private readonly IMapper _mapper;
 
@@ -30,7 +28,7 @@ namespace Application.Features.User.Queries.ViewAllEvents
 
         private readonly IDatabaseContext _context;
 
-        public ViewAllEventsHandler(IMapper mapper, UserManager<BaseUser> userManager,
+        public ViewProfileQueryHandler(IMapper mapper, UserManager<BaseUser> userManager,
             IStringLocalizer<SharedResource> localizer, IHttpContextAccessor httpContextAccessor
             , IDatabaseContext context)
         {
@@ -40,32 +38,32 @@ namespace Application.Features.User.Queries.ViewAllEvents
             HttpContextAccessor = httpContextAccessor;
             _context = context;
         }
-        
-        public async Task<ViewAllEventsViewModel> Handle(ViewAllEventsQuery request, CancellationToken cancellationToken)
+        public async Task<ViewProfileViewModel> Handle(ViewProfileQuery request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await UserManager.FindByIdAsync(userId);
+            var user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
             if (user == null)
                 throw new CustomException(new Error
                 {
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            ICollection<string> roles = await UserManager.GetRolesAsync(user);
-            BaseUser baseUser;
-            if (roles.First() == UserType.Student.ToString())
-                baseUser = _context.Students.Include(s => s.Courses).
-                    Include(s => s.Events).
-                    FirstOrDefault(s => s.Id == userId);
-            else
-                baseUser = _context.Instructors.Include(s => s.Courses).
-                    Include(s => s.Events).
-                    FirstOrDefault(s => s.Id == userId);
-
-            return new ViewAllEventsViewModel
+            BaseUser baseUser = null;
+            switch (user.UserType)
             {
-                Events = _mapper.Map<AllEventsDto>(baseUser)
+                case UserType.Instructor:
+                    baseUser = _context.Instructors.FirstOrDefault(i => i.Id == request.UserId);
+                    break;
+                case UserType.Student:
+                    baseUser = _context.Students.FirstOrDefault(s => s.Id == request.UserId);
+                    break;
+            }
+
+            return new ViewProfileViewModel
+            {
+                Profile = _mapper.Map<ProfileDto>(baseUser)
             };
+
         }
     }
 }

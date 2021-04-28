@@ -12,6 +12,7 @@ using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace Application.Features.Course.Command.RemoveCourse
@@ -47,7 +48,8 @@ namespace Application.Features.Course.Command.RemoveCourse
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            var courseObj = _context.Courses.FirstOrDefault(c => c.CourseId == request.CourseId);
+            var courseObj = _context.Courses.Include(c => c.Students).
+                FirstOrDefault(c => c.CourseId == request.CourseId);
             if(courseObj != null) 
                 _context.Courses.Remove(courseObj);
             await _context.SaveChangesAsync(cancellationToken);

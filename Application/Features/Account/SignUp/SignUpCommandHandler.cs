@@ -1,4 +1,5 @@
 ﻿
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
@@ -27,13 +28,16 @@ namespace Application.Features.Account.SignUp
         
         private IMapper _mapper { get; }
 
+        private readonly IDatabaseContext _context;
+
         public SignUpCommandHandler(UserManager<BaseUser> userManager, IStringLocalizer<SharedResource> localizer,
-            SignInManager<BaseUser> signInManager, IMapper mapper)
+            SignInManager<BaseUser> signInManager, IMapper mapper, IDatabaseContext context)
         {
             _userManager = userManager;
             _localizer = localizer;
             _signInManager = signInManager;
             _mapper = mapper;
+            _context = context;
         }
         public async Task<SignUpViewModel> Handle(SignUpCommand request, CancellationToken cancellationToken)
         {
@@ -45,6 +49,30 @@ namespace Application.Features.Account.SignUp
                     Message = _localizer["DuplicateUser"],
                     ErrorType = ErrorType.DuplicateUser
                 });
+            }
+            //Should be Duplicate StudentId not Duplicate Email
+            switch (request.UserType)
+            {
+                case UserType.Instructor:
+                    var duplicateInstructor = _context.Instructors.
+                        FirstOrDefault(i => i.InstructorId == request.Id);
+                    if(duplicateInstructor != null)
+                        throw new CustomException(new Error
+                        {
+                            Message = _localizer["DuplicateUser"],
+                            ErrorType = ErrorType.DuplicateUser
+                        });
+                    break;
+                case UserType.Student:
+                    var duplicateStudent = _context.Students.
+                        FirstOrDefault(s => s.StudentId == request.Id);
+                    if(duplicateStudent != null)
+                        throw new CustomException(new Error
+                        {
+                            Message = _localizer["DuplicateUser"],
+                            ErrorType = ErrorType.DuplicateUser
+                        });
+                    break;
             }
 
             BaseUser user = null;
@@ -81,7 +109,7 @@ namespace Application.Features.Account.SignUp
                 });
             }
 
-            await _userManager.AddToRoleAsync(user, request.UserType.ToString());
+            await _userManager.AddToRoleAsync(user, request.UserType.ToString().Normalize());
 
             await _signInManager.SignInAsync(user, false);
 

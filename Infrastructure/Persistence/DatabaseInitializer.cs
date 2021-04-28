@@ -26,8 +26,8 @@ namespace Infrastructure.Persistence
         }
         private async Task RoleInitializer()
         {
-            await RoleManager.CreateAsync(new IdentityRole {Name = "Student"});
-            await RoleManager.CreateAsync(new IdentityRole {Name = "Instructor"});
+            await RoleManager.CreateAsync(new IdentityRole {Name = "Student".Normalize()});
+            await RoleManager.CreateAsync(new IdentityRole {Name = "Instructor".Normalize()});
         }
     }
 }

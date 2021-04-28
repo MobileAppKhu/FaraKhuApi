@@ -48,7 +48,9 @@ namespace Application.Features.Course.Command.UpdateCourse
             Domain.Models.Course courseObj = new Domain.Models.Course
             {
                 CourseId = request.CourseId,
-                CourseTitle = request.CourseTitle
+                CourseTitle = request.CourseTitle,
+                Instructor = user,
+                InstructorId = userId
             };
             _context.Courses.Update(courseObj);
             await _context.SaveChangesAsync(cancellationToken);
