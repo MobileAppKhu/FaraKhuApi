@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Application.Features.Account.SignOut
 {
-    public class SignOutCommandHandler : IRequest<SignOutCommand>
+    public class SignOutCommandHandler : IRequestHandler<SignOutCommand>
     {
         private SignInManager<BaseUser> _signInManager { get; }
         private IHttpContextAccessor HttpContextAccessor { get; }
@@ -17,8 +17,6 @@ namespace Application.Features.Account.SignOut
             _signInManager = signInManager;
             HttpContextAccessor = httpContextAccessor;
         }
-
-
         public async Task<Unit> Handle(SignOutCommand request, CancellationToken cancellationToken)
         {
             await _signInManager.SignOutAsync();
