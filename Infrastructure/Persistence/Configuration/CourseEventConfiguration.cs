@@ -9,10 +9,10 @@ namespace Infrastructure.Persistence.Configuration
         public void Configure(EntityTypeBuilder<CourseEvent> builder)
         {
             builder.HasKey(ce => ce.CourseEventId);
-            builder.Property(ce => ce.CourseId).ValueGeneratedOnAdd();
+            builder.Property(ce => ce.CourseEventId).ValueGeneratedOnAdd();
             builder.HasOne(ce => ce.Course)
                 .WithMany(c => c.CourseEvents)
-                .HasForeignKey(ce => ce.CourseEventId);
+                .HasForeignKey(ce => ce.CourseId);
             //TODO
         }
     }

@@ -14,6 +14,7 @@ using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace Application.Features.CourseEvent.Command.AddCourseEvent
@@ -50,7 +51,8 @@ namespace Application.Features.CourseEvent.Command.AddCourseEvent
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            Domain.Models.Course courseObj = _context.Courses.FirstOrDefault(c => c.CourseId == request.CourseId);
+            Domain.Models.Course courseObj = _context.Courses.Include(c => c.CourseEvents).
+                FirstOrDefault(c => c.CourseId == request.CourseId);
             if(courseObj == null)
                 throw new CustomException(new Error
                 {
@@ -60,11 +62,11 @@ namespace Application.Features.CourseEvent.Command.AddCourseEvent
             Domain.Models.CourseEvent courseEvent = new Domain.Models.CourseEvent
             {
                 EventName = request.EventName,
-                EventTime = DateTimeOffset.Parse(request.EventTime).Date,
                 EventDescription = request.EventDescription,
                 EventType = request.EventType,
                 Course = courseObj,
-                CourseId = request.CourseId
+                CourseId = request.CourseId,
+                EventTime = DateTimeOffset.Parse(request.EventTime).Date
             };
             await _context.CourseEvents.AddAsync(courseEvent, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);

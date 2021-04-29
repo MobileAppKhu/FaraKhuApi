@@ -56,6 +56,7 @@ namespace Application.Features.CourseEvent.Command.RemoveCourseEvent
                     Message = "Course Event NotFound"
                 });
             _context.CourseEvents.Remove(courseEventObj);
+            await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }
     }

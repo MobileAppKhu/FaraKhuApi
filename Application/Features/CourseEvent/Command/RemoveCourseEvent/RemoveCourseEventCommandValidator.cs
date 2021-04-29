@@ -8,8 +8,6 @@ namespace Application.Features.CourseEvent.Command.RemoveCourseEvent
     {
         public RemoveCourseEventCommandValidator(IStringLocalizer<SharedResource> localizer)
         {
-            RuleFor(r => r.CourseId)
-                .NotEmpty();
             RuleFor(r => r.CourseEventId)
                 .NotEmpty();
         }

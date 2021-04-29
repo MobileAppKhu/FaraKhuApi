@@ -16,7 +16,10 @@ namespace Application.DTOs.CourseEvent
         public CourseEventType EventType { get; set; }
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Domain.Models.CourseEvent, ViewCourseCourseEventDto>();
+            profile.CreateMap<Domain.Models.CourseEvent, ViewCourseCourseEventDto>()
+                .ForMember(c => c.Description,
+                    opt => opt.
+                        MapFrom(src => src.EventDescription));
         }
     }
 }
