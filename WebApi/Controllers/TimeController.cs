@@ -1,4 +1,5 @@
 ﻿using Application.Features.Time.Command.AddTime;
+using Application.Features.Time.Command.RemoveTime;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -28,5 +29,11 @@ namespace WebApi.Controllers
             return Ok(await _mediator.Send(request));
         }
 
+        [HttpPost]
+        [Authorize(Policy = "InstructorPolicy")]
+        public async Task<IActionResult> RemoveTime(RemoveTimeCommand request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
     }
 }
