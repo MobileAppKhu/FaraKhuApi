@@ -17,6 +17,10 @@ namespace Application.Common.Interfaces
         public DbSet<BaseUser> BaseUsers { get; set; }
 
         public DbSet<Event> Events { get; set; }
+
+        public DbSet<Time> Times { get; set; }
+
+        public DbSet<CourseEvent> CourseEvents { get; set; }
         
         
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

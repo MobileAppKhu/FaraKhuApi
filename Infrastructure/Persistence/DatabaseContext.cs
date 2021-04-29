@@ -27,7 +27,10 @@ namespace Infrastructure.Persistence
         public DbSet<Course> Courses { get; set; }
         public DbSet<BaseUser> BaseUsers { get; set; }
         public DbSet<Event> Events { get; set; }
+        public DbSet<Time> Times { get; set; }
         
+        public DbSet<CourseEvent> CourseEvents { get; set; }
+
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
 
