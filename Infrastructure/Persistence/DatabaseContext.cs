@@ -30,6 +30,7 @@ namespace Infrastructure.Persistence
         public DbSet<Time> Times { get; set; }
         
         public DbSet<CourseEvent> CourseEvents { get; set; }
+        public DbSet<Announcement> Announcements { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

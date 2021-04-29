@@ -22,7 +22,7 @@ namespace Application.Common.Interfaces
 
         public DbSet<CourseEvent> CourseEvents { get; set; }
         
-        
+        public DbSet<Announcement> Announcements { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
 

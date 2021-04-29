@@ -9,5 +9,6 @@ namespace Domain.Models
         public string InstructorId { get; set; }
         
         public ICollection<Course> Courses { get; set; }
+        public ICollection<Announcement> Announcements { get; set; }
     }
 }
