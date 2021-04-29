@@ -16,5 +16,9 @@ namespace Domain.BaseModels
         public bool IsDeleted { get; set; }
 
         public UserType UserType { get; set; }
+
+        public string ValidationCode { get; set; }
+        public bool IsValidating { get; set; }
+        public bool ResettingPassword { get; set; }
     }
 }

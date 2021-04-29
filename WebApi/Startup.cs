@@ -8,6 +8,7 @@ using Infrastructure;
 using Infrastructure.Identity;
 using Infrastructure.MiddleWare;
 using Infrastructure.Persistence;
+using Infrastructure.Persistence.EmailService;
 using Infrastructure.Policy;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -39,6 +40,8 @@ namespace WebApi
             services.AddInfrastructureServices(Configuration);
 
             services.AddScoped<IDatabaseContext, DatabaseContext>();
+            services.AddScoped<IEmailService, EmailService>();
+
 
             services.AddControllers();
 

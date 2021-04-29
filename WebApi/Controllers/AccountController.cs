@@ -1,4 +1,7 @@
 ﻿using System.Threading.Tasks;
+using Application.Features.Account.ForgetPassword;
+using Application.Features.Account.ResetPassword;
+using Application.Features.Account.ResetPasswordValidation;
 using Application.Features.Account.SignIn;
 using Application.Features.Account.SignOut;
 using Application.Features.Account.SignUp;
@@ -39,6 +42,25 @@ namespace WebApi.Controllers
         {
             await _mediator.Send(request);
             return Ok();
+        }
+        
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgetPassword(ForgetPasswordCommand request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPasswordValidation(ResetPasswordValidationCommand request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword(ResetPasswordCommand request)
+        {
+            return Ok(await _mediator.Send(request));
         }
     }
 }
