@@ -17,12 +17,14 @@ namespace Application.Features.Account.SignUp
                 .WithMessage(localizer["LastnameRequired"]);
             RuleFor(u => u.Password)
                 .NotEmpty()
+                .WithMessage(localizer["PasswordRequired"])
                 .MinimumLength(6)
                 .WithMessage(localizer["MessageLength"]);
             RuleFor(u => u.Email)
                 .NotEmpty()
+                .WithMessage(localizer["NotEmpty"])
                 .Must(e => e.IsEmail())
-                .WithMessage(localizer["EmailIncorrect"]);
+                .WithMessage(localizer["InvalidEmail"]);
 
         }
     }

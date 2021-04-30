@@ -13,7 +13,6 @@ namespace Infrastructure.Persistence.Configuration
             builder.HasOne(ce => ce.Course)
                 .WithMany(c => c.CourseEvents)
                 .HasForeignKey(ce => ce.CourseId);
-            //TODO
         }
     }
 }

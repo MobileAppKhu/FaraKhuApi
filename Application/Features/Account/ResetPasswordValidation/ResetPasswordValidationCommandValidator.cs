@@ -11,9 +11,11 @@ namespace Application.Features.Account.ResetPasswordValidation
         {
             RuleFor(r => r.Email)
                 .NotEmpty()
+                .WithMessage(localizer["NotEmpty"])
                 .Must(e => e.IsEmail());
             RuleFor(r => r.Token)
                 .NotEmpty()
+                .WithMessage(localizer["NotEmpty"])
                 .Length(5);
         }
     }

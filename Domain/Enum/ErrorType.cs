@@ -2,12 +2,16 @@
 {
     public enum ErrorType
     {
-        FirstNameRequired,
-        LastNameRequired,
         DuplicateUser,
         Unexpected,
         InvalidInput,
         UserNotFound,
-        Unauthorized
+        Unauthorized,
+        CourseNotFound,
+        EmailNotFound,
+        CourseEventNotFound,
+        UnauthorizedResetPassword,
+        UnauthorizedValidation,
+        EmailServiceException,
     }
 }

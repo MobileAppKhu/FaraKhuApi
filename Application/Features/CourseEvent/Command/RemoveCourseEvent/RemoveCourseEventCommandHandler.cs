@@ -52,8 +52,8 @@ namespace Application.Features.CourseEvent.Command.RemoveCourseEvent
             if(courseEventObj == null)
                 throw new CustomException(new Error
                 {
-                    ErrorType = ErrorType.Unexpected,//TODO
-                    Message = "Course Event NotFound"
+                    ErrorType = ErrorType.CourseEventNotFound,
+                    Message = Localizer["CourseEventNotFound"]
                 });
             _context.CourseEvents.Remove(courseEventObj);
             await _context.SaveChangesAsync(cancellationToken);

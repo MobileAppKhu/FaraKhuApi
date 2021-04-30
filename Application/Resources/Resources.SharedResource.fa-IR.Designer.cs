@@ -61,6 +61,24 @@ namespace Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to رویداد درسی پیدا نشد.
+        /// </summary>
+        internal static string CourseEventNotFound {
+            get {
+                return ResourceManager.GetString("CourseEventNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to درس مورد نظر پیدا نشد.
+        /// </summary>
+        internal static string CourseNotFound {
+            get {
+                return ResourceManager.GetString("CourseNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to اطلاعات کاربر تکراری است.
         /// </summary>
         internal static string DuplicateUser {
@@ -70,11 +88,47 @@ namespace Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ایمیل پیدا نشد.
+        /// </summary>
+        internal static string EmailNotFound {
+            get {
+                return ResourceManager.GetString("EmailNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to خطای سرویس ایمیل.
+        /// </summary>
+        internal static string EmailServiceException {
+            get {
+                return ResourceManager.GetString("EmailServiceException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to فیلد نباید خالی باشد.
+        /// </summary>
+        internal static string EmptyInput {
+            get {
+                return ResourceManager.GetString("EmptyInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to نام ضروری است.
         /// </summary>
         internal static string FirstnameRequired {
             get {
                 return ResourceManager.GetString("FirstnameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ایمیل صحیح نیست.
+        /// </summary>
+        internal static string InvalidEmail {
+            get {
+                return ResourceManager.GetString("InvalidEmail", resourceCulture);
             }
         }
         
@@ -111,6 +165,24 @@ namespace Application.Resources {
         internal static string Unauthorized {
             get {
                 return ResourceManager.GetString("Unauthorized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to بازنشانی رمز عبور مجاز نیست.
+        /// </summary>
+        internal static string UnauthorizedResetPassword {
+            get {
+                return ResourceManager.GetString("UnauthorizedResetPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to تایید ایمیل مجاز نیست.
+        /// </summary>
+        internal static string UnautorizedValidation {
+            get {
+                return ResourceManager.GetString("UnautorizedValidation", resourceCulture);
             }
         }
         

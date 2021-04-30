@@ -35,16 +35,16 @@ namespace Application.Features.Account.ResetPasswordValidation
             if (user == null)
                 throw new CustomException(new Error
                 {
-                    ErrorType = ErrorType.UserNotFound, //TODO Email not found
-                    Message = "Email Not Found" //TODO
+                    ErrorType = ErrorType.EmailNotFound,
+                    Message = Localizer["EmailNotFound"]
                 });
             BaseUser baseUser =
                 _context.BaseUsers.FirstOrDefault(u => u.Id == user.Id);
             if(!baseUser.IsValidating)
                 throw new CustomException(new Error
                 {
-                    ErrorType = ErrorType.UserNotFound, //TODO NotValidating
-                    Message = "Not validating" //TODO
+                    ErrorType = ErrorType.UnauthorizedValidation,
+                    Message = Localizer["UnauthorizedValidation"]
                 });
             if (baseUser.ValidationCode.Normalize() == request.Token.Normalize())
             {

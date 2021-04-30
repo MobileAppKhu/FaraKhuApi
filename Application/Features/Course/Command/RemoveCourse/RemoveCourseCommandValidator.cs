@@ -9,7 +9,8 @@ namespace Application.Features.Course.Command.RemoveCourse
         public RemoveCourseCommandValidator(IStringLocalizer<SharedResource> localizer)
         {
             RuleFor(r => r.CourseId)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage(localizer["NotEmpty"]);
         }
     }
 }
