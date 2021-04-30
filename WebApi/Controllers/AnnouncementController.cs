@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Features.Announcement.Queries.ViewInstructorAnnouncements;
 
 namespace WebApi.Controllers
 {
@@ -46,6 +47,13 @@ namespace WebApi.Controllers
             return Ok(await _mediator.Send(request));
         }
 
+        [HttpPost]
+        [Authorize(Policy = "InstructorPolicy")]
+        [ProducesResponseType(typeof(ViewInstructorAnnouncementsViewModel), 200)]
+        public async Task<IActionResult> ViewInstructorAnnouncements(ViewInstructorAnnouncementsQuery request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
         
     }
 }
