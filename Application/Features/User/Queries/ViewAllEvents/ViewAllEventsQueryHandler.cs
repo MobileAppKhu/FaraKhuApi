@@ -54,12 +54,16 @@ namespace Application.Features.User.Queries.ViewAllEvents
             ICollection<string> roles = await UserManager.GetRolesAsync(user);
             BaseUser baseUser;
             if (roles.First() == UserType.Student.ToString())
-                baseUser = _context.Students.Include(s => s.Courses).
-                    Include(s => s.Events).
+                baseUser = _context.Students.Include(s => s.Events).
+                    Include(s => s.Courses).ThenInclude(c => c.Times).
+                    Include(s => s.Courses).ThenInclude(c => c.CourseEvents).
+                    Include(s => s.Courses).ThenInclude(c => c.Instructor).
                     FirstOrDefault(s => s.Id == userId);
             else
-                baseUser = _context.Instructors.Include(s => s.Courses).
-                    Include(s => s.Events).
+                baseUser = _context.Instructors.Include(s => s.Events).
+                    Include(i => i.Courses).ThenInclude(c => c.Times).
+                    Include(i => i.Courses).ThenInclude(c => c.CourseEvents).
+                    Include(i => i.Courses).ThenInclude(c => c.Instructor).
                     FirstOrDefault(s => s.Id == userId);
 
             return new ViewAllEventsViewModel

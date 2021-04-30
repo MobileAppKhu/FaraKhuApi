@@ -41,7 +41,7 @@ namespace WebApi.Controllers
         
         [HttpPost]
         [ProducesResponseType(typeof(ViewPersonalEventViewModel),200)]
-        public async Task<IActionResult> UpdateEvent(ViewPersonalEventQuery request)
+        public async Task<IActionResult> ViewPersonalEvent(ViewPersonalEventQuery request)
         {
             return Ok(await _mediator.Send(request));
         }

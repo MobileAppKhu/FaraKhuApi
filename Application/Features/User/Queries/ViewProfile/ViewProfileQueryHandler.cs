@@ -48,16 +48,7 @@ namespace Application.Features.User.Queries.ViewProfile
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            BaseUser baseUser = null;
-            switch (user.UserType)
-            {
-                case UserType.Instructor:
-                    baseUser = _context.Instructors.FirstOrDefault(i => i.Id == request.UserId);
-                    break;
-                case UserType.Student:
-                    baseUser = _context.Students.FirstOrDefault(s => s.Id == request.UserId);
-                    break;
-            }
+            BaseUser baseUser = _context.BaseUsers.FirstOrDefault(u => u.Id == request.UserId);
 
             return new ViewProfileViewModel
             {

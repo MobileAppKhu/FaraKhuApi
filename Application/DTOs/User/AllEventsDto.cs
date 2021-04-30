@@ -3,6 +3,7 @@ using System.Linq;
 using Application.Common.Mappings;
 using Application.DTOs.Event.CourseEvent;
 using Application.DTOs.Event.PersonalEvent;
+using Application.DTOs.Time;
 using AutoMapper;
 using Domain.Models;
 
@@ -12,7 +13,7 @@ namespace Application.DTOs.User
     {
         public ICollection<EventShortDto> Events { get; set; }
         public ICollection<CourseEventShortDto> CourseEvents { get; set; }
-        public ICollection<Domain.Models.Time> Times { get; set; }
+        public ICollection<ViewEventTimeDto> Times { get; set; }
 
         public void Mapping(Profile profile)
         {

@@ -49,6 +49,7 @@ namespace Application.Features.Event.Command.DeleteEvent
             var eventObj = _context.Events.FirstOrDefault(e => e.EventId == request.EventId);
             if(eventObj != null)
                 _context.Events.Remove(eventObj);
+            await _context.SaveChangesAsync(cancellationToken);
             return new DeleteEventViewModel
             {
             };//?
