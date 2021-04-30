@@ -1,4 +1,5 @@
 ﻿using Application.Features.Announcement.Commands.CreateAnnouncement;
+using Application.Features.Announcement.Queries.ViewAnnouncements;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -24,6 +25,13 @@ namespace WebApi.Controllers
         [Authorize(Policy = "InstructorPolicy")]
         [ProducesResponseType(typeof(CreateAnnouncementViewModel), 200)]
         public async Task<IActionResult> CreateAnnouncement(CreateAnnouncementCommand request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        [HttpPost]
+        [Authorize]
+        [ProducesResponseType(typeof(ViewAnnouncementsViewModel), 200)]
+        public async Task<IActionResult> ViewAnnouncements(ViewAnnouncementsQuery request)
         {
             return Ok(await _mediator.Send(request));
         }
