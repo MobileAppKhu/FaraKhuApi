@@ -9,13 +9,17 @@ namespace Application.Features.CourseEvent.Command.AddCourseEvent
         public AddCourseEventCommandValidator(IStringLocalizer<SharedResource> localizer)
         {
             RuleFor(r => r.CourseId)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage(localizer["NotEmpty"]);
             RuleFor(r => r.EventDescription)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage(localizer["NotEmpty"]);
             RuleFor(r => r.EventName)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage(localizer["NotEmpty"]);
             RuleFor(r => r.EventTime)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage(localizer["NotEmpty"]);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Application.DTOs.User
                         opt.MapFrom(src => src.Courses.SelectMany(c => c.Times)))
                 .ForMember(e => e.CourseEvents,
                     opt =>
-                        opt.MapFrom(src => src.Courses.SelectMany(c => c.CourseEvents)));//TODO
+                        opt.MapFrom(src => src.Courses.SelectMany(c => c.CourseEvents)));
             
             profile.CreateMap<Domain.Models.Instructor, AllEventsDto>()
                 .ForMember(e => e.Events,
@@ -37,7 +37,7 @@ namespace Application.DTOs.User
                         opt.MapFrom(src => src.Courses.SelectMany(c => c.Times)))
                 .ForMember(e => e.CourseEvents,
                     opt =>
-                        opt.MapFrom(src => src.Courses.SelectMany(c => c.CourseEvents)));//TODO
+                        opt.MapFrom(src => src.Courses.SelectMany(c => c.CourseEvents)));
         }
     }
 }

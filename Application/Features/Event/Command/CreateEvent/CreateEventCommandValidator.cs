@@ -10,9 +10,11 @@ namespace Application.Features.Event.Command.CreateEvent
         public CreateEventCommandValidator(IStringLocalizer<SharedResource> localizer)
         {
             RuleFor(e => e.EventName)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage(localizer["NotEmpty"]);
             RuleFor(e => e.EventTime)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage(localizer["NotEmpty"]);
         }
     }
 }

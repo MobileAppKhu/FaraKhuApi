@@ -11,10 +11,14 @@ namespace Application.Features.Account.ResetPassword
         {
             RuleFor(r => r.Email)
                 .NotEmpty()
-                .Must(e => e.IsEmail());
+                .WithMessage(localizer["EmptyInput"])
+                .Must(e => e.IsEmail())
+                .WithMessage(localizer["InvalidEmail"]);
             RuleFor(r => r.NewPassword)
                 .NotEmpty()
-                .MinimumLength(6);
+                .WithMessage(localizer["PasswordRequired"])
+                .MinimumLength(6)
+                .WithMessage(localizer["PasswordLength"]);
         }
     }
 }

@@ -79,8 +79,8 @@ namespace Infrastructure.Persistence.EmailService
             {
                 throw new CustomException(new Error
                 {
-                    Message = "Email Exception", //TODO
-                    ErrorType = ErrorType.Unexpected
+                    Message = _localizer["EmailServiceException"],
+                    ErrorType = ErrorType.EmailServiceException
                 });
             }
         }

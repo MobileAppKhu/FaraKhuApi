@@ -11,7 +11,9 @@ namespace Application.Features.Account.ForgetPassword
         {
             RuleFor(r => r.Email)
                 .NotEmpty()
-                .Must(e => e.IsEmail());
+                .WithMessage(localizer["EmptyInput"])
+                .Must(e => e.IsEmail())
+                .WithMessage(localizer["NotValidEmail"]);
         }
     }
 }

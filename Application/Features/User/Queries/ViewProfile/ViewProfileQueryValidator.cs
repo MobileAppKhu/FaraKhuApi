@@ -9,7 +9,8 @@ namespace Application.Features.User.Queries.ViewProfile
         public ViewProfileQueryValidator(IStringLocalizer<SharedResource> localizer)
         {
             RuleFor(r => r.UserId)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage(localizer["NotEmpty"]);
         }
     }
 }

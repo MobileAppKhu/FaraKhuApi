@@ -42,4 +42,28 @@
     <data name="Unauthorized" xml:space="preserve">
         <value>دسترسی مجاز نیست</value>
     </data>
+    <data name="CourseNotFound" xml:space="preserve">
+        <value>درس مورد نظر پیدا نشد</value>
+    </data>
+    <data name="EmailNotFound" xml:space="preserve">
+        <value>ایمیل پیدا نشد</value>
+    </data>
+    <data name="CourseEventNotFound" xml:space="preserve">
+        <value>رویداد درسی پیدا نشد</value>
+    </data>
+    <data name="UnauthorizedResetPassword" xml:space="preserve">
+        <value>بازنشانی رمز عبور مجاز نیست</value>
+    </data>
+    <data name="UnautorizedValidation" xml:space="preserve">
+        <value>تایید ایمیل مجاز نیست</value>
+    </data>
+    <data name="EmailServiceException" xml:space="preserve">
+        <value>خطای سرویس ایمیل</value>
+    </data>
+    <data name="EmptyInput" xml:space="preserve">
+        <value>فیلد نباید خالی باشد</value>
+    </data>
+    <data name="InvalidEmail" xml:space="preserve">
+        <value>ایمیل صحیح نیست</value>
+    </data>
 </root>

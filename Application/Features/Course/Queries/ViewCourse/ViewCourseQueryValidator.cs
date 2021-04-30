@@ -9,7 +9,8 @@ namespace Application.Features.Course.Queries.ViewCourse
         public ViewCourseQueryValidator(IStringLocalizer<SharedResource> localizer)
         {
             RuleFor(r => r.CourseId)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage(localizer["NotEmpty"]);
         }
     }
 }

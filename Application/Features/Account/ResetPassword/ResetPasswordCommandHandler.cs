@@ -39,20 +39,20 @@ namespace Application.Features.Account.ResetPassword
             if (user == null)
                 throw new CustomException(new Error
                 {
-                    ErrorType = ErrorType.UserNotFound, //TODO Email not found
-                    Message = "Email Not Found" //TODO
+                    ErrorType = ErrorType.EmailNotFound,
+                    Message = Localizer["EmailNotFound"]
                 });
             
             if(!user.ResettingPassword)
                 throw new CustomException(new Error
                 {
-                    ErrorType = ErrorType.Unexpected, //TODO NotResetting
-                    Message = "Not Resetting" //TODO
+                    ErrorType = ErrorType.UnauthorizedResetPassword,
+                    Message = Localizer["UnauthorizedResetPassword"]
                 });
             user.ResettingPassword = false;
             await UserManager.RemovePasswordAsync(user);
             await UserManager.AddPasswordAsync(user, request.NewPassword);
-            _context.SaveChangesAsync(cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }
     }

@@ -9,7 +9,8 @@ namespace Application.Features.Account.SignIn
         public SignInCommandValidator(IStringLocalizer<SharedResource> localizer)
         {
             RuleFor(s => s.Logon)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage(localizer["NotEmpty"]);
             RuleFor(s => s.Password)
                 .NotEmpty()
                 .WithMessage(localizer["PasswordRequired"])

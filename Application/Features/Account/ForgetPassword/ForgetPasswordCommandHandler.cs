@@ -36,8 +36,8 @@ namespace Application.Features.Account.ForgetPassword
             {
                 throw new CustomException(new Error
                 {
-                    ErrorType = ErrorType.UserNotFound, //TODO Email not found
-                    Message = "Email Not Found" //TODO
+                    ErrorType = ErrorType.EmailNotFound,
+                    Message = Localizer["EmailNotFound"]
                 });
             }
 

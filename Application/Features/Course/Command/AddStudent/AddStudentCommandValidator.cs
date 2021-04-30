@@ -9,9 +9,11 @@ namespace Application.Features.Course.Command.AddStudent
         public AddStudentCommandValidator(IStringLocalizer<SharedResource> localizer)
         {
             RuleFor(r => r.CourseId)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage(localizer["NotEmpty"]);
             RuleFor(r => r.StudentId)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage(localizer["NotEmpty"]);
         }
     }
 }

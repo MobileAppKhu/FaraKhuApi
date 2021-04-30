@@ -20,7 +20,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Application.Features.Event.Queries.ViewPersonalEvent
 {
-    public class ViewPersonalEventHandler : IRequestHandler<ViewPersonalEventQuery, ViewPersonalEventViewModel>
+    public class ViewPersonalEventQueryHandler : IRequestHandler<ViewPersonalEventQuery, ViewPersonalEventViewModel>
     {
         private readonly IMapper _mapper;
 
@@ -32,7 +32,7 @@ namespace Application.Features.Event.Queries.ViewPersonalEvent
 
         private readonly IDatabaseContext _context;
 
-        public ViewPersonalEventHandler(IMapper mapper, UserManager<BaseUser> userManager,
+        public ViewPersonalEventQueryHandler(IMapper mapper, UserManager<BaseUser> userManager,
             IStringLocalizer<SharedResource> localizer, IHttpContextAccessor httpContextAccessor
             , IDatabaseContext context)
         {

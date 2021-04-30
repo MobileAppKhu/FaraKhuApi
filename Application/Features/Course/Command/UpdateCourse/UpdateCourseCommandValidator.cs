@@ -9,9 +9,11 @@ namespace Application.Features.Course.Command.UpdateCourse
         public UpdateCourseCommandValidator(IStringLocalizer<SharedResource> localizer)
         {
             RuleFor(r => r.CourseId)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage(localizer["NotEmpty"]);
             RuleFor(r => r.CourseTitle)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage(localizer["NotEmpty"]);
         }
     }
 }

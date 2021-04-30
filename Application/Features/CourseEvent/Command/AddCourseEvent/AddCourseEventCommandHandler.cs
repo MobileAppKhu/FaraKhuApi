@@ -56,8 +56,8 @@ namespace Application.Features.CourseEvent.Command.AddCourseEvent
             if(courseObj == null)
                 throw new CustomException(new Error
                 {
-                    ErrorType = ErrorType.Unexpected,//TODO
-                    Message = Localizer["Course Not Found"]
+                    ErrorType = ErrorType.CourseNotFound,
+                    Message = Localizer["CourseNotFound"]
                 });
             Domain.Models.CourseEvent courseEvent = new Domain.Models.CourseEvent
             {

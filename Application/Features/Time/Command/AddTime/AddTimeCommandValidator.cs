@@ -9,11 +9,14 @@ namespace Application.Features.Time.Command.AddTime
         public AddTimeCommandValidator(IStringLocalizer<SharedResource> localizer)
         {
             RuleFor(r => r.CourseId)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage(localizer["NotEmpty"]);
             RuleFor(r => r.StartTime)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage(localizer["NotEmpty"]);
             RuleFor(r => r.EndTime)
-                .NotEmpty();
+                .NotEmpty()
+                .WithMessage(localizer["NotEmpty"]);
         }
     }
 }
