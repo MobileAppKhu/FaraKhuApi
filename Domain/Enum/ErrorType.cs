@@ -13,5 +13,7 @@
         UnauthorizedResetPassword,
         UnauthorizedValidation,
         EmailServiceException,
+        DuplicatePassword,
+        InvalidPassword
     }
 }

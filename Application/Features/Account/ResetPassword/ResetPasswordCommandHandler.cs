@@ -42,7 +42,7 @@ namespace Application.Features.Account.ResetPassword
                     ErrorType = ErrorType.EmailNotFound,
                     Message = Localizer["EmailNotFound"]
                 });
-            
+            //TODO should check if new password doesn't match with the older one
             if(!user.ResettingPassword)
                 throw new CustomException(new Error
                 {

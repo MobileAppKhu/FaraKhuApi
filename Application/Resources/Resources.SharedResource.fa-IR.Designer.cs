@@ -79,6 +79,15 @@ namespace Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to رمز عبور جدید نباید تکراری باشد.
+        /// </summary>
+        internal static string DuplicatePassword {
+            get {
+                return ResourceManager.GetString("DuplicatePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to اطلاعات کاربر تکراری است.
         /// </summary>
         internal static string DuplicateUser {
@@ -129,6 +138,15 @@ namespace Application.Resources {
         internal static string InvalidEmail {
             get {
                 return ResourceManager.GetString("InvalidEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to رمز عبور نادرست است.
+        /// </summary>
+        internal static string InvalidPassword {
+            get {
+                return ResourceManager.GetString("InvalidPassword", resourceCulture);
             }
         }
         

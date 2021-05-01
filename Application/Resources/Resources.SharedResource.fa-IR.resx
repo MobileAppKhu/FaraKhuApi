@@ -66,4 +66,10 @@
     <data name="InvalidEmail" xml:space="preserve">
         <value>ایمیل صحیح نیست</value>
     </data>
+    <data name="DuplicatePassword" xml:space="preserve">
+        <value>رمز عبور جدید نباید تکراری باشد</value>
+    </data>
+    <data name="InvalidPassword" xml:space="preserve">
+        <value>رمز عبور نادرست است</value>
+    </data>
 </root>
