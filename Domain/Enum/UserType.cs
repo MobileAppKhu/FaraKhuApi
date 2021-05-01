@@ -3,6 +3,7 @@
     public enum UserType
     {
         Instructor,
-        Student
+        Student,
+        PROfficer
     }
 }

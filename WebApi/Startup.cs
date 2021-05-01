@@ -83,12 +83,14 @@ namespace WebApi
             services.AddAuthorization(option =>
             {
                 option.DefaultPolicy = new AuthorizationPolicyBuilder()
-                    .AddRequirements(new AuthorizationRequirements(new List<string> {"Student", "Instructor"}))
+                    .AddRequirements(new AuthorizationRequirements(new List<string> {"Student", "Instructor", "PROfficer"}))
                     .Build();
                 option.AddPolicy("StudentPolicy", policy =>
                     policy.AddRequirements(new AuthorizationRequirements(new List<string> {"Student".Normalize()})));
                 option.AddPolicy("InstructorPolicy", policy =>
                     policy.AddRequirements(new AuthorizationRequirements(new List<string> {"Instructor".Normalize()})));
+                option.AddPolicy("PROfficerPolicy", policy =>
+                    policy.AddRequirements(new AuthorizationRequirements(new List<string> {"PROfficer".Normalize()})));
             });
         }
 

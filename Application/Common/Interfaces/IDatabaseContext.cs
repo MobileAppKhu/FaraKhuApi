@@ -24,6 +24,8 @@ namespace Application.Common.Interfaces
         
         public DbSet<Announcement> Announcements { get; set; }
         public DbSet<Offer> Offers { get; set; }
+        public DbSet<PROfficer> PROfficers { get; set; }
+        public DbSet<News> News { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
 
