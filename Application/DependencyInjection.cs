@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Reflection;
+using Application.Common.Behaviours;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -17,6 +18,8 @@ namespace Application
             services.AddMediatR(Assembly.GetExecutingAssembly());
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehaviour<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             
             services.AddLocalization(options => options.ResourcesPath = "Resources");
             services.Configure<RequestLocalizationOptions>(options =>

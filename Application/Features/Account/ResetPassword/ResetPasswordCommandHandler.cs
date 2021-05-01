@@ -43,11 +43,19 @@ namespace Application.Features.Account.ResetPassword
                     Message = Localizer["EmailNotFound"]
                 });
             //TODO should check if new password doesn't match with the older one
+            
             if(!user.ResettingPassword)
                 throw new CustomException(new Error
                 {
                     ErrorType = ErrorType.UnauthorizedResetPassword,
                     Message = Localizer["UnauthorizedResetPassword"]
+                });
+            if(UserManager.PasswordHasher.VerifyHashedPassword(user, user.PasswordHash,
+                request.NewPassword) == PasswordVerificationResult.Success)
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.DuplicatePassword,
+                    Message = Localizer["DuplicatePassword"]
                 });
             user.ResettingPassword = false;
             await UserManager.RemovePasswordAsync(user);

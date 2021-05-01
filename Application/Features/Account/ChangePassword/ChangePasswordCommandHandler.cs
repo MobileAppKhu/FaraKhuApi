@@ -52,8 +52,6 @@ namespace Application.Features.Account.ChangePassword
                 });
             
             await UserManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
-            //await UserManager.RemovePasswordAsync(user);
-            //await UserManager.AddPasswordAsync(user, request.NewPassword);
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

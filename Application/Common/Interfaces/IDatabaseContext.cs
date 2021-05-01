@@ -23,6 +23,7 @@ namespace Application.Common.Interfaces
         public DbSet<CourseEvent> CourseEvents { get; set; }
         
         public DbSet<Announcement> Announcements { get; set; }
+        public DbSet<Offer> Offers { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
 
