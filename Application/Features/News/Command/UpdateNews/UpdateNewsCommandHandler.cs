@@ -14,9 +14,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.News.Command.AddNews
+namespace Application.Features.News.Command.UpdateNews
 {
-    public class AddNewsCommandHandler : IRequestHandler<AddNewsCommand, AddNewsViewModel>
+    public class UpdateNewsCommandHandler : IRequestHandler<UpdateNewsCommand>
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
@@ -24,7 +24,7 @@ namespace Application.Features.News.Command.AddNews
         private UserManager<BaseUser> UserManager { get; }
         private IMapper _mapper { get; }
 
-        public AddNewsCommandHandler( IStringLocalizer<SharedResource> localizer,
+        public UpdateNewsCommandHandler( IStringLocalizer<SharedResource> localizer,
             IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
             , IDatabaseContext context)
         {
@@ -34,7 +34,7 @@ namespace Application.Features.News.Command.AddNews
             UserManager = userManager;
             _mapper = mapper;
         }
-        public async Task<AddNewsViewModel> Handle(AddNewsCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdateNewsCommand request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             PROfficer user = _context.PROfficers.FirstOrDefault(u => u.Id == userId);
@@ -47,15 +47,12 @@ namespace Application.Features.News.Command.AddNews
             Domain.Models.News news = new Domain.Models.News
             {
                 Description = request.Description,
-                Title = request.Title
+                Title = request.Title,
+                NewsId = request.NewsId
             };
-            await _context.News.AddAsync(news, cancellationToken);
+            _context.News.Update(news);
             await _context.SaveChangesAsync(cancellationToken);
-
-            return new AddNewsViewModel
-            {
-                News = news
-            };
+            return Unit.Value;
         }
     }
 }

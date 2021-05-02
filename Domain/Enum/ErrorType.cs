@@ -14,6 +14,7 @@
         UnauthorizedValidation,
         EmailServiceException,
         DuplicatePassword,
-        InvalidPassword
+        InvalidPassword,
+        NewsNotFound
     }
 }

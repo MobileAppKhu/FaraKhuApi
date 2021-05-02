@@ -142,6 +142,15 @@ namespace Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ایمیل یا رمز عبور نادرست است.
+        /// </summary>
+        internal static string InvalidInput {
+            get {
+                return ResourceManager.GetString("InvalidInput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to رمز عبور نادرست است.
         /// </summary>
         internal static string InvalidPassword {
@@ -156,6 +165,15 @@ namespace Application.Resources {
         internal static string LastnameRequired {
             get {
                 return ResourceManager.GetString("LastnameRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to خبر پیدا نشد.
+        /// </summary>
+        internal static string NewsNotFound {
+            get {
+                return ResourceManager.GetString("NewsNotFound", resourceCulture);
             }
         }
         

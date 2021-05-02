@@ -72,4 +72,10 @@
     <data name="InvalidPassword" xml:space="preserve">
         <value>رمز عبور نادرست است</value>
     </data>
+    <data name="InvalidInput" xml:space="preserve">
+        <value>ایمیل یا رمز عبور نادرست است</value>
+    </data>
+    <data name="NewsNotFound" xml:space="preserve">
+        <value>خبر پیدا نشد</value>
+    </data>
 </root>
