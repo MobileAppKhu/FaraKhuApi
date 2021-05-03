@@ -4,6 +4,7 @@
     {
         Instructor,
         Student,
-        PROfficer
+        PROfficer,
+        Owner
     }
 }

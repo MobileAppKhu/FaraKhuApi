@@ -79,18 +79,34 @@ namespace WebApi
                     return Task.CompletedTask;
                 };
             });
-
+            //TODO to be able to give all permissions to owner we shouldn't create/update/ sth using httpaccessor
+            //should get instructor id/ student id from request
             services.AddAuthorization(option =>
             {
                 option.DefaultPolicy = new AuthorizationPolicyBuilder()
-                    .AddRequirements(new AuthorizationRequirements(new List<string> {"Student", "Instructor", "PROfficer"}))
+                    .AddRequirements(new AuthorizationRequirements(new List<string> {"Student", 
+                                                                    "Instructor", "PROfficer", "Owner"}))
                     .Build();
                 option.AddPolicy("StudentPolicy", policy =>
-                    policy.AddRequirements(new AuthorizationRequirements(new List<string> {"Student".Normalize()})));
+                    policy.AddRequirements(new AuthorizationRequirements(new List<string>
+                    {
+                        "Student".Normalize() , "Owner".Normalize()
+                    })));
                 option.AddPolicy("InstructorPolicy", policy =>
-                    policy.AddRequirements(new AuthorizationRequirements(new List<string> {"Instructor".Normalize()})));
+                    policy.AddRequirements(new AuthorizationRequirements(new List<string>
+                    {
+                        "Instructor".Normalize() , "Owner".Normalize()
+                    })));
                 option.AddPolicy("PROfficerPolicy", policy =>
-                    policy.AddRequirements(new AuthorizationRequirements(new List<string> {"PROfficer".Normalize()})));
+                    policy.AddRequirements(new AuthorizationRequirements(new List<string>
+                    {
+                        "PROfficer".Normalize(), "Owner".Normalize()
+                    })));
+                option.AddPolicy("OwnerPolicy", policy =>
+                    policy.AddRequirements(new AuthorizationRequirements(new List<string>
+                    {
+                        "Owner".Normalize()
+                    })));
             });
         }
 

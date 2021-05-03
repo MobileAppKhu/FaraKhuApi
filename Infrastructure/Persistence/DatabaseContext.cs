@@ -34,6 +34,7 @@ namespace Infrastructure.Persistence
         public DbSet<Offer> Offers { get; set; }
         public DbSet<PROfficer> PROfficers { get; set; }
         public DbSet<News> News { get; set; }
+        public DbSet<Suggestion> Suggestions { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

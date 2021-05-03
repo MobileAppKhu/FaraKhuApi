@@ -1,7 +1,10 @@
 ﻿using System.Threading.Tasks;
+using Application.Features.User.Command.CreateUser;
+using Application.Features.User.Command.RemoveUser;
 using Application.Features.User.Queries.ViewAllEvents;
 using Application.Features.User.Queries.ViewProfile;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -25,6 +28,22 @@ namespace WebApi.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(ViewProfileViewModel),200)]
         public async Task<IActionResult> ViewProfile(ViewProfileQuery request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        
+        [HttpPost]
+        [Authorize(Policy = "OwnerPolicy")]
+
+        [ProducesResponseType(typeof(CreateUserViewModel),200)]
+        public async Task<IActionResult> CreateUser(CreateUserCommand request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        
+        [HttpPost]
+        [Authorize(Policy = "OwnerPolicy")]
+        public async Task<IActionResult> RemoveUser(RemoveUserCommand request)
         {
             return Ok(await _mediator.Send(request));
         }

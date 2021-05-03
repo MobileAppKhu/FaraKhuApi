@@ -30,7 +30,7 @@ namespace Application.DTOs.User
                         opt.MapFrom(src => src.InstructorId))
                 .ForMember(s => s.UserType,opt =>
                     opt.MapFrom(src => src.UserType.ToString()));
-            profile.CreateMap<PROfficer, ProfileDto>()
+            profile.CreateMap<Domain.BaseModels.BaseUser, ProfileDto>()
                 .ForMember(o => o.Id,
                     opt =>
                         opt.Ignore())

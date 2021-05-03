@@ -19,5 +19,6 @@ namespace Domain.BaseModels
         public bool ResettingPassword { get; set; }
         public ICollection<Event> Events { get; set; }
         public ICollection<Offer> Offers { get; set; }
+        public ICollection<Suggestion> Suggestions { get; set; }
     }
 }

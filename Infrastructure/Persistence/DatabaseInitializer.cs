@@ -35,6 +35,7 @@ namespace Infrastructure.Persistence
             await RoleManager.CreateAsync(new IdentityRole {Name = "Student".Normalize()});
             await RoleManager.CreateAsync(new IdentityRole {Name = "Instructor".Normalize()});
             await RoleManager.CreateAsync(new IdentityRole {Name = "PROfficer".Normalize()});
+            await RoleManager.CreateAsync(new IdentityRole {Name = "Owner".Normalize()});
         }
 
         private async Task UserInitializer()
@@ -43,11 +44,22 @@ namespace Infrastructure.Persistence
             {
                 FirstName = "PublicRelation",
                 LastName = "Officer",
-                Email = "PublicRelation@FaraKhu.app"
+                Email = "PublicRelation@FaraKhu.app",
+                UserType = UserType.PROfficer
             };
             await UserManager.CreateAsync(officer, "PROfficerPassword");
             await UserManager.AddToRoleAsync(officer, UserType.PROfficer.ToString().Normalize());
-            
+
+            var owner = new BaseUser
+            {
+                FirstName = "Owner",
+                LastName = "User",
+                Email = "Owner@FaraKhu.app",
+                UserType = UserType.Owner
+            };
+            await UserManager.CreateAsync(owner, "OwnerPassword");
+            await UserManager.AddToRoleAsync(owner, UserType.Owner.ToString().Normalize());
+
         }
     }
 }
