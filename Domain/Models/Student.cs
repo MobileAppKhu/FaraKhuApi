@@ -9,6 +9,6 @@ namespace Domain.Models
         public string StudentId { get; set; }
 
         public ICollection<Course> Courses { get; set; }
-        
+        public ICollection<PollAnswer> PollAnswers { get; set; }
     }
 }

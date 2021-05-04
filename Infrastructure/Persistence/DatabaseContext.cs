@@ -44,5 +44,8 @@ namespace Infrastructure.Persistence
 
             return result;
         }
+
+        public DbSet<PollQuestion> PollQuestions { get; set; }
+        public DbSet<PollAnswer> PollAnswers { get; set; }
     }
 }
