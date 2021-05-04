@@ -19,10 +19,13 @@ namespace Application.DTOs.Course
         public ViewCourseInstructorDto Instructor { get; set; }
 
         public ICollection<ViewCourseCourseEventDto> CourseEvents { get; set; }
-
+        public int AvailablePolls { get; set; }
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Domain.Models.Course, ViewCourseDto>();
+            profile.CreateMap<Domain.Models.Course, ViewCourseDto>()
+                .ForMember(d => d.AvailablePolls,
+                    opt =>
+                        opt.MapFrom(src => src.Polls.Count));
         }
     }
 }
