@@ -5,7 +5,7 @@ using Domain.Models;
 
 namespace Application.DTOs.User
 {
-    public class ProfileDto : IMapFrom<Domain.Models.Instructor>, IMapFrom<Domain.Models.Student>, IMapFrom<PROfficer>
+    public class ProfileDto : IMapFrom<Domain.Models.Instructor>, IMapFrom<Domain.Models.Student>
     {
         public string FirstName { get; set; }
 

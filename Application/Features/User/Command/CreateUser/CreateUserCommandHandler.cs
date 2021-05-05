@@ -97,7 +97,7 @@ namespace Application.Features.User.Command.CreateUser
                     };
                     break;
                 case UserType.PROfficer:
-                    user = new PROfficer
+                    user = new BaseUser
                     {
                         Email = request.Email.EmailNormalize(),
                         FirstName = request.FirstName,

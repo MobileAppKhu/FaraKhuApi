@@ -40,7 +40,7 @@ namespace Infrastructure.Persistence
 
         private async Task UserInitializer()
         {
-            var officer = new PROfficer
+            var officer = new BaseUser
             {
                 FirstName = "PublicRelation",
                 LastName = "Officer",

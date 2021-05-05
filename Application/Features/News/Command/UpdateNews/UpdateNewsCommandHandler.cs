@@ -37,7 +37,7 @@ namespace Application.Features.News.Command.UpdateNews
         public async Task<Unit> Handle(UpdateNewsCommand request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            PROfficer user = _context.PROfficers.FirstOrDefault(u => u.Id == userId);
+            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
             if(user == null)
                 throw new CustomException(new Error
                 {
