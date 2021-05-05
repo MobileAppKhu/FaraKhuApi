@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Domain.BaseModels;
+using Domain.Enum;
 using Domain.Models;
 using Infrastructure.Identity;
 using Infrastructure.Persistence;
@@ -68,11 +69,11 @@ namespace UnitTest.Persistence
 
             var student = new Student
             {
-                Id = "StudentUser",
-                UserName = "",
-                LastName = "Test",
-                FirstName = "User1",
-                Email = "TestUser@Test.com",
+                FirstName = "Mehrad",
+                LastName = "Moshiri",
+                Email = "mehradmoshiri@khu.ac.ir",
+                UserType = UserType.Student,
+                Id = "982023025",
             };
             await UserManager.CreateAsync(student, "StudentPassword");
             await UserManager.AddToRoleAsync(student, "Student");

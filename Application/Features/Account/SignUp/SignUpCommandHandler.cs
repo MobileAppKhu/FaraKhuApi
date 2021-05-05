@@ -111,7 +111,7 @@ namespace Application.Features.Account.SignUp
 
             await _userManager.AddToRoleAsync(user, request.UserType.ToString().Normalize());
 
-            await _signInManager.SignInAsync(user, false);
+            //await _signInManager.SignInAsync(user, false);
 
             
            
