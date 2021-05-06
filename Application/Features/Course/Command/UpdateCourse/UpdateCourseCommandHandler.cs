@@ -19,21 +19,15 @@ namespace Application.Features.Course.Command.UpdateCourse
     public class UpdateCourseCommandHandler : IRequestHandler<UpdateCourseCommand>
     {
         private readonly IDatabaseContext _context;
-
         private IStringLocalizer<SharedResource> Localizer { get; }
-
         private IHttpContextAccessor HttpContextAccessor { get; }
-
         private UserManager<BaseUser> UserManager { get; }
-
         public UpdateCourseCommandHandler(IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
-            , IDatabaseContext context)
+            IHttpContextAccessor httpContextAccessor, IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
             HttpContextAccessor = httpContextAccessor;
-            UserManager = userManager;
         }
         public async Task<Unit> Handle(UpdateCourseCommand request, CancellationToken cancellationToken)
         {

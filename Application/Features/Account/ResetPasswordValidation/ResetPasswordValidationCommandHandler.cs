@@ -17,16 +17,15 @@ namespace Application.Features.Account.ResetPasswordValidation
     {
         private IStringLocalizer<SharedResource> Localizer { get; }
         private UserManager<BaseUser> UserManager { get; }
-        private IEmailService _emailService { get; }
+
         private readonly IDatabaseContext _context;
 
         public ResetPasswordValidationCommandHandler(UserManager<BaseUser> userManager,
-            IStringLocalizer<SharedResource> localizer, IEmailService emailService, 
-            IDatabaseContext context)
+            IStringLocalizer<SharedResource> localizer, IDatabaseContext context)
         {
             Localizer = localizer;
             UserManager = userManager;
-            _emailService = emailService;
+            
             _context = context;
         }
         public async Task<Unit> Handle(ResetPasswordValidationCommand request, CancellationToken cancellationToken)

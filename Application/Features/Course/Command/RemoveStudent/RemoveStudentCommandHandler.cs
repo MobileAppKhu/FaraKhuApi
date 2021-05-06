@@ -21,13 +21,9 @@ namespace Application.Features.Course.Command.RemoveStudent
     public class RemoveStudentCommandHandler : IRequestHandler<RemoveStudentCommand, RemoveStudentViewModel>
     {
         private readonly IDatabaseContext _context;
-
         private IStringLocalizer<SharedResource> Localizer { get; }
-
         private IHttpContextAccessor HttpContextAccessor { get; }
-
-        private UserManager<BaseUser> UserManager { get; }
-
+        
         public RemoveStudentCommandHandler(IStringLocalizer<SharedResource> localizer,
             IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
             , IDatabaseContext context)
@@ -35,7 +31,6 @@ namespace Application.Features.Course.Command.RemoveStudent
             _context = context;
             Localizer = localizer;
             HttpContextAccessor = httpContextAccessor;
-            UserManager = userManager;
         }
         public async Task<RemoveStudentViewModel> Handle(RemoveStudentCommand request, CancellationToken cancellationToken)
         {

@@ -22,12 +22,8 @@ namespace Application.Features.CourseEvent.Command.AddCourseEvent
     public class AddCourseEventCommandHandler : IRequestHandler<AddCourseEventCommand, AddCourseEventViewModel>
     {
         private readonly IDatabaseContext _context;
-        
         private IStringLocalizer<SharedResource> Localizer { get; }
-        
         private IHttpContextAccessor HttpContextAccessor { get; }
-        
-        private UserManager<BaseUser> UserManager { get; }
         private IMapper _mapper { get; }
 
         public AddCourseEventCommandHandler( IStringLocalizer<SharedResource> localizer,
@@ -37,7 +33,6 @@ namespace Application.Features.CourseEvent.Command.AddCourseEvent
             _context = context;
             Localizer = localizer;
             HttpContextAccessor = httpContextAccessor;
-            UserManager = userManager;
             _mapper = mapper;
         }
 

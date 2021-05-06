@@ -21,12 +21,8 @@ namespace Application.Features.Event.Command.CreateEvent
     {
         
         private readonly IDatabaseContext _context;
-        
         private IStringLocalizer<SharedResource> Localizer { get; }
-        
         private IHttpContextAccessor HttpContextAccessor { get; }
-        
-        private UserManager<BaseUser> UserManager { get; }
         private IMapper _mapper { get; }
 
         public CreateEventCommandHandler( IStringLocalizer<SharedResource> localizer,
@@ -36,7 +32,6 @@ namespace Application.Features.Event.Command.CreateEvent
             _context = context;
             Localizer = localizer;
             HttpContextAccessor = httpContextAccessor;
-            UserManager = userManager;
             _mapper = mapper;
         }
 

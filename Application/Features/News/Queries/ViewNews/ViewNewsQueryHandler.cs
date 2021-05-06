@@ -18,19 +18,11 @@ namespace Application.Features.News.Queries.ViewNews
     public class ViewNewsQueryHandler : IRequestHandler<ViewNewsQuery, ViewNewsViewModel>
     {
         private readonly IDatabaseContext _context;
-        private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
-        private UserManager<BaseUser> UserManager { get; }
         private IMapper _mapper { get; }
 
-        public ViewNewsQueryHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
-            , IDatabaseContext context)
+        public ViewNewsQueryHandler(IMapper mapper, IDatabaseContext context)
         {
             _context = context;
-            Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
-            UserManager = userManager;
             _mapper = mapper;
         }
         public async Task<ViewNewsViewModel> Handle(ViewNewsQuery request, CancellationToken cancellationToken)

@@ -2,7 +2,7 @@
 
 namespace Application.Features.Event.Command.UpdateEvent
 {
-    public class UpdateEventCommand : IRequest<UpdateEventViewModel>
+    public class UpdateEventCommand : IRequest<Unit>
     {
         public int EventId { get; set; }
         

@@ -19,13 +19,8 @@ namespace Application.Features.Offer.Command.RemoveOffer
     public class RemoveOfferCommandHandler : IRequestHandler<RemoveOfferCommand>
     {
         private readonly IDatabaseContext _context;
-        
         private IStringLocalizer<SharedResource> Localizer { get; }
-        
         private IHttpContextAccessor HttpContextAccessor { get; }
-        
-        private UserManager<BaseUser> UserManager { get; }
-        private IMapper _mapper { get; }
 
         public RemoveOfferCommandHandler( IStringLocalizer<SharedResource> localizer,
             IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
@@ -34,8 +29,6 @@ namespace Application.Features.Offer.Command.RemoveOffer
             _context = context;
             Localizer = localizer;
             HttpContextAccessor = httpContextAccessor;
-            UserManager = userManager;
-            _mapper = mapper;
         }
         public async Task<Unit> Handle(RemoveOfferCommand request, CancellationToken cancellationToken)
         {

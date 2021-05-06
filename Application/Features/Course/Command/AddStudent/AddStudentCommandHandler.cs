@@ -25,17 +25,15 @@ namespace Application.Features.Course.Command.AddStudent
         
         private IHttpContextAccessor HttpContextAccessor { get; }
         
-        private UserManager<BaseUser> UserManager { get; }
         private IMapper _mapper { get; }
 
         public AddStudentCommandHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
+            IHttpContextAccessor httpContextAccessor,IMapper mapper
             , IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
             HttpContextAccessor = httpContextAccessor;
-            UserManager = userManager;
             _mapper = mapper;
         }
         public async Task<AddStudentViewModel> Handle(AddStudentCommand request, CancellationToken cancellationToken)

@@ -16,28 +16,20 @@ using Microsoft.Extensions.Localization;
 
 namespace Application.Features.Event.Command.UpdateEvent
 {
-    public class UpdateEventCommandHandler : IRequestHandler<UpdateEventCommand, UpdateEventViewModel>
+    public class UpdateEventCommandHandler : IRequestHandler<UpdateEventCommand>
     {
         private readonly IDatabaseContext _context;
-        
         private IStringLocalizer<SharedResource> Localizer { get; }
-        
         private IHttpContextAccessor HttpContextAccessor { get; }
-        
-        private UserManager<BaseUser> UserManager { get; }
-        private IMapper _mapper { get; }
 
         public UpdateEventCommandHandler(IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
-            , IDatabaseContext context)
+            IHttpContextAccessor httpContextAccessor, IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
             HttpContextAccessor = httpContextAccessor;
-            UserManager = userManager;
-            _mapper = mapper;
         }
-        public async Task<UpdateEventViewModel> Handle(UpdateEventCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdateEventCommand request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
@@ -56,9 +48,7 @@ namespace Application.Features.Event.Command.UpdateEvent
                     EventName = request.EventName,
                     EventTime = DateTimeOffset.Parse(request.EventTime).Date,
                 });
-            return new UpdateEventViewModel
-            {
-            };
+            return Unit.Value;
         }
     }
 }

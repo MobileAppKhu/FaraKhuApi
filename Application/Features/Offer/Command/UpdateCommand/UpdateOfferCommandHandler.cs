@@ -18,23 +18,18 @@ namespace Application.Features.Offer.Command.UpdateCommand
     public class UpdateOfferCommandHandler : IRequestHandler<UpdateOfferCommand>
     {
         private readonly IDatabaseContext _context;
-        
         private IStringLocalizer<SharedResource> Localizer { get; }
-        
         private IHttpContextAccessor HttpContextAccessor { get; }
-        
         private UserManager<BaseUser> UserManager { get; }
-        private IMapper _mapper { get; }
 
         public UpdateOfferCommandHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
+            IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager
             , IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
             HttpContextAccessor = httpContextAccessor;
             UserManager = userManager;
-            _mapper = mapper;
         }
         public async Task<Unit> Handle(UpdateOfferCommand request, CancellationToken cancellationToken)
         {

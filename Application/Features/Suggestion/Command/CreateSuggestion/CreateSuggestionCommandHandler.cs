@@ -22,14 +22,11 @@ namespace Application.Features.Suggestion.Command.CreateSuggestion
         private UserManager<BaseUser> UserManager { get; }
         private IMapper _mapper { get; }
 
-        public CreateSuggestionCommandHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
-            , IDatabaseContext context)
+        public CreateSuggestionCommandHandler(IHttpContextAccessor httpContextAccessor,
+            IMapper mapper, IDatabaseContext context)
         {
             _context = context;
-            Localizer = localizer;
             HttpContextAccessor = httpContextAccessor;
-            UserManager = userManager;
             _mapper = mapper;
         }
         public async Task<CreateSuggestionViewModel> Handle(CreateSuggestionCommand request, CancellationToken cancellationToken)

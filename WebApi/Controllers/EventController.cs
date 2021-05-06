@@ -26,14 +26,12 @@ namespace WebApi.Controllers
         }
         
         [HttpPost]
-        [ProducesResponseType(typeof(DeleteEventViewModel),200)]
         public async Task<IActionResult> DeleteEvent(DeleteEventCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
         
         [HttpPost]
-        [ProducesResponseType(typeof(UpdateEventViewModel),200)]
         public async Task<IActionResult> UpdateEvent(UpdateEventCommand request)
         {
             return Ok(await _mediator.Send(request));

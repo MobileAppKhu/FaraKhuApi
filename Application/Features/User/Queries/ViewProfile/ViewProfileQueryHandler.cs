@@ -19,21 +19,14 @@ namespace Application.Features.User.Queries.ViewProfile
     public class ViewProfileQueryHandler : IRequestHandler<ViewProfileQuery, ViewProfileViewModel>
     {
         private readonly IMapper _mapper;
-
-        public UserManager<BaseUser> UserManager { get; }
-
         public IStringLocalizer<SharedResource> Localizer { get; }
-        
         private IHttpContextAccessor HttpContextAccessor { get; }
-
         private readonly IDatabaseContext _context;
-
         public ViewProfileQueryHandler(IMapper mapper, UserManager<BaseUser> userManager,
             IStringLocalizer<SharedResource> localizer, IHttpContextAccessor httpContextAccessor
             , IDatabaseContext context)
         {
             _mapper = mapper;
-            UserManager = userManager;
             Localizer = localizer;
             HttpContextAccessor = httpContextAccessor;
             _context = context;

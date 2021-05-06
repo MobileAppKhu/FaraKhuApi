@@ -21,18 +21,13 @@ namespace Application.Features.News.Command.UpdateNews
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
         private IHttpContextAccessor HttpContextAccessor { get; }
-        private UserManager<BaseUser> UserManager { get; }
-        private IMapper _mapper { get; }
 
         public UpdateNewsCommandHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
-            , IDatabaseContext context)
+            IHttpContextAccessor httpContextAccessor, IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
             HttpContextAccessor = httpContextAccessor;
-            UserManager = userManager;
-            _mapper = mapper;
         }
         public async Task<Unit> Handle(UpdateNewsCommand request, CancellationToken cancellationToken)
         {

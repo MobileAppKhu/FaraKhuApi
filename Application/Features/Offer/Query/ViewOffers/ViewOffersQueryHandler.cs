@@ -19,19 +19,11 @@ namespace Application.Features.Offer.Query.ViewOffers
     public class ViewOffersQueryHandler : IRequestHandler<ViewOffersQuery, ViewOffersViewModel>
     {
         private readonly IDatabaseContext _context;
-        private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
-        private UserManager<BaseUser> UserManager { get; }
         private IMapper _mapper { get; }
 
-        public ViewOffersQueryHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
-            , IDatabaseContext context)
+        public ViewOffersQueryHandler(IMapper mapper, IDatabaseContext context)
         {
             _context = context;
-            Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
-            UserManager = userManager;
             _mapper = mapper;
         }
         public async Task<ViewOffersViewModel> Handle(ViewOffersQuery request, CancellationToken cancellationToken)

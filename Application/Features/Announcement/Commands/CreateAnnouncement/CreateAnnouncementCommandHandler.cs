@@ -28,17 +28,16 @@ namespace Application.Features.Announcement.Commands.CreateAnnouncement
 
         private IHttpContextAccessor HttpContextAccessor { get; }
 
-        private UserManager<BaseUser> UserManager { get; }
+        
         private IMapper _mapper { get; }
 
         public CreateAnnouncementCommandHandler(IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
+            IHttpContextAccessor httpContextAccessor, IMapper mapper
             , IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
             HttpContextAccessor = httpContextAccessor;
-            UserManager = userManager;
             _mapper = mapper;
         }
         public async Task<CreateAnnouncementViewModel> Handle(CreateAnnouncementCommand request, CancellationToken cancellationToken)

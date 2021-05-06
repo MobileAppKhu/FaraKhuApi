@@ -22,16 +22,15 @@ namespace Application.Features.Account.ResetPassword
         private UserManager<BaseUser> UserManager { get; }
         private IEmailService _emailService { get; }
         private readonly IDatabaseContext _context;
-        private readonly IMapper _mapper;
+        
         public ResetPasswordCommandHandler(UserManager<BaseUser> userManager,
             IStringLocalizer<SharedResource> localizer, IEmailService emailService, 
-            IDatabaseContext context, IMapper mapper)
+            IDatabaseContext context)
         {
             Localizer = localizer;
             UserManager = userManager;
             _emailService = emailService;
             _context = context;
-            _mapper = mapper;
         }
         public async Task<Unit> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
         {
@@ -43,7 +42,6 @@ namespace Application.Features.Account.ResetPassword
                     Message = Localizer["EmailNotFound"]
                 });
             //TODO should check if new password doesn't match with the older one
-            
             if(!user.ResettingPassword)
                 throw new CustomException(new Error
                 {

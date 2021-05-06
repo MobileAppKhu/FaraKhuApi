@@ -19,18 +19,13 @@ namespace Application.Features.News.Queries.ViewIndividualNews
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
-        private UserManager<BaseUser> UserManager { get; }
         private IMapper _mapper { get; }
 
-        public ViewIndividualNewsQueryHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
-            , IDatabaseContext context)
+        public ViewIndividualNewsQueryHandler( IStringLocalizer<SharedResource> localizer
+            , IMapper mapper, IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
-            UserManager = userManager;
             _mapper = mapper;
         }
         public async Task<ViewIndividualNewsViewModel> Handle(ViewIndividualNewsQuery request, CancellationToken cancellationToken)

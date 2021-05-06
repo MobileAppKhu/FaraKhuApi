@@ -21,7 +21,6 @@ namespace Application.Features.User.Queries.ViewAllEvents
     public class ViewAllEventsQueryHandler : IRequestHandler<ViewAllEventsQuery, ViewAllEventsViewModel>
     {
         private readonly IMapper _mapper;
-
         public UserManager<BaseUser> UserManager { get; }
 
         public IStringLocalizer<SharedResource> Localizer { get; }

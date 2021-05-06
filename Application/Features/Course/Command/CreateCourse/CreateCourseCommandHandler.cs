@@ -20,22 +20,17 @@ namespace Application.Features.Course.Command.CreateCourse
     public class CreateCourseCommandHandler : IRequestHandler<CreateCourseCommand, CreateCourseViewModel>
     {
         private readonly IDatabaseContext _context;
-        
         private IStringLocalizer<SharedResource> Localizer { get; }
-        
         private IHttpContextAccessor HttpContextAccessor { get; }
-        
-        private UserManager<BaseUser> UserManager { get; }
         private IMapper _mapper { get; }
 
         public CreateCourseCommandHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
+            IHttpContextAccessor httpContextAccessor, IMapper mapper
             , IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
             HttpContextAccessor = httpContextAccessor;
-            UserManager = userManager;
             _mapper = mapper;
         }
         public async Task<CreateCourseViewModel> Handle(CreateCourseCommand request, CancellationToken cancellationToken)

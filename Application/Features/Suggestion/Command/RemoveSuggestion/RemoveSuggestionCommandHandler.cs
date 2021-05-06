@@ -15,20 +15,10 @@ namespace Application.Features.Suggestion.Command.RemoveSuggestion
     public class RemoveSuggestionCommandHandler : IRequestHandler<RemoveSuggestionCommand>
     {
         private readonly IDatabaseContext _context;
-        private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
-        private UserManager<BaseUser> UserManager { get; }
-        private IMapper _mapper { get; }
 
-        public RemoveSuggestionCommandHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
-            , IDatabaseContext context)
+        public RemoveSuggestionCommandHandler(IDatabaseContext context)
         {
             _context = context;
-            Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
-            UserManager = userManager;
-            _mapper = mapper;
         }
         public async Task<Unit> Handle(RemoveSuggestionCommand request, CancellationToken cancellationToken)
         {

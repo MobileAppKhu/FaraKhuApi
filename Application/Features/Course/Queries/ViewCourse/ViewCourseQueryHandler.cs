@@ -21,22 +21,16 @@ namespace Application.Features.Course.Queries.ViewCourse
     public class ViewCourseQueryHandler : IRequestHandler<ViewCourseQuery, ViewCourseViewModel>
     {
         private readonly IDatabaseContext _context;
-
         private IStringLocalizer<SharedResource> Localizer { get; }
-
         private IHttpContextAccessor HttpContextAccessor { get; }
-
-        private UserManager<BaseUser> UserManager { get; }
         private IMapper _mapper { get; }
 
         public ViewCourseQueryHandler(IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
-            , IDatabaseContext context)
+            IHttpContextAccessor httpContextAccessor, IMapper mapper, IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
             HttpContextAccessor = httpContextAccessor;
-            UserManager = userManager;
             _mapper = mapper;
         }
         public async Task<ViewCourseViewModel> Handle(ViewCourseQuery request, CancellationToken cancellationToken)
