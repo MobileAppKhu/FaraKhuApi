@@ -41,8 +41,8 @@ namespace Application.Features.Announcement.Queries.ViewAnnouncements
         }
         public async Task<ViewAnnouncementsViewModel> Handle(ViewAnnouncementsQuery request, CancellationToken cancellationToken)
         {
-            var list = _context.Announcements
-                .Include(announce => announce.Instructor).ToList();
+            var list = await _context.Announcements
+                .Include(announce => announce.Instructor).ToListAsync(cancellationToken);
             
             if(!string.IsNullOrEmpty(request.Faculty))
             {

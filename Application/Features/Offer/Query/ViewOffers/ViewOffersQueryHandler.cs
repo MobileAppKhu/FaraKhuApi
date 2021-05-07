@@ -28,7 +28,8 @@ namespace Application.Features.Offer.Query.ViewOffers
         }
         public async Task<ViewOffersViewModel> Handle(ViewOffersQuery request, CancellationToken cancellationToken)
         {
-            var offers = _context.Offers.Include(o => o.BaseUser).ToList();
+            var offers = await _context.Offers.Include(o => o.BaseUser).
+                ToListAsync(cancellationToken);
             if (!string.IsNullOrWhiteSpace(request.Search))
                 offers = offers.Where(offer => offer.Title.ToLower().Contains(request.Search.ToLower()) || 
                                                offer.Description.ToLower().Contains(request.Search.ToLower()))

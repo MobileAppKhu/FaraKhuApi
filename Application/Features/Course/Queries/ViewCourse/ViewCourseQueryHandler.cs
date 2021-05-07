@@ -36,7 +36,8 @@ namespace Application.Features.Course.Queries.ViewCourse
         public async Task<ViewCourseViewModel> Handle(ViewCourseQuery request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
+            BaseUser user = await _context.BaseUsers.FirstOrDefaultAsync(u => u.Id == userId
+            ,cancellationToken);
             if (user == null)
                 throw new CustomException(new Error
                 {

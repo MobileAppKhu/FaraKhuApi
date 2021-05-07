@@ -12,6 +12,7 @@ using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace Application.Features.Time.Command.RemoveTime
@@ -35,14 +36,15 @@ namespace Application.Features.Time.Command.RemoveTime
         public async Task<Unit> Handle(RemoveTimeCommand request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Instructor user = _context.Instructors.FirstOrDefault(u => u.Id == userId);
+            Instructor user = await _context.Instructors.FirstOrDefaultAsync(u => u.Id == userId,
+                cancellationToken);
             if(user == null)
                 throw new CustomException(new Error
                 {
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            var timeObj = _context.Times.FirstOrDefault(t => t.TimeId == request.TimeId);
+            var timeObj = await _context.Times.FirstOrDefaultAsync(t => t.TimeId == request.TimeId, cancellationToken);
             if(timeObj != null)
                 _context.Times.Remove(timeObj);
             return Unit.Value;

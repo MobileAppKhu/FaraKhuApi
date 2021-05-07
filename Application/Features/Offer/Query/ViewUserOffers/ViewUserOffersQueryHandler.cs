@@ -37,8 +37,8 @@ namespace Application.Features.Offer.Query.ViewUserOffers
         public async Task<ViewUserOffersViewModel> Handle(ViewUserOffersQuery request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            BaseUser user = _context.BaseUsers.Include(u => u.Offers).
-                FirstOrDefault(u => u.Id == userId);
+            BaseUser user = await _context.BaseUsers.Include(u => u.Offers).
+                FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
             if(user == null)
                 throw new CustomException(new Error
                 {

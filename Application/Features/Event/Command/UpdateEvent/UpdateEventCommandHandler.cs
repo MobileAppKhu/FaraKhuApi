@@ -12,6 +12,7 @@ using Domain.Enum;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace Application.Features.Event.Command.UpdateEvent
@@ -32,7 +33,7 @@ namespace Application.Features.Event.Command.UpdateEvent
         public async Task<Unit> Handle(UpdateEventCommand request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
+            BaseUser user = await _context.BaseUsers.FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
             if(user == null)
                 throw new CustomException(new Error
                 {

@@ -27,7 +27,8 @@ namespace Application.Features.Suggestion.Queries.ViewSuggestions
         }
         public async Task<ViewSuggestionsViewModel> Handle(ViewSuggestionsQuery request, CancellationToken cancellationToken)
         {
-            var suggestions = _context.Suggestions.Include(s => s.Sender).ToList();
+            var suggestions = await _context.Suggestions.Include(s => s.Sender).
+                ToListAsync(cancellationToken);
             return new ViewSuggestionsViewModel
             {
                 Suggestions = _mapper.Map<ICollection<SuggestionDto>>(suggestions)

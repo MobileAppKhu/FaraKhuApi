@@ -33,7 +33,7 @@ namespace Application.Common.Behaviours
             {
                 throw;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 Debugger.Break();
                 throw new CustomException(new Error
