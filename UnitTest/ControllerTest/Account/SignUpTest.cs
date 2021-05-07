@@ -30,7 +30,7 @@ namespace UnitTest.ControllerTest.Account
                 FirstName = "Mohammad",
                 LastName = "SharifiSadeghi",
                 Email = "m.sharifisadeghi@khu.ac.ir",
-                UserType = UserType.Student,
+                UserType= UserType.Student,
                 Id= "982023016",
                 Password="mohammad"
             };

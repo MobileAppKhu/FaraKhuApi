@@ -9,7 +9,9 @@ namespace Application.Features.Poll.Commands.RetractVote
     {
         public RetractVoteCommandValidator(IStringLocalizer<SharedResource> localizer)
         {
-            
+            RuleFor(r => r.AnswerId)
+                .NotEmpty()
+                .WithMessage(localizer["EmptyInput"]);
         }
     }
 }

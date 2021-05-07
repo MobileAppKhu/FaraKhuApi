@@ -4,6 +4,5 @@ namespace Application.Features.Poll.Commands.RemoveAnswer
 {
     public class RemoveAnswerViewModel
     {
-        
     }
 }

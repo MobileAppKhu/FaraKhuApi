@@ -111,10 +111,8 @@ namespace Application.Features.Account.SignUp
 
             await _userManager.AddToRoleAsync(user, request.UserType.ToString().Normalize());
 
-            //await _signInManager.SignInAsync(user, false);
-
+            await _signInManager.SignInAsync(user, false);
             
-           
             return new SignUpViewModel
             {
                 ProfileDto = _mapper.Map<ProfileDto>(user)

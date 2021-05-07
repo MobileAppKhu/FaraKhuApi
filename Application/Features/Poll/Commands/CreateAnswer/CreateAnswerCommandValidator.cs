@@ -9,7 +9,12 @@ namespace Application.Features.Poll.Commands.CreateAnswer
     {
         public CreateAnswerCommandValidator(IStringLocalizer<SharedResource> localizer)
         {
-            
+            RuleFor(r => r.AnswerDescription)
+                .NotEmpty()
+                .WithMessage(localizer["EmptyInput"]);
+            RuleFor(r => r.QuestionId)
+                .NotEmpty()
+                .WithMessage(localizer["EmptyInput"]);
         }
     }
 }

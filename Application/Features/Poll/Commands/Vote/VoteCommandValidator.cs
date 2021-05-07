@@ -9,7 +9,9 @@ namespace Application.Features.Poll.Commands.Vote
     {
         public VoteCommandValidator(IStringLocalizer<SharedResource> localizer)
         {
-            
+            RuleFor(r => r.AnswerId)
+                .NotEmpty()
+                .WithMessage(localizer["EmptyInput"]);
         }
     }
 }

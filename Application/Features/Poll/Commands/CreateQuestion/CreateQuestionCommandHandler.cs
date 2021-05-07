@@ -5,13 +5,16 @@ using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.DTOs.Offer;
+using Application.DTOs.Poll;
 using Application.Resources;
 using AutoMapper;
 using Domain.BaseModels;
 using Domain.Enum;
+using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace Application.Features.Poll.Commands.CreateQuestion
@@ -21,7 +24,6 @@ namespace Application.Features.Poll.Commands.CreateQuestion
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
         private IHttpContextAccessor HttpContextAccessor { get; }
-        private UserManager<BaseUser> UserManager { get; }
         private IMapper _mapper { get; }
 
         public CreateQuestionCommandHandler( IStringLocalizer<SharedResource> localizer,
@@ -31,13 +33,37 @@ namespace Application.Features.Poll.Commands.CreateQuestion
             _context = context;
             Localizer = localizer;
             HttpContextAccessor = httpContextAccessor;
-            UserManager = userManager;
             _mapper = mapper;
         }
 
-        public Task<CreateQuestionViewModel> Handle(CreateQuestionCommand request, CancellationToken cancellationToken)
+        public async Task<CreateQuestionViewModel> Handle(CreateQuestionCommand request, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Instructor user = await _context.Instructors.FirstOrDefaultAsync(i => i.Id == userId, cancellationToken);
+            if (user == null)
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.Unauthorized,
+                    Message = Localizer["Unauthorized"]
+                });
+
+            var course = await _context.Courses.Include(c => c.Instructor)
+                .Include(c => c.Polls).FirstOrDefaultAsync(c => c.CourseId == request.CourseId
+                , cancellationToken);
+            var poll = new PollQuestion
+            {
+                QuestionDescription = request.QuestionDescription,
+                MultiVote = request.MultiVote,
+                Course = course,
+                CourseId = course.CourseId
+            };
+            await _context.PollQuestions.AddAsync(poll, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return new CreateQuestionViewModel
+            {
+                Poll = _mapper.Map<PollQuestionDto>(poll)
+            };
         }
     }
 }
