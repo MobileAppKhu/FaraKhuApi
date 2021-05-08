@@ -43,7 +43,7 @@ namespace WebApi
             services.AddScoped<IEmailService, EmailService>();
 
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
 
             services.AddIdentity<BaseUser, IdentityRole>()
                 .AddEntityFrameworkStores<DatabaseContext>()

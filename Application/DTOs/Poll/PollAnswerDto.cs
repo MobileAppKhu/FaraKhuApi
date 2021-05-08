@@ -13,7 +13,7 @@ namespace Application.DTOs.Poll
         public ICollection<StudentShortDto> Voters { get; set; }
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<PollAnswerDto, PollAnswer>();
+            profile.CreateMap<PollAnswer, PollAnswerDto>();
         }
     }
 }
