@@ -6,7 +6,7 @@ namespace Domain.Models
 {
     public class Event : BaseEntity
     {
-        public int EventId { get; set; }
+        public string EventId { get; set; }
         
         public string EventName { get; set; }
         

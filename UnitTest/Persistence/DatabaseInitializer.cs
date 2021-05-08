@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using Domain.BaseModels;
 using Domain.Enum;
 using Domain.Models;
-using Infrastructure.Identity;
 using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -23,7 +17,6 @@ namespace UnitTest.Persistence
         private DatabaseContext Context { get; }
         private IConfiguration Configuration { get; }
         private UserManager<BaseUser> UserManager { get; }
-
         private RoleManager<IdentityRole> RoleManager { get; }
         // private ILoggerService<DatabaseInitializer> Logger { get; }
 
@@ -73,7 +66,7 @@ namespace UnitTest.Persistence
                 LastName = "Moshiri",
                 Email = "mehradmoshiri@khu.ac.ir",
                 UserType = UserType.Student,
-                Id = "982023025",
+                StudentId = "982023025",
             };
             await UserManager.CreateAsync(student, "StudentPassword");
             await UserManager.AddToRoleAsync(student, "Student");

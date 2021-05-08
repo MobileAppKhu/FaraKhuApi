@@ -6,7 +6,7 @@ namespace Domain.Models
 {
     public class CourseEvent
     {
-        public int CourseEventId { get; set; }
+        public string CourseEventId { get; set; }
         
         public string EventName { get; set; }
         
@@ -18,6 +18,6 @@ namespace Domain.Models
 
         public Course Course { get; set; }
 
-        public int CourseId { get; set; }
+        public string CourseId { get; set; }
     }
 }

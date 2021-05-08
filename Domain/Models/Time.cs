@@ -4,11 +4,11 @@ namespace Domain.Models
 {
     public class Time : BaseEntity
     {
-        public int TimeId { get; set; }
+        public string TimeId { get; set; }
         
         public Course Course { get; set; }
 
-        public int CourseId { get; set; }
+        public string CourseId { get; set; }
 
         public DateTime StartTime { get; set; }
 

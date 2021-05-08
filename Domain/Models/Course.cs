@@ -4,7 +4,7 @@ namespace Domain.Models
 {
     public class Course : BaseEntity
     {
-        public int CourseId { get; set; }
+        public string CourseId { get; set; }
 
         public string CourseTitle { get; set; }
 

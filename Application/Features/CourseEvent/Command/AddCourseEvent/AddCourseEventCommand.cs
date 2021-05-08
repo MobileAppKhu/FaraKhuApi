@@ -14,6 +14,6 @@ namespace Application.Features.CourseEvent.Command.AddCourseEvent
 
     public CourseEventType EventType { get; set; }
 
-    public int CourseId { get; set; }
+    public string CourseId { get; set; }
     }
 }

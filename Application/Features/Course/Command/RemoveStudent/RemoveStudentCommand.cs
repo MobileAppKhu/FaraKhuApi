@@ -9,7 +9,7 @@ namespace Application.Features.Course.Command.RemoveStudent
 {
     public class RemoveStudentCommand : IRequest<RemoveStudentViewModel>
     {
-        public int CourseId { get; set; }
+        public string CourseId { get; set; }
         public string StudentId { get; set; }
     }
 }

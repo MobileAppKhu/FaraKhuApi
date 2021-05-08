@@ -8,7 +8,7 @@ namespace Domain.Models
 {
     public class Announcement : BaseEntity
     {
-        public int AnnouncementId { get; set; }
+        public string AnnouncementId { get; set; }
         public string AnnouncementTitle { get; set; }
         public string AnnouncementDescription { get; set; }
         public string Department { get; set; }

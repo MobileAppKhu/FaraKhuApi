@@ -4,7 +4,7 @@ namespace Application.Features.Event.Command.UpdateEvent
 {
     public class UpdateEventCommand : IRequest<Unit>
     {
-        public int EventId { get; set; }
+        public string EventId { get; set; }
         
         public string EventName { get; set; }
         

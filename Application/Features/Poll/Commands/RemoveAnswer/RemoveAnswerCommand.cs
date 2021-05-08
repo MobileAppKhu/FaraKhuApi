@@ -5,6 +5,6 @@ namespace Application.Features.Poll.Commands.RemoveAnswer
 {
     public class RemoveAnswerCommand : IRequest<RemoveAnswerViewModel>
     {
-        public int AnswerId { get; set; }
+        public string AnswerId { get; set; }
     }
 }

@@ -7,8 +7,8 @@ namespace Application.DTOs.CourseEvent
 {
     public class ViewCourseCourseEventDto : IMapFrom<Domain.Models.CourseEvent>
     {
+        public string CourseEventId { get; set; }
         public string EventName { get; set; }
-
         public string Description { get; set; }
         
         public DateTime EventTime { get; set; }

@@ -7,7 +7,7 @@ namespace Application.DTOs.Event.CourseEvent
 {
     public class CourseEventShortDto : IMapFrom<Domain.Models.CourseEvent>
     {
-        public int CourseEventId { get; set; }
+        public string CourseEventId { get; set; }
         
         public string EventName { get; set; }
 

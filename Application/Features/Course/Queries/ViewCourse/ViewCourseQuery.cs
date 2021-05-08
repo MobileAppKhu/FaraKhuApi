@@ -4,6 +4,6 @@ namespace Application.Features.Course.Queries.ViewCourse
 {
     public class ViewCourseQuery : IRequest<ViewCourseViewModel>
     {
-        public int CourseId { get; set; }
+        public string CourseId { get; set; }
     }
 }

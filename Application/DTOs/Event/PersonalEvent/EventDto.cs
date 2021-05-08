@@ -6,7 +6,7 @@ namespace Application.DTOs.Event.PersonalEvent
 {
     public class EventDto : IMapFrom<Domain.Models.Event>
     {
-        public int EventId { get; set; }
+        public string EventId { get; set; }
         
         public string EventName { get; set; }
         

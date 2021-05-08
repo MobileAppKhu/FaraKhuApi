@@ -5,7 +5,7 @@ namespace Application.Features.Offer.Command.UpdateCommand
 {
     public class UpdateOfferCommand : IRequest<Unit>
     {
-        public int OfferId { get; set; }
+        public string OfferId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public OfferType OfferType { get; set; }

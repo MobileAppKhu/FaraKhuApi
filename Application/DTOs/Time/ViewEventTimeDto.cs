@@ -6,14 +6,11 @@ namespace Application.DTOs.Time
 {
     public class ViewEventTimeDto : IMapFrom<Domain.Models.Time>
     {
+        public string TimeId { get; set; }
         public DateTime StartTime { get; set; }
-
         public DateTime EndTime { get; set; }
-
         public string InstructorName { get; set; }
-
         public string CourseTitle { get; set; }
-
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Domain.Models.Time, ViewEventTimeDto>()

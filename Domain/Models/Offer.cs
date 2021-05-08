@@ -5,7 +5,7 @@ namespace Domain.Models
 {
     public class Offer : BaseEntity
     {
-        public int OfferId { get; set; }
+        public string OfferId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public OfferType OfferType { get; set; }

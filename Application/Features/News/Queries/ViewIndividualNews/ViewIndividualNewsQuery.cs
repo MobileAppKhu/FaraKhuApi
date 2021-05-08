@@ -4,6 +4,6 @@ namespace Application.Features.News.Queries.ViewIndividualNews
 {
     public class ViewIndividualNewsQuery : IRequest<ViewIndividualNewsViewModel>
     {
-        public int NewsId { get; set; }
+        public string NewsId { get; set; }
     }
 }

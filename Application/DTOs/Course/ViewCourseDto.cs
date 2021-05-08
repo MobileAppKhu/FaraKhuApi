@@ -10,6 +10,7 @@ namespace Application.DTOs.Course
 {
     public class ViewCourseDto : IMapFrom<Domain.Models.Course>
     {
+        public string CourseId { get; set; }
         public string CourseTitle { get; set; }
 
         public ICollection<ViewCourseTimeDto> Times { get; set; }

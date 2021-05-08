@@ -10,7 +10,7 @@ namespace Application.DTOs.Announcement
 {
     public class ViewAnnouncementDto : IMapFrom<Domain.Models.Announcement>
     {
-        public int AnnouncementId { get; set; }
+        public string AnnouncementId { get; set; }
         public string AnnouncementTitle { get; set; }
         public string AnnouncementDescription { get; set; }
         public string Department { get; set; }

@@ -5,7 +5,7 @@ namespace Application.DTOs.News
 {
     public class NewsDto : IMapFrom<Domain.Models.News>
     {
-        public int NewsId { get; set; }
+        public string NewsId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public void Mapping(Profile profile)

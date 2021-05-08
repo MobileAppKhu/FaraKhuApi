@@ -7,6 +7,6 @@ namespace Application.Features.Poll.Commands.CreateQuestion
     {
         public string QuestionDescription { get; set; }
         public bool MultiVote { get; set; } // Check if poll allows MultiVote
-        public int CourseId { get; set; }
+        public string CourseId { get; set; }
     }
 }

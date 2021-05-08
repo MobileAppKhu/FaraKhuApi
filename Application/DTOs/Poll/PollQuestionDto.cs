@@ -7,7 +7,7 @@ namespace Application.DTOs.Poll
 {
     public class PollQuestionDto : IMapFrom<PollQuestionDto>
     {
-        public int QuestionId { get; set; }
+        public string QuestionId { get; set; }
         public string QuestionDescription { get; set; }
         public ICollection<PollAnswerDto> Answers { get; set; }
         public bool MultiVote { get; set; } // Check if poll allows MultiVote

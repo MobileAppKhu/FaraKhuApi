@@ -4,6 +4,6 @@ namespace Application.Features.Offer.Command.RemoveOffer
 {
     public class RemoveOfferCommand : IRequest<Unit>
     {
-        public int OfferId { get; set; }
+        public string OfferId { get; set; }
     }
 }

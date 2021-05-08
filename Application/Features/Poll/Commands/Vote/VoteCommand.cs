@@ -5,6 +5,6 @@ namespace Application.Features.Poll.Commands.Vote
 {
     public class VoteCommand : IRequest<VoteViewModel>
     {
-        public int AnswerId { get; set; }
+        public string AnswerId { get; set; }
     }
 }
