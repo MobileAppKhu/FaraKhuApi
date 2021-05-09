@@ -196,6 +196,15 @@ namespace Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to نظرسنجی به پایان رسیده است.
+        /// </summary>
+        internal static string PollIsNotOpen {
+            get {
+                return ResourceManager.GetString("PollIsNotOpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to دسترسی مجاز نیست.
         /// </summary>
         internal static string Unauthorized {

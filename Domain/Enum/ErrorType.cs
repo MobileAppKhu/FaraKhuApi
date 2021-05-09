@@ -15,6 +15,7 @@
         EmailServiceException,
         DuplicatePassword,
         InvalidPassword,
-        NewsNotFound
+        NewsNotFound,
+        PollIsNotOpen
     }
 }

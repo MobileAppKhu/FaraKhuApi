@@ -78,4 +78,7 @@
     <data name="NewsNotFound" xml:space="preserve">
         <value>خبر پیدا نشد</value>
     </data>
+    <data name="PollIsNotOpen" xml:space="preserve">
+        <value>نظرسنجی به پایان رسیده است</value>
+    </data>
 </root>

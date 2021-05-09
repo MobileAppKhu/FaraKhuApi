@@ -46,8 +46,25 @@ namespace Application.Features.Poll.Commands.Vote
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
+            
             var answer = await _context.PollAnswers.Include(a => a.Voters)
+                .Include(a => a.Question).ThenInclude(q => q.Answers)
+                .ThenInclude(a => a.Voters)
                 .FirstOrDefaultAsync(a => a.AnswerId == request.AnswerId, cancellationToken);
+            if (!answer.Question.IsOpen)
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.PollIsNotOpen,
+                    Message = Localizer["PollIsNotOpen"]
+                });
+            if (!answer.Question.MultiVote)
+                foreach (var temp in answer.Question.Answers)
+                    if (temp.Voters.Contains(user))
+                    {
+                        temp.Voters.Remove(user);
+                        break;
+                    }
+            
             user.PollAnswers.Add(answer);
             await _context.SaveChangesAsync(cancellationToken);
 

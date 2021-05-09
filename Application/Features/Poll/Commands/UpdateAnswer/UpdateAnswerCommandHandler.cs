@@ -1,10 +1,8 @@
-﻿using System.Linq;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.DTOs.Offer;
 using Application.Resources;
 using AutoMapper;
 using Domain.BaseModels;
@@ -16,17 +14,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Poll.Commands.RetractVote
+namespace Application.Features.Poll.Commands.UpdateAnswer
 {
-    public class RetractVoteCommandHandler : IRequestHandler<RetractVoteCommand, RetractVoteViewModel>
+    public class UpdateAnswerCommandHandler : IRequestHandler<UpdateAnswerCommand>
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
         private IHttpContextAccessor HttpContextAccessor { get; }
         private IMapper _mapper { get; }
 
-        public RetractVoteCommandHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, IMapper mapper
+        public UpdateAnswerCommandHandler( IStringLocalizer<SharedResource> localizer,
+            IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
             , IDatabaseContext context)
         {
             _context = context;
@@ -35,29 +33,26 @@ namespace Application.Features.Poll.Commands.RetractVote
             _mapper = mapper;
         }
 
-        public async Task<RetractVoteViewModel> Handle(RetractVoteCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdateAnswerCommand request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Student user = await _context.Students.Include(s => s.PollAnswers).
-                FirstOrDefaultAsync(s => s.Id == userId, cancellationToken);
+            Instructor user = await _context.Instructors.
+                FirstOrDefaultAsync(i => i.Id == userId, cancellationToken);
             if(user == null)
                 throw new CustomException(new Error
                 {
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            var answer = await _context.PollAnswers.Include(a => a.Voters)
-                .FirstOrDefaultAsync(a => a.AnswerId == request.AnswerId, cancellationToken);
-            if (!answer.Question.IsOpen)
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.PollIsNotOpen,
-                    Message = Localizer["PollIsNotOpen"]
-                });
-            user.PollAnswers.Remove(answer);
+            var answer = new PollAnswer
+            {
+                AnswerId = request.AnswerId,
+                AnswerDescription = request.AnswerDescription
+            };
+            _context.PollAnswers.Update(answer);
             await _context.SaveChangesAsync(cancellationToken);
-
-            return new RetractVoteViewModel();
+            
+            return Unit.Value;
         }
     }
 }
