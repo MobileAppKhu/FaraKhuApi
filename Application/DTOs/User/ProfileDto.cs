@@ -13,6 +13,7 @@ namespace Application.DTOs.User
         public string Id { get; set; }
         public string UserType { get; set; }
         public string Email { get; set; }
+        public string AvatarId { get; set; }
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Domain.Models.Student, ProfileDto>()
