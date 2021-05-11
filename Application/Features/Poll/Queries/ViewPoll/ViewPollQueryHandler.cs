@@ -26,6 +26,7 @@ namespace Application.Features.Poll.Queries.ViewPoll
         public async Task<ViewPollViewModel> Handle(ViewPollQuery request, CancellationToken cancellationToken)
         {
             var questionPoll = await _context.PollQuestions.Include(q => q.Answers)
+                .ThenInclude(a => a.Voters)
                 .FirstOrDefaultAsync(q => q.QuestionId == request.QuestionId, cancellationToken);
 
             return new ViewPollViewModel

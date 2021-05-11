@@ -5,6 +5,7 @@ using Application.Features.Course.Command.RemoveCourse;
 using Application.Features.Course.Command.RemoveStudent;
 using Application.Features.Course.Command.UpdateCourse;
 using Application.Features.Course.Queries.ViewCourse;
+using Application.Features.Course.Queries.ViewMyCourses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -61,6 +62,13 @@ namespace WebApi.Controllers
         [Authorize]
         [ProducesResponseType(typeof(ViewCourseViewModel), 200)]
         public async Task<IActionResult> ViewCourse(ViewCourseQuery request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        [HttpPost]
+        [Authorize]
+        [ProducesResponseType(typeof(ViewMyCoursesViewModel), 200)]
+        public async Task<IActionResult> ViewMyCourses(ViewMyCoursesQuery request)
         {
             return Ok(await _mediator.Send(request));
         }

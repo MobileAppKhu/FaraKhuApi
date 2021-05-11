@@ -8,6 +8,9 @@ namespace Application.Features.File.Queries.Download
     {
         public DownloadQueryValidator(IStringLocalizer<SharedResource> localizer)
         {
+            RuleFor(r => r.FileId)
+                .NotEmpty()
+                .WithMessage(localizer["InvalidFileID"]);
         }
     }
 }

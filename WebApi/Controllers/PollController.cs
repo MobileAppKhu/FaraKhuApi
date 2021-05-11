@@ -5,6 +5,7 @@ using Application.Features.Poll.Commands.RemoveAnswer;
 using Application.Features.Poll.Commands.RetractVote;
 using Application.Features.Poll.Commands.Vote;
 using Application.Features.Poll.Queries.ViewAvailablePolls;
+using Application.Features.Poll.Queries.ViewPoll;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -59,6 +60,13 @@ namespace WebApi.Controllers
         [Authorize]
         [ProducesResponseType(typeof(ViewPollsViewModel), 200)]
         public async Task<IActionResult> ViewAvailablePolls(ViewPollsQuery request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        [HttpPost]
+        [Authorize]
+        [ProducesResponseType(typeof(ViewPollsViewModel), 200)]
+        public async Task<IActionResult> ViewPoll(ViewPollQuery request)
         {
             return Ok(await _mediator.Send(request));
         }

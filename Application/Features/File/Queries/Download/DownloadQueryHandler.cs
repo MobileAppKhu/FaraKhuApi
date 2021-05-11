@@ -40,11 +40,8 @@ namespace Application.Features.File.Queries.Download
         public async Task<DownloadViewModel> Handle(DownloadQuery request, CancellationToken cancellationToken)
         {
             var id = request.FileId;
-            if (string.IsNullOrWhiteSpace(id))
-                throw new CustomException(new Error
-                    {ErrorType = ErrorType.InvalidInput, Message = Localizer["InvalidFileID"]});
 
-            var file = _context.Files.Find(id);
+            var file = await _context.Files.FindAsync(id);
             if (file == null)
                 throw new CustomException(new Error
                     {ErrorType = ErrorType.FileNotFound, Message = Localizer["FileNotFound"]});
