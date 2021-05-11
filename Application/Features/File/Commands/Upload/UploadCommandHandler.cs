@@ -1,9 +1,6 @@
 using System.IO;
-using System.Linq;
-using System.Net.Http.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Resources;
 using AutoMapper;
@@ -41,7 +38,7 @@ namespace Application.Features.File.Commands.Upload
 
         public async Task<UploadViewModel> Handle(UploadCommand request, CancellationToken cancellationToken)
         {
-            var file = new Domain.BaseModels.FileEntity
+            var file = new FileEntity
             {
                 Name = request.File.FileName,
                 Size = request.File.Length,
@@ -51,10 +48,17 @@ namespace Application.Features.File.Commands.Upload
 
             await _context.Files.AddAsync(file, cancellationToken);
             
-            var stream = new MemoryStream();
+            var fileId = file.Id;
+            var path = _config["StorePath"] + fileId;
+
+            await using var stream = System.IO.File.Create(path);
             await request.File.CopyToAsync(stream, cancellationToken);
-            stream.Position = 0;
-            return new UploadViewModel();
+
+            await _context.SaveChangesAsync(cancellationToken);
+            return new UploadViewModel
+            {
+                FileId = file.Id
+            };
             /*var file = request.Form.Files.FirstOrDefault();
             if (file == null)
                 throw new CustomException(new Error
