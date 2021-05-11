@@ -29,28 +29,47 @@ namespace Application.Features.Account.SignUp
         private IMapper _mapper { get; }
 
         private readonly IDatabaseContext _context;
+        
+        private IEmailService _emailService { get; }
+
 
         public SignUpCommandHandler(UserManager<BaseUser> userManager, IStringLocalizer<SharedResource> localizer,
-            SignInManager<BaseUser> signInManager, IMapper mapper, IDatabaseContext context)
+            SignInManager<BaseUser> signInManager, IMapper mapper, IDatabaseContext context
+            , IEmailService emailService)
         {
             _userManager = userManager;
             _localizer = localizer;
             _signInManager = signInManager;
             _mapper = mapper;
             _context = context;
+            _emailService = emailService;
         }
         public async Task<SignUpViewModel> Handle(SignUpCommand request, CancellationToken cancellationToken)
         {
             var duplicateUser = await _userManager.FindByEmailAsync(request.Email.EmailNormalize());
             if (duplicateUser != null)
             {
-                throw new CustomException(new Error
-                {
-                    Message = _localizer["DuplicateUser"],
-                    ErrorType = ErrorType.DuplicateUser
-                });
+                if(duplicateUser.EmailConfirmed)
+                    throw new CustomException(new Error
+                    {
+                        Message = _localizer["DuplicateUser"],
+                        ErrorType = ErrorType.DuplicateUser
+                    });
+                //if somebody signed up and close the app after
+                duplicateUser.IsValidating = true;
+                string code = ConfirmEmailCodeGenerator.GenerateCode();
+                duplicateUser.ValidationCode = code;
+
+                await _context.SaveChangesAsync(cancellationToken);
+        
+                _emailService.SendEmail(request.Email,
+                    "Farakhu", "EmailVerification", "EmailVerification",
+                    code);
+
+                return new SignUpViewModel();
+                
+                    
             }
-            //Should be Duplicate StudentId not Duplicate Email
             switch (request.UserType)
             {
                 case UserType.Instructor:
@@ -111,13 +130,17 @@ namespace Application.Features.Account.SignUp
 
             await _userManager.AddToRoleAsync(user, request.UserType.ToString().Normalize());
 
-            await _signInManager.SignInAsync(user, false);
+            user.IsValidating = true;
+            string validationCode = ConfirmEmailCodeGenerator.GenerateCode();
+            user.ValidationCode = validationCode;
+
+            await _context.SaveChangesAsync(cancellationToken);
             
-            return new SignUpViewModel
-            {
-                ProfileDto = _mapper.Map<ProfileDto>(user)
-            };
-            
+            _emailService.SendEmail(request.Email,
+                "Farakhu", "EmailVerification", "EmailVerification",
+                validationCode);
+
+            return new SignUpViewModel();
         }
     }
 }

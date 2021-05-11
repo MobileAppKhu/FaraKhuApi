@@ -1,4 +1,5 @@
 ﻿
+using System.Formats.Asn1;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
@@ -21,14 +22,19 @@ namespace Application.Features.Account.SignIn
         private UserManager<BaseUser> _userManager { get; }
         private IStringLocalizer<SharedResource> _localizer { get; }
         private SignInManager<BaseUser> _signInManager { get; }
+        private readonly IDatabaseContext _context;
+        private IEmailService _emailService { get; set; }
 
         public SignInCommandHandler(IMapper mapper, UserManager<BaseUser> userManager,
-            SignInManager<BaseUser> signInManager, IStringLocalizer<SharedResource> localizer)
+            SignInManager<BaseUser> signInManager, IStringLocalizer<SharedResource> localizer
+            ,IDatabaseContext context, IEmailService emailService)
         {
             _mapper = mapper;
             _userManager = userManager;
             _signInManager = signInManager;
             _localizer = localizer;
+            _context = context;
+            _emailService = emailService;
         }
         public async Task<SignInViewModel> Handle(SignInCommand request, CancellationToken cancellationToken)
         {
@@ -39,6 +45,19 @@ namespace Application.Features.Account.SignIn
                     ErrorType = ErrorType.UserNotFound,
                     Message = _localizer["UserNotFound"]
                 });
+            if (!user.EmailConfirmed)
+            {
+                user.IsValidating = true;
+                string validationCode = ConfirmEmailCodeGenerator.GenerateCode();
+                user.ValidationCode = validationCode;
+
+                await _context.SaveChangesAsync(cancellationToken);
+            
+                _emailService.SendEmail(request.Logon,
+                    "Farakhu", "EmailVerification", "EmailVerification",
+                    validationCode);
+            }
+                
             var result = await _signInManager.PasswordSignInAsync(user, request.Password, true, false);
             
             if (!result.Succeeded)
