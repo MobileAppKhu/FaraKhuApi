@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace Application.Features.User.Commands.UpdateAvatar
+namespace Application.Features.User.Command.UpdateAvatar
 {
     public class UpdateAvatarCommand: IRequest<Unit>
     {

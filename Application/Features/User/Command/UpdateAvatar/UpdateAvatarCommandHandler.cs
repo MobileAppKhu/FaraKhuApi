@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.User.Commands.UpdateAvatar
+namespace Application.Features.User.Command.UpdateAvatar
 {
     public class UpdateAvatarCommandHandler : IRequestHandler<UpdateAvatarCommand, Unit>
     {

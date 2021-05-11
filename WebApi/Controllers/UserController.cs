@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Application.Features.User.Command.CreateUser;
 using Application.Features.User.Command.RemoveUser;
-using Application.Features.User.Commands.UpdateAvatar;
+using Application.Features.User.Command.UpdateAvatar;
 using Application.Features.User.Queries.ViewAllEvents;
 using Application.Features.User.Queries.ViewProfile;
 using MediatR;
