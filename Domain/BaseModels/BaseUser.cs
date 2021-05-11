@@ -17,6 +17,8 @@ namespace Domain.BaseModels
         public string ValidationCode { get; set; }
         public bool IsValidating { get; set; }
         public bool ResettingPassword { get; set; }
+        public FileEntity Avatar { get; set; }
+        public string AvatarId { get; set; }
         public ICollection<Event> Events { get; set; }
         public ICollection<Offer> Offers { get; set; }
         public ICollection<Suggestion> Suggestions { get; set; }

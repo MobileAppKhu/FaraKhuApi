@@ -16,6 +16,7 @@
         DuplicatePassword,
         InvalidPassword,
         NewsNotFound,
-        PollIsNotOpen
+        PollIsNotOpen,
+        FileNotFound
     }
 }

@@ -26,11 +26,23 @@
     <ItemGroup>
       <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
       <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.0.4" />
+      <PackageReference Include="Magick.NET-Q16-AnyCPU" Version="7.24.0" />
       <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
       <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
       <PackageReference Include="Microsoft.AspNetCore.Localization" Version="2.2.0" />
       <PackageReference Include="Microsoft.Extensions.Localization" Version="5.0.5" />
       <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="5.0.5" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Features\File\Commands" />
+      <Folder Include="Features\File\Queries" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Microsoft.AspNetCore.Mvc.Core, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+        <HintPath>..\..\..\..\..\..\Program Files\dotnet\packs\Microsoft.AspNetCore.App.Ref\5.0.0\ref\net5.0\Microsoft.AspNetCore.Mvc.Core.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

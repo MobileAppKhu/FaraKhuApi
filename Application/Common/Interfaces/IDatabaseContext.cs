@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using Domain.BaseModels;
 using Domain.Models;
@@ -22,6 +23,6 @@ namespace Application.Common.Interfaces
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
         public DbSet<PollQuestion> PollQuestions { get; set; }
         public DbSet<PollAnswer> PollAnswers { get; set; }
-
+        public DbSet<FileEntity> Files { get; set; }
     }
 }
