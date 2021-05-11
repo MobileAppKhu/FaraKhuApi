@@ -37,9 +37,15 @@ namespace WebApi.Controllers
         [ProducesResponseType(typeof(FileStreamResult), 200)]
         public async Task<IActionResult> Download(DownloadQuery request)
         {
-            var viewModel = await _mediator.Send(request);
-            var stream = System.IO.File.OpenRead(viewModel.Path);
-            return File(stream, viewModel.ContentType ?? "application/octet-stream", viewModel.Name);
+            var downloadFile = (await _mediator.Send(request)).DownloadDto;
+
+            if (downloadFile.ContentType?.StartsWith("image") ?? false)
+                HttpContext.Response.Headers.Append("Cache-Control",
+                    "max-age=" + new TimeSpan(30, 0, 0, 0)
+                        .TotalSeconds.ToString("0"));
+
+            var stream = System.IO.File.OpenRead(downloadFile.Path);
+            return File(stream, downloadFile.ContentType ?? "application/octet-stream", downloadFile.Name);
         }
     }
 }

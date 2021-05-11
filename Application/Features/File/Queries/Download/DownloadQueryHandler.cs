@@ -2,6 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.DTOs.FileEntity;
 using Application.Resources;
 using AutoMapper;
 using Domain.BaseModels;
@@ -38,7 +39,7 @@ namespace Application.Features.File.Queries.Download
 
         public async Task<DownloadViewModel> Handle(DownloadQuery request, CancellationToken cancellationToken)
         {
-            var id = request.Id;
+            var id = request.FileId;
             if (string.IsNullOrWhiteSpace(id))
                 throw new CustomException(new Error
                     {ErrorType = ErrorType.InvalidInput, Message = Localizer["InvalidFileID"]});
@@ -49,11 +50,15 @@ namespace Application.Features.File.Queries.Download
                     {ErrorType = ErrorType.FileNotFound, Message = Localizer["FileNotFound"]});
 
             var path = _config["StorePath"] + id;
-            var stream = System.IO.File.OpenRead(path);
+            
             return new DownloadViewModel
             {
-                Name = file.Name, Path = path, ContentType = file.ContentType
+                DownloadDto = new DownloadDto
+                {
+                    Name = file.Name, Path = path, ContentType = file.ContentType
+                }
             };
+            
         }
     }
 }
