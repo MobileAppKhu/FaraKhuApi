@@ -47,18 +47,18 @@ namespace Application.Features.Account.EmailVerification
                     ErrorType = ErrorType.EmailNotFound,
                     Message = Localizer["EmailNotFound"]
                 });
-            BaseUser baseUser =
-                _context.BaseUsers.FirstOrDefault(u => u.Id == user.Id);
-            if(!baseUser.IsValidating)
+            /*BaseUser baseUser =
+                _context.BaseUsers.FirstOrDefault(u => u.Id == user.Id);*/
+            if(!user.IsValidating)
                 throw new CustomException(new Error
                 {
                     ErrorType = ErrorType.UnauthorizedValidation,
                     Message = Localizer["UnauthorizedValidation"]
                 });
-            if (baseUser.ValidationCode.Normalize() == request.Token.Normalize())
+            if (user.ValidationCode.Normalize() == request.Token.Normalize())
             {
-                baseUser.IsValidating = false;
-                baseUser.EmailConfirmed = true;
+                user.IsValidating = false;
+                user.EmailConfirmed = true;
             }
 
             await _signInManager.SignInAsync(user, false);

@@ -116,7 +116,11 @@ namespace Application.Features.Account.SignUp
                     };
                     break;
             }
-
+            
+            user.IsValidating = true;
+            string validationCode = ConfirmEmailCodeGenerator.GenerateCode();
+            user.ValidationCode = validationCode;
+            
             var result = await _userManager.CreateAsync(user, request.Password);
             
             if (!result.Succeeded)
@@ -130,9 +134,7 @@ namespace Application.Features.Account.SignUp
 
             await _userManager.AddToRoleAsync(user, request.UserType.ToString().Normalize());
 
-            user.IsValidating = true;
-            string validationCode = ConfirmEmailCodeGenerator.GenerateCode();
-            user.ValidationCode = validationCode;
+            
 
             await _context.SaveChangesAsync(cancellationToken);
             
