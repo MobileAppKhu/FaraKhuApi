@@ -2,7 +2,10 @@
 using Application.Features.Poll.Commands.CreateAnswer;
 using Application.Features.Poll.Commands.CreateQuestion;
 using Application.Features.Poll.Commands.RemoveAnswer;
+using Application.Features.Poll.Commands.RemoveQuestion;
 using Application.Features.Poll.Commands.RetractVote;
+using Application.Features.Poll.Commands.UpdateAnswer;
+using Application.Features.Poll.Commands.UpdateQuestion;
 using Application.Features.Poll.Commands.Vote;
 using Application.Features.Poll.Queries.ViewAvailablePolls;
 using Application.Features.Poll.Queries.ViewPoll;
@@ -39,6 +42,21 @@ namespace WebApi.Controllers
         [Authorize(Policy = "InstructorPolicy")]
         [ProducesResponseType(typeof(RemoveAnswerViewModel), 200)]
         public async Task<IActionResult> RemovePollAnswer(RemoveAnswerCommand request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        [Authorize(Policy = "InstructorPolicy")]
+        public async Task<IActionResult> RemovePollQuestion(RemoveQuestionCommand request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        [Authorize(Policy = "InstructorPolicy")]
+        public async Task<IActionResult> UpdatePollQuestion(UpdateQuestionCommand request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        [Authorize(Policy = "InstructorPolicy")]
+        public async Task<IActionResult> UpdatePollAnswer(UpdateAnswerCommand request)
         {
             return Ok(await _mediator.Send(request));
         }

@@ -45,7 +45,8 @@ namespace Infrastructure.Persistence
                 FirstName = "PublicRelation",
                 LastName = "Officer",
                 Email = "PublicRelation@FaraKhu.app",
-                UserType = UserType.PROfficer
+                UserType = UserType.PROfficer,
+                EmailConfirmed = true
             };
             await UserManager.CreateAsync(officer, "PROfficerPassword");
             await UserManager.AddToRoleAsync(officer, UserType.PROfficer.ToString().Normalize());
@@ -55,10 +56,37 @@ namespace Infrastructure.Persistence
                 FirstName = "Owner",
                 LastName = "User",
                 Email = "Owner@FaraKhu.app",
-                UserType = UserType.Owner
+                UserType = UserType.Owner,
+                EmailConfirmed = true
             };
             await UserManager.CreateAsync(owner, "OwnerPassword");
             await UserManager.AddToRoleAsync(owner, UserType.Owner.ToString().Normalize());
+
+            var instructor = new Instructor()
+            {
+                FirstName = "Instructor",
+                LastName = "User",
+                Email = "Instructor@FaraKhu.app",
+                UserType = UserType.Instructor,
+                InstructorId = "12345",
+                EmailConfirmed = true
+            };
+
+            await UserManager.CreateAsync(instructor, "InstructorPassword");
+            await UserManager.AddToRoleAsync(instructor, UserType.Instructor.ToString().Normalize());
+            
+            var student = new Student()
+            {
+                FirstName = "Instructor",
+                LastName = "User",
+                Email = "Student@FaraKhu.app",
+                UserType = UserType.Instructor,
+                StudentId = "12345",
+                EmailConfirmed = true
+            };
+
+            await UserManager.CreateAsync(student, "StudentPassword");
+            await UserManager.AddToRoleAsync(student, UserType.Instructor.ToString().Normalize());
 
         }
     }

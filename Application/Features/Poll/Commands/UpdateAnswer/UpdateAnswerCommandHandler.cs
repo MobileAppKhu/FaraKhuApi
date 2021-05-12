@@ -44,11 +44,11 @@ namespace Application.Features.Poll.Commands.UpdateAnswer
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            var answer = new PollAnswer
-            {
-                AnswerId = request.AnswerId,
-                AnswerDescription = request.AnswerDescription
-            };
+            var answer = await _context.PollAnswers.Include(a => a.Question)
+                .FirstOrDefaultAsync(a => a.AnswerId == request.AnswerId, cancellationToken);
+
+            answer.AnswerDescription = request.AnswerDescription;
+            
             _context.PollAnswers.Update(answer);
             await _context.SaveChangesAsync(cancellationToken);
             

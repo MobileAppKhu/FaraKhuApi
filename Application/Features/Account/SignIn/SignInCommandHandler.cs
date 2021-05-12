@@ -56,6 +56,7 @@ namespace Application.Features.Account.SignIn
                 _emailService.SendEmail(request.Logon,
                     "Farakhu", "EmailVerification", "EmailVerification",
                     validationCode);
+                return null;
             }
                 
             var result = await _signInManager.PasswordSignInAsync(user, request.Password, true, false);
