@@ -28,8 +28,8 @@ namespace Infrastructure.Persistence
             await DatabaseContext.Database.EnsureDeletedAsync();
             await DatabaseContext.Database.EnsureCreatedAsync();
             await RoleInitializer();
-            await UserInitializer();
             await AvatarInitializer();
+            await UserInitializer();
         }
         private async Task RoleInitializer()
         {
@@ -41,13 +41,16 @@ namespace Infrastructure.Persistence
 
         private async Task UserInitializer()
         {
+            var avatar = await DatabaseContext.Files.FirstOrDefaultAsync(a => a.Id == "smiley.png");
             var officer = new BaseUser
             {
                 FirstName = "PublicRelation",
                 LastName = "Officer",
                 Email = "PublicRelation@FaraKhu.app",
                 UserType = UserType.PROfficer,
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                Avatar = avatar,
+                AvatarId = "smiley.png"
             };
             await UserManager.CreateAsync(officer, "PROfficerPassword");
             await UserManager.AddToRoleAsync(officer, UserType.PROfficer.ToString().Normalize());
@@ -58,7 +61,10 @@ namespace Infrastructure.Persistence
                 LastName = "User",
                 Email = "Owner@FaraKhu.app",
                 UserType = UserType.Owner,
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                Avatar = avatar,
+                AvatarId = "smiley.png"
+
             };
             await UserManager.CreateAsync(owner, "OwnerPassword");
             await UserManager.AddToRoleAsync(owner, UserType.Owner.ToString().Normalize());
@@ -70,7 +76,10 @@ namespace Infrastructure.Persistence
                 Email = "Instructor@FaraKhu.app",
                 UserType = UserType.Instructor,
                 InstructorId = "12345",
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                Avatar = avatar,
+                AvatarId = "smiley.png"
+
             };
 
             await UserManager.CreateAsync(instructor, "InstructorPassword");
@@ -83,7 +92,10 @@ namespace Infrastructure.Persistence
                 Email = "Student@FaraKhu.app",
                 UserType = UserType.Instructor,
                 StudentId = "12345",
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                Avatar = avatar,
+                AvatarId = "smiley.png"
+
             };
 
             await UserManager.CreateAsync(student, "StudentPassword");
@@ -99,7 +111,7 @@ namespace Infrastructure.Persistence
                 Name = "smiley.png",
                 Size = 22480,
                 Type = FileType.Image,
-                ContentType = "image/jpeg"
+                ContentType = "image/jpeg",
             };
             
             var blink = new FileEntity

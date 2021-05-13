@@ -13,6 +13,7 @@ using Domain.Enum;
 using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 
@@ -116,6 +117,11 @@ namespace Application.Features.Account.SignUp
                     };
                     break;
             }
+
+            var avatar = await _context.Files.FirstOrDefaultAsync(a => a.Id == "smiley.png", cancellationToken);
+            user.AvatarId = avatar.Id;
+            user.Avatar = avatar;
+            
             
             user.IsValidating = true;
             string validationCode = ConfirmEmailCodeGenerator.GenerateCode();

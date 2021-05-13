@@ -21,7 +21,9 @@ namespace Infrastructure.Persistence.Configuration
                 .ValueGeneratedOnAddOrUpdate();
             builder.Property(user => user.FirstName).IsRequired();
             builder.Property(user => user.LastName).IsRequired();
-            builder.HasOne(user => user.Avatar).WithMany().HasForeignKey(user => user.AvatarId);
+            builder.HasOne(user => user.Avatar).WithOne(a => a.BaseUser)
+                .HasForeignKey("FileEntity", "AvatarId");
+
         }
     }
 }
