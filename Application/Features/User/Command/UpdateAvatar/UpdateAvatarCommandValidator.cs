@@ -8,6 +8,7 @@ namespace Application.Features.User.Command.UpdateAvatar
     {
         public UpdateAvatarCommandValidator(IStringLocalizer<SharedResource> localizer)
         {
+            
         }
     }
 }

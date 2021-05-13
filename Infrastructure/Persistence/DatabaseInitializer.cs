@@ -29,6 +29,7 @@ namespace Infrastructure.Persistence
             await DatabaseContext.Database.EnsureCreatedAsync();
             await RoleInitializer();
             await UserInitializer();
+            await AvatarInitializer();
         }
         private async Task RoleInitializer()
         {
@@ -87,6 +88,48 @@ namespace Infrastructure.Persistence
 
             await UserManager.CreateAsync(student, "StudentPassword");
             await UserManager.AddToRoleAsync(student, UserType.Instructor.ToString().Normalize());
+
+        }
+
+        private async Task AvatarInitializer()
+        {
+            var smiley = new FileEntity
+            {
+                Id = "smiley",
+                Size = 22480,
+                Type = FileType.Image,
+                ContentType = "img/png"
+            };
+            
+            var blink = new FileEntity
+            {
+                Id = "blink",
+                Size = 10521,
+                Type = FileType.Image,
+                ContentType = "img/png"
+            };
+            
+            var sad = new FileEntity
+            {
+                Id = "sad",
+                Size = 29209,
+                Type = FileType.Image,
+                ContentType = "img/png"
+            };
+            
+            var poker = new FileEntity
+            {
+                Id = "poker",
+                Size = 27621,
+                Type = FileType.Image,
+                ContentType = "img/png"
+            };
+
+            await DatabaseContext.Files.AddAsync(smiley);
+            await DatabaseContext.Files.AddAsync(sad);
+            await DatabaseContext.Files.AddAsync(blink);
+            await DatabaseContext.Files.AddAsync(poker);
+            await DatabaseContext.SaveChangesAsync();
 
         }
     }
