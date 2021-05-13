@@ -95,34 +95,38 @@ namespace Infrastructure.Persistence
         {
             var smiley = new FileEntity
             {
-                Id = "smiley",
+                Id = "smiley.png",
+                Name = "smiley.png",
                 Size = 22480,
                 Type = FileType.Image,
-                ContentType = "img/png"
+                ContentType = "image/jpeg"
             };
             
             var blink = new FileEntity
             {
-                Id = "blink",
+                Id = "blink.png",
+                Name = "blink.png",
                 Size = 10521,
                 Type = FileType.Image,
-                ContentType = "img/png"
+                ContentType = "image/jpeg"
             };
             
             var sad = new FileEntity
             {
-                Id = "sad",
+                Id = "sad.png",
+                Name = "sad.png",
                 Size = 29209,
                 Type = FileType.Image,
-                ContentType = "img/png"
+                ContentType = "image/jpeg"
             };
             
             var poker = new FileEntity
             {
-                Id = "poker",
+                Id = "poker.png",
+                Name = "poker.png",
                 Size = 27621,
                 Type = FileType.Image,
-                ContentType = "img/png"
+                ContentType = "image/jpeg"
             };
 
             await DatabaseContext.Files.AddAsync(smiley);
