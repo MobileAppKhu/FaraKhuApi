@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  fara-khu-api-test:
+    container_name: fara-khu-api-test
+    image: mcr.microsoft.com/dotnet/sdk:5.0-focal
+    volumes:
+      - .:/src
+    entrypoint: "sh -c"
+    command: ["cd /src && dotnet test"]
+
+  fara-khu-api:
+    container_name: fara-khu-api
+    build: .
+    image: fara-khu-api:latest
+    ports:
+      - "127.0.0.1:6003:5000"
+    restart: always
+    volumes:
+      - /srv/fara-khu-api/DataProtection-Keys:/root/.aspnet/DataProtection-Keys
+      - /srv/fara-khu-api/StoreFiles:/build/StoreFiles
+      - /srv/fara-khu-api/log:/build/log
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - DefaultConnection=$DBConnection
+    networks:
+      - postgres-network
+    external_links:
+      - postgres
+
+networks:
+  postgres-network:
+    external: true

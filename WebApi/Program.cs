@@ -19,7 +19,7 @@ namespace WebApi
             await ServiceProvider(host);
             await host.RunAsync();
         }
-        
+
         private static async Task ServiceProvider(IHost host)
         {
             using var scope = host.Services.CreateScope();
@@ -28,6 +28,6 @@ namespace WebApi
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
+                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseUrls("http://0.0.0.0:5000").UseStartup<Startup>(); });
     }
 }
