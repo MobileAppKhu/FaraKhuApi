@@ -1,5 +1,4 @@
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Application.Features.File.Queries.Download
 {

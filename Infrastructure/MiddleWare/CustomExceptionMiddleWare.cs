@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Net;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Resources;

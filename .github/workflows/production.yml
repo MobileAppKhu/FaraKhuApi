@@ -1,0 +1,30 @@
+name: .NET production branch
+
+on:
+  push:
+    branches: [production]
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: self-hosted
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Run Test Container
+        run: docker-compose up --exit-code-from fara-khu-api-test fara-khu-api-test
+
+      - name: Configure Environment
+        env:
+          DBConnectionPostgreSQL: ${{ secrets.DBCONNECTIONPOSTGRESQL }}
+        run: |
+          sed -i "s/\$DBConnection/${DBConnectionPostgreSQL}/" docker-compose.yml
+
+      - name: Deploy Project
+        run: docker-compose up -d --force-recreate --build fara-khu-api
+
+      - name: CleanUp Environment
+        if: ${{ always() }}
+        run: docker system prune -f

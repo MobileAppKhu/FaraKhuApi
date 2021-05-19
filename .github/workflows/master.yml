@@ -1,0 +1,21 @@
+name: .NET master branch
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  test:
+    name: Test
+    runs-on: self-hosted
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Run Test Container
+        run: docker-compose up --exit-code-from fara-khu-api-test fara-khu-api-test
+
+      - name: CleanUp Environment
+        if: ${{ always() }}
+        run: docker system prune -f
