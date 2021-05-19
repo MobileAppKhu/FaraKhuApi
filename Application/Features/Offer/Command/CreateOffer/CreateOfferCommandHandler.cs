@@ -12,6 +12,7 @@ using Domain.Enum;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace Application.Features.Offer.Command.CreateOffer
@@ -41,6 +42,12 @@ namespace Application.Features.Offer.Command.CreateOffer
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
+            var avatarObj = await _context.Files.FirstOrDefaultAsync(a => a.Id == request.AvatarId,
+                cancellationToken);
+            if (avatarObj == null)
+                throw new CustomException(new Error
+                    {ErrorType = ErrorType.FileNotFound, Message = Localizer["FileNotFound"]});
+            
             Domain.Models.Offer offer = new Domain.Models.Offer
             {
                 Title = request.Title,
@@ -48,7 +55,9 @@ namespace Application.Features.Offer.Command.CreateOffer
                 Price = request.Price,
                 OfferType = request.OfferType,
                 BaseUser = user,
-                UserId = user.Id
+                UserId = user.Id,
+                Avatar = avatarObj,
+                AvatarId = request.AvatarId
             };
             await _context.Offers.AddAsync(offer, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);

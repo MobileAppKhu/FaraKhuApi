@@ -12,5 +12,7 @@ namespace Domain.Models
         public string Price { get; set; }
         public BaseUser BaseUser { get; set; }
         public string UserId { get; set; }
+        public FileEntity Avatar { get; set; }
+        public string AvatarId { get; set; }
     }
 }

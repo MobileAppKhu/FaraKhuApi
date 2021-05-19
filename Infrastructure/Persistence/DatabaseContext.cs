@@ -47,5 +47,6 @@ namespace Infrastructure.Persistence
         public DbSet<PollQuestion> PollQuestions { get; set; }
         public DbSet<PollAnswer> PollAnswers { get; set; }
         public DbSet<FileEntity> Files { get; set; }
+        public DbSet<Favourite> Favourites { get; set; }
     }
 }

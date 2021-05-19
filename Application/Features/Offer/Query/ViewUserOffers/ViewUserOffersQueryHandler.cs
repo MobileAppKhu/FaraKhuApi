@@ -38,7 +38,7 @@ namespace Application.Features.Offer.Query.ViewUserOffers
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             BaseUser user = await _context.BaseUsers.Include(u => u.Offers).
-                FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
+                ThenInclude(o => o.Avatar).FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
             if(user == null)
                 throw new CustomException(new Error
                 {
@@ -49,7 +49,6 @@ namespace Application.Features.Offer.Query.ViewUserOffers
             {
                 Offers = _mapper.Map<ICollection<OfferDto>>(user.Offers)
             };
-
         }
     }
 }

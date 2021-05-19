@@ -13,6 +13,7 @@ namespace Infrastructure.Persistence.Configuration
             builder.HasOne(o => o.BaseUser)
                 .WithMany(u => u.Offers)
                 .HasForeignKey(o => o.UserId);
+            builder.HasOne(o => o.Avatar).WithMany().HasForeignKey(o => o.AvatarId);
         }
     }
 }

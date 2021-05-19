@@ -1,5 +1,4 @@
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
@@ -11,11 +10,13 @@ using Domain.Enum;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Microsoft.VisualBasic;
 
-namespace Application.Features.User.Command.UpdateAvatar
+namespace Application.Features.User.Command.RemoveFavourite
 {
-    public class UpdateAvatarCommandHandler : IRequestHandler<UpdateAvatarCommand, Unit>
+    public class RemoveFavouriteCommandHandler : IRequestHandler<RemoveFavouriteCommand>
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
@@ -23,7 +24,7 @@ namespace Application.Features.User.Command.UpdateAvatar
         private UserManager<BaseUser> UserManager { get; }
         private IMapper _mapper { get; }
 
-        public UpdateAvatarCommandHandler( IStringLocalizer<SharedResource> localizer,
+        public RemoveFavouriteCommandHandler( IStringLocalizer<SharedResource> localizer,
             IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
             , IDatabaseContext context)
         {
@@ -33,23 +34,19 @@ namespace Application.Features.User.Command.UpdateAvatar
             UserManager = userManager;
             _mapper = mapper;
         }
-
-        public async Task<Unit> Handle(UpdateAvatarCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(RemoveFavouriteCommand request, CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var fileObj = _context.Files.FirstOrDefault(file => file.Id == request.FileId);
-            var userObj =await UserManager.FindByIdAsync(userId);
-            if (request.DeleteAvatar)
-            {
-                userObj.AvatarId = "smiley.png";
-                await UserManager.UpdateAsync(userObj);
-                return Unit.Value;
-            }
-            if (fileObj == null)
+            var userId = HttpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var favourite = await _context.Favourites.Include(f => f.BaseUser)
+                .FirstOrDefaultAsync(f => f.FavouriteId == request.FavouriteId,cancellationToken);
+            if (favourite.UserId != userId)
                 throw new CustomException(new Error
-                    {ErrorType = ErrorType.FileNotFound, Message = Localizer["FileNotFound"]});
-            userObj.Avatar = fileObj;
-            await UserManager.UpdateAsync(userObj);
+                {
+                    ErrorType = ErrorType.Unauthorized,
+                    Message = Localizer["Unauthorized"]
+                });
+            _context.Favourites.Remove(favourite);
+            await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }
     }

@@ -11,6 +11,7 @@ using Domain.Enum;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace Application.Features.Offer.Command.UpdateCommand
@@ -41,6 +42,11 @@ namespace Application.Features.Offer.Command.UpdateCommand
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
+            var avatarObj = await _context.Files.FirstOrDefaultAsync(a => a.Id == request.AvatarId,
+                cancellationToken);
+            if (avatarObj == null)
+                throw new CustomException(new Error
+                    {ErrorType = ErrorType.FileNotFound, Message = Localizer["FileNotFound"]});
             Domain.Models.Offer offer = new Domain.Models.Offer
             {
                 OfferId = request.OfferId,
@@ -49,7 +55,9 @@ namespace Application.Features.Offer.Command.UpdateCommand
                 Price = request.Price,
                 OfferType = request.OfferType,
                 BaseUser = user,
-                UserId = user.Id
+                UserId = user.Id,
+                Avatar = avatarObj,
+                AvatarId = request.AvatarId
             };
             _context.Offers.Update(offer);
             await _context.SaveChangesAsync(cancellationToken);

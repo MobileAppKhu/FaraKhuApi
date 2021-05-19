@@ -12,8 +12,5 @@ namespace Domain.BaseModels
         public long Size { set; get; }
         public FileType Type { get; set; }
 
-        public BaseUser BaseUser { get; set; }
-
-        public string UserId { get; set; }
     }
 }

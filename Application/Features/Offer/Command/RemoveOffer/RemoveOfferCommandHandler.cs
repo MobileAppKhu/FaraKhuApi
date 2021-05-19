@@ -33,15 +33,23 @@ namespace Application.Features.Offer.Command.RemoveOffer
         public async Task<Unit> Handle(RemoveOfferCommand request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
+            BaseUser user = _context.BaseUsers.Include(u => u.Offers).FirstOrDefault(u => u.Id == userId);
             if(user == null)
                 throw new CustomException(new Error
                 {
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            Domain.Models.Offer offer = await _context.Offers.
+            Domain.Models.Offer offer = await _context.Offers.Include(o => o.Avatar).
                 FirstOrDefaultAsync(o => o.OfferId == request.OfferId, cancellationToken);
+            if (!user.Offers.Contains(offer))
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.Unauthorized,
+                    Message = Localizer["Unauthorized"]
+                }); 
+            }
             //TODO check if this offer blongs to user
             _context.Offers.Remove(offer);
             await _context.SaveChangesAsync(cancellationToken);
