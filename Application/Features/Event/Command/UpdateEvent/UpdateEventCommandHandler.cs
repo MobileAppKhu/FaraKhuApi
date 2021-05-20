@@ -41,14 +41,25 @@ namespace Application.Features.Event.Command.UpdateEvent
                     Message = Localizer["Unauthorized"]
                 });
             var eventObj = _context.Events.FirstOrDefault(e => e.EventId == request.EventId);
+
             if (eventObj != null)
-                _context.Events.Update(new Domain.Models.Event
+            {
+                eventObj.EventDescription = request.EventDescription;
+                eventObj.EventName = request.EventName;
+                eventObj.EventTime = DateTimeOffset.Parse(request.EventTime).Date;
+                _context.Events.Update(eventObj);
+                await _context.SaveChangesAsync(cancellationToken);
+            }
+            else
+            {
+                throw new CustomException(new Error
                 {
-                    EventDescription = request.EventDescription,
-                    EventId = request.EventId,
-                    EventName = request.EventName,
-                    EventTime = DateTimeOffset.Parse(request.EventTime).Date,
+                    ErrorType = ErrorType.EventNotFound,
+                    Message = Localizer["EventNotFound"]
                 });
+            }
+
+            
             return Unit.Value;
         }
     }

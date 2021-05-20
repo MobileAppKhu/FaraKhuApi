@@ -5,6 +5,7 @@ using Domain.Enum;
 using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure.Persistence
@@ -79,7 +80,6 @@ namespace Infrastructure.Persistence
                 EmailConfirmed = true,
                 Avatar = avatar,
                 AvatarId = "smiley.png"
-
             };
 
             await UserManager.CreateAsync(instructor, "InstructorPassword");
@@ -87,10 +87,10 @@ namespace Infrastructure.Persistence
             
             var student = new Student()
             {
-                FirstName = "Instructor",
+                FirstName = "Student",
                 LastName = "User",
                 Email = "Student@FaraKhu.app",
-                UserType = UserType.Instructor,
+                UserType = UserType.Student,
                 StudentId = "12345",
                 EmailConfirmed = true,
                 Avatar = avatar,
@@ -99,7 +99,7 @@ namespace Infrastructure.Persistence
             };
 
             await UserManager.CreateAsync(student, "StudentPassword");
-            await UserManager.AddToRoleAsync(student, UserType.Instructor.ToString().Normalize());
+            await UserManager.AddToRoleAsync(student, UserType.Student.ToString().Normalize());
 
         }
 

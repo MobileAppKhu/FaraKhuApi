@@ -48,12 +48,24 @@ namespace Application.Features.Time.Command.AddTime
                 });
             var courseObj = _context.Courses.Include(c => c.Times).
                 FirstOrDefault(c => c.CourseId == request.CourseId);
+            if (courseObj == null)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.CourseNotFound,
+                    Message = Localizer["CourseNotFound"]
+                });
+            }
+            string[] startTimes = request.StartTime.Split("-");
+            string[] endTime = request.EndTime.Split("-");
+            
             Domain.Models.Time timeObj = new Domain.Models.Time
             {
                 Course = courseObj,
-                CourseId = courseObj.CourseId,
-                StartTime = DateTimeOffset.Parse(request.StartTime).Date,
-                EndTime = DateTimeOffset.Parse(request.EndTime).Date
+                CourseId = courseObj?.CourseId,
+                StartTime = new DateTime(2000,12,25,Int32.Parse(startTimes[0]), Int32.Parse(startTimes[1]), 0),
+                EndTime = new DateTime(2000,12,25,Int32.Parse(endTime[0]), Int32.Parse(endTime[1]),0),
+                WeekDay = Localizer[request.WeekDay.ToString()]
             };
             await _context.Times.AddAsync(timeObj, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);

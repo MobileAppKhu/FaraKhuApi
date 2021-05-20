@@ -41,7 +41,7 @@ namespace Application.Features.User.Command.UpdateAvatar
             var userObj =await UserManager.FindByIdAsync(userId);
             if (request.DeleteAvatar)
             {
-                userObj.AvatarId = null;
+                userObj.AvatarId = "smiley.png";
                 await UserManager.UpdateAsync(userObj);
                 return Unit.Value;
             }

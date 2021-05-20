@@ -16,13 +16,14 @@ namespace Application.DTOs.Announcement
         public string Department { get; set; }
         public string Faculty { get; set; }
         
-        public string InstructorFullname { get; set; }
+        public string UserFullname { get; set; }
 
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Domain.Models.Announcement, ViewAnnouncementDto>()
-                .ForMember(a => a.InstructorFullname,
-                opt => opt.MapFrom(src => src.Instructor.FirstName + " " + src.Instructor.LastName));
+                .ForMember(a => a.UserFullname,
+                opt =>
+                    opt.MapFrom(src => src.BaseUser.FirstName + " " + src.BaseUser.LastName));
         }
     }
 }

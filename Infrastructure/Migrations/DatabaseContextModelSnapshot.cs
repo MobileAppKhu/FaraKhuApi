@@ -128,12 +128,14 @@ namespace Infrastructure.Migrations
                     b.Property<int>("UserType")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasDefaultValue(1);
+                        .HasDefaultValue(2);
 
                     b.Property<string>("ValidationCode")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AvatarId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -156,9 +158,6 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("text");
-
-                    b.Property<string>("AvatarId")
                         .HasColumnType("text");
 
                     b.Property<string>("ContentType")
@@ -186,13 +185,7 @@ namespace Infrastructure.Migrations
                     b.Property<byte>("Type")
                         .HasColumnType("smallint");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("AvatarId")
-                        .IsUnique();
 
                     b.ToTable("Files");
                 });
@@ -218,18 +211,18 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Faculty")
                         .HasColumnType("text");
 
-                    b.Property<string>("InstructorId")
-                        .HasColumnType("text");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("LastModifiedDate")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
                     b.HasKey("AnnouncementId");
 
-                    b.HasIndex("InstructorId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Announcements");
                 });
@@ -244,6 +237,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("EndDate")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("InstructorId")
@@ -329,6 +325,35 @@ namespace Infrastructure.Migrations
                     b.ToTable("Events");
                 });
 
+            modelBuilder.Entity("Domain.Models.Favourite", b =>
+                {
+                    b.Property<string>("FavouriteId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("FavouriteId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Favourites");
+                });
+
             modelBuilder.Entity("Domain.Models.News", b =>
                 {
                     b.Property<string>("NewsId")
@@ -339,6 +364,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FileId")
                         .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
@@ -353,6 +381,8 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("NewsId");
 
+                    b.HasIndex("FileId");
+
                     b.ToTable("News");
                 });
 
@@ -360,6 +390,9 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<string>("OfferId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("text");
+
+                    b.Property<string>("AvatarId")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedDate")
@@ -387,6 +420,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("OfferId");
+
+                    b.HasIndex("AvatarId");
 
                     b.HasIndex("UserId");
 
@@ -515,6 +550,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("WeekDay")
+                        .HasColumnType("text");
 
                     b.HasKey("TimeId");
 
@@ -705,22 +743,22 @@ namespace Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.BaseModels.FileEntity", b =>
+            modelBuilder.Entity("Domain.BaseModels.BaseUser", b =>
                 {
-                    b.HasOne("Domain.BaseModels.BaseUser", "BaseUser")
-                        .WithOne("Avatar")
-                        .HasForeignKey("Domain.BaseModels.FileEntity", "AvatarId");
+                    b.HasOne("Domain.BaseModels.FileEntity", "Avatar")
+                        .WithMany()
+                        .HasForeignKey("AvatarId");
 
-                    b.Navigation("BaseUser");
+                    b.Navigation("Avatar");
                 });
 
             modelBuilder.Entity("Domain.Models.Announcement", b =>
                 {
-                    b.HasOne("Domain.Models.Instructor", "Instructor")
+                    b.HasOne("Domain.BaseModels.BaseUser", "BaseUser")
                         .WithMany("Announcements")
-                        .HasForeignKey("InstructorId");
+                        .HasForeignKey("UserId");
 
-                    b.Navigation("Instructor");
+                    b.Navigation("BaseUser");
                 });
 
             modelBuilder.Entity("Domain.Models.Course", b =>
@@ -750,11 +788,35 @@ namespace Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Domain.Models.Favourite", b =>
+                {
+                    b.HasOne("Domain.BaseModels.BaseUser", "BaseUser")
+                        .WithMany("Favourites")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("BaseUser");
+                });
+
+            modelBuilder.Entity("Domain.Models.News", b =>
+                {
+                    b.HasOne("Domain.BaseModels.FileEntity", "FileEntity")
+                        .WithMany()
+                        .HasForeignKey("FileId");
+
+                    b.Navigation("FileEntity");
+                });
+
             modelBuilder.Entity("Domain.Models.Offer", b =>
                 {
+                    b.HasOne("Domain.BaseModels.FileEntity", "Avatar")
+                        .WithMany()
+                        .HasForeignKey("AvatarId");
+
                     b.HasOne("Domain.BaseModels.BaseUser", "BaseUser")
                         .WithMany("Offers")
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Avatar");
 
                     b.Navigation("BaseUser");
                 });
@@ -867,9 +929,11 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.BaseModels.BaseUser", b =>
                 {
-                    b.Navigation("Avatar");
+                    b.Navigation("Announcements");
 
                     b.Navigation("Events");
+
+                    b.Navigation("Favourites");
 
                     b.Navigation("Offers");
 
@@ -892,8 +956,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Models.Instructor", b =>
                 {
-                    b.Navigation("Announcements");
-
                     b.Navigation("Courses");
 
                     b.Navigation("Polls");

@@ -11,7 +11,6 @@ namespace Infrastructure.Persistence
 {
     public class DatabaseContext : IdentityDbContext<BaseUser>, IDatabaseContext
     {
-        
         public DatabaseContext(DbContextOptions<DatabaseContext> option) : base(option)
         {
         }
@@ -47,5 +46,6 @@ namespace Infrastructure.Persistence
         public DbSet<PollQuestion> PollQuestions { get; set; }
         public DbSet<PollAnswer> PollAnswers { get; set; }
         public DbSet<FileEntity> Files { get; set; }
+        public DbSet<Favourite> Favourites { get; set; }
     }
 }

@@ -8,14 +8,11 @@ namespace Application.DTOs.Offer
     {
         public string OfferId { get; set; }
         public string UserFullName { get; set; }
-        
         public string Title { get; set; }
-        
         public string Description { get; set; }
-        
         public string OfferType { get; set; }
-        
         public string Price { get; set; }
+        public string AvatarId { get; set; }
 
         public void Mapping(Profile profile)
         {

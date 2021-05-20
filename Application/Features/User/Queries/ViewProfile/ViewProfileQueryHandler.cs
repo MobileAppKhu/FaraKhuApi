@@ -35,7 +35,8 @@ namespace Application.Features.User.Queries.ViewProfile
         public async Task<ViewProfileViewModel> Handle(ViewProfileQuery request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _context.BaseUsers.FirstOrDefaultAsync(u => u.Id == userId
+            var user = await _context.BaseUsers.
+                Include(u => u.Favourites).FirstOrDefaultAsync(u => u.Id == userId
             , cancellationToken);
             if (user == null)
                 throw new CustomException(new Error
@@ -43,11 +44,9 @@ namespace Application.Features.User.Queries.ViewProfile
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            BaseUser baseUser = _context.BaseUsers.FirstOrDefault(u => u.Id == request.UserId);
-
             return new ViewProfileViewModel
             {
-                Profile = _mapper.Map<ProfileDto>(baseUser)
+                Profile = _mapper.Map<ProfileDto>(user)
             };
 
         }

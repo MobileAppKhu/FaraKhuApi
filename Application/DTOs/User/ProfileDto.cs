@@ -1,4 +1,6 @@
-﻿using Application.Common.Mappings;
+﻿using System.Collections.Generic;
+using Application.Common.Mappings;
+using Application.DTOs.Favourite;
 using AutoMapper;
 using Domain.Enum;
 using Domain.Models;
@@ -14,6 +16,7 @@ namespace Application.DTOs.User
         public string UserType { get; set; }
         public string Email { get; set; }
         public string AvatarId { get; set; }
+        public ICollection<FavouriteDto> Favourites { get; set; }
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Domain.Models.Student, ProfileDto>()

@@ -6,5 +6,6 @@ namespace Application.Features.News.Command.AddNews
     {
         public string Title { get; set; }
         public string Description { get; set; }
+        public string FileId { get; set; }
     }
 }

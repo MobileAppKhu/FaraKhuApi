@@ -12,6 +12,7 @@ using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace Application.Features.News.Command.UpdateNews
@@ -39,12 +40,23 @@ namespace Application.Features.News.Command.UpdateNews
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            Domain.Models.News news = new Domain.Models.News
-            {
-                Description = request.Description,
-                Title = request.Title,
-                NewsId = request.NewsId
-            };
+            var fileEntity = await _context.Files.FirstOrDefaultAsync(f => f.Id == request.FileId,
+                cancellationToken);
+            if (fileEntity == null)
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.FileNotFound,
+                    Message = Localizer["FileNotFound"]
+                });
+            var news = await _context.News.Include(n => n.FileEntity).
+                FirstOrDefaultAsync(n => n.NewsId == request.NewsId, cancellationToken);
+            var oldFile = await _context.Files.FirstOrDefaultAsync(f => f.Id == news.FileId, cancellationToken);
+
+            _context.Files.Remove(oldFile);
+            news.Description = request.Description;
+            news.Title = request.Title;
+            news.FileId = request.FileId;
+            
             _context.News.Update(news);
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;

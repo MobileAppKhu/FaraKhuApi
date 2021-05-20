@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.BaseModels;
 
 namespace Domain.Models
 {
@@ -13,8 +14,8 @@ namespace Domain.Models
         public string AnnouncementDescription { get; set; }
         public string Department { get; set; }
         public string Faculty { get; set; }
-        public Instructor Instructor { get; set; }
-        public string InstructorId { get; set; }
+        public BaseUser BaseUser { get; set; }
+        public string UserId { get; set; }
         
     }
 }
