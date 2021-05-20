@@ -1,7 +1,11 @@
 ﻿using System.Threading.Tasks;
+using Application.Features.User.Command.AddFavourite;
 using Application.Features.User.Command.CreateUser;
+using Application.Features.User.Command.RemoveFavourite;
 using Application.Features.User.Command.RemoveUser;
 using Application.Features.User.Command.UpdateAvatar;
+using Application.Features.User.Command.UpdateFavourite;
+using Application.Features.User.Queries.GetUserId;
 using Application.Features.User.Queries.ViewAllEvents;
 using Application.Features.User.Queries.ViewProfile;
 using MediatR;
@@ -55,6 +59,38 @@ namespace WebApi.Controllers
         {
             return Ok(await _mediator.Send(request));
         }
+        
+        [HttpPost]
+        [Authorize]
+        [ProducesResponseType(typeof(AddFavouriteViewModel),200)]
+        public async Task<IActionResult> AddFavourite(AddFavouriteCommand request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> UpdateFavourite(UpdateFavouriteCommand request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> DeleteFavourite(RemoveFavouriteCommand request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        
+        [HttpPost]
+        [Authorize]
+        [ProducesResponseType(typeof(GetUserViewModel),200)]
+        public async Task<IActionResult> GetUserId(GetUserIdQuery request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        
+        
         
     }
 }

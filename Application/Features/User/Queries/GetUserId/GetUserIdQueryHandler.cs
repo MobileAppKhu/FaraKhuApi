@@ -4,12 +4,10 @@ using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Resources;
-using AutoMapper;
 using Domain.BaseModels;
 using Domain.Enum;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
@@ -19,10 +17,10 @@ namespace Application.Features.User.Queries.GetUserId
     {
         private IHttpContextAccessor HttpContextAccessor { get; }
         private IDatabaseContext _context { get; }
-        private StringLocalizer<SharedResource> _localizer { get; }
+        private IStringLocalizer<SharedResource> _localizer { get; }
 
         public GetUserIdQueryHandler(IHttpContextAccessor httpContextAccessor, IDatabaseContext context
-        , StringLocalizer<SharedResource> localizer)
+        , IStringLocalizer<SharedResource> localizer)
         {
             HttpContextAccessor = httpContextAccessor;
             _context = context;
