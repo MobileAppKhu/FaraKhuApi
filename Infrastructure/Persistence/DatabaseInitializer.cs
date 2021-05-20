@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Domain.BaseModels;
 using Domain.Enum;
@@ -28,6 +29,8 @@ namespace Infrastructure.Persistence
             await DatabaseContext.Database.MigrateAsync();
             //await DatabaseContext.Database.EnsureDeletedAsync();
             //await DatabaseContext.Database.EnsureCreatedAsync();
+            if(DatabaseContext.UserRoles.Any())
+                return;
             await RoleInitializer();
             await AvatarInitializer();
             await UserInitializer();
