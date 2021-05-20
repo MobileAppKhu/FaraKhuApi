@@ -11,6 +11,7 @@ namespace Infrastructure.Persistence.Configuration
             builder.HasKey(n => n.NewsId);
             builder.Property(n => n.NewsId).ValueGeneratedOnAdd();
             builder.Property(n => n.Title).IsRequired();
+            builder.HasOne(n => n.FileEntity).WithMany().HasForeignKey(n => n.FileId);
         }
     }
 }

@@ -17,6 +17,7 @@
         InvalidPassword,
         NewsNotFound,
         PollIsNotOpen,
-        FileNotFound
+        FileNotFound,
+        EventNotFound
     }
 }

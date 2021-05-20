@@ -19,12 +19,6 @@ namespace Application.Features.Announcement.Commands.CreateAnnouncement
             RuleFor(r => r.Description)
                 .NotEmpty()
                 .WithMessage(localizer["NotEmpty"]);
-            RuleFor(r => r.Faculty)
-                .NotEmpty()
-                .WithMessage(localizer["NotEmpty"]);
-            RuleFor(r => r.Department)
-                .NotEmpty()
-                .WithMessage(localizer["NotEmpty"]);
         }
     }
 }

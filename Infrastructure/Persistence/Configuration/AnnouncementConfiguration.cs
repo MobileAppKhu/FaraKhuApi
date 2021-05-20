@@ -15,9 +15,9 @@ namespace Infrastructure.Persistence.Configuration
         {
             builder.HasKey(announcement => announcement.AnnouncementId);
             builder.Property(announcement => announcement.AnnouncementId).ValueGeneratedOnAdd();
-            builder.HasOne(announcement => announcement.Instructor)
-                .WithMany(instructor => instructor.Announcements)
-                .HasForeignKey(announcement => announcement.InstructorId);
+            builder.HasOne(announcement => announcement.BaseUser)
+                .WithMany(user =>  user.Announcements)
+                .HasForeignKey(announcement => announcement.UserId);
         }
     }
 }

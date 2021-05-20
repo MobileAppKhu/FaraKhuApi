@@ -11,7 +11,6 @@ namespace Infrastructure.Persistence
 {
     public class DatabaseContext : IdentityDbContext<BaseUser>, IDatabaseContext
     {
-        
         public DatabaseContext(DbContextOptions<DatabaseContext> option) : base(option)
         {
         }

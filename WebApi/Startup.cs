@@ -95,7 +95,7 @@ namespace WebApi
                 option.AddPolicy("InstructorPolicy", policy =>
                     policy.AddRequirements(new AuthorizationRequirements(new List<string>
                     {
-                        "Instructor".Normalize() , "Owner".Normalize()
+                        "Instructor".Normalize() , "Owner".Normalize() , "PROfficer".Normalize()
                     })));
                 option.AddPolicy("PROfficerPolicy", policy =>
                     policy.AddRequirements(new AuthorizationRequirements(new List<string>

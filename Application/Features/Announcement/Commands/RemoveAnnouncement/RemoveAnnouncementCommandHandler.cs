@@ -24,11 +24,8 @@ namespace Application.Features.Announcement.Commands.RemoveAnnouncement
     public class RemoveAnnouncementCommandHandler : IRequestHandler<RemoveAnnouncementCommand, RemoveAnnouncementViewModel>
     {
         private readonly IDatabaseContext _context;
-
         private IStringLocalizer<SharedResource> Localizer { get; }
-
         private IHttpContextAccessor HttpContextAccessor { get; }
-
         private UserManager<BaseUser> UserManager { get; }
         private IMapper _mapper { get; }
 
@@ -45,12 +42,11 @@ namespace Application.Features.Announcement.Commands.RemoveAnnouncement
         public async Task<RemoveAnnouncementViewModel> Handle(RemoveAnnouncementCommand request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Instructor user = _context.Instructors.FirstOrDefault(u => u.Id == userId);
-            var announcementObj = _context.Announcements.Include(announce => announce.Instructor)
+            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
+            var announcementObj = _context.Announcements.Include(announce => announce.BaseUser)
                 .FirstOrDefault(announce => announce.AnnouncementId == request.AnnouncementId);
-                
             if (user == null || 
-                announcementObj?.Instructor.Id != userId)
+                announcementObj?.BaseUser.Id != userId)
                 throw new CustomException(new Error
                 {
                     ErrorType = ErrorType.Unauthorized,

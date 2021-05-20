@@ -8,6 +8,7 @@ namespace Application.Features.Course.Command.CreateCourse
     public class CreateCourseCommand : IRequest<CreateCourseViewModel>
     {
         public string CourseTitle { get; set; }
+        public string EndDate { get; set; }
         
     }
 }

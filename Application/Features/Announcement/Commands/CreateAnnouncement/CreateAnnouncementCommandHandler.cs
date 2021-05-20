@@ -43,7 +43,7 @@ namespace Application.Features.Announcement.Commands.CreateAnnouncement
         public async Task<CreateAnnouncementViewModel> Handle(CreateAnnouncementCommand request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Instructor user = _context.Instructors.FirstOrDefault(u => u.Id == userId);
+            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
             if (user == null)
                 throw new CustomException(new Error
                 {
@@ -56,8 +56,8 @@ namespace Application.Features.Announcement.Commands.CreateAnnouncement
                 AnnouncementDescription = request.Description,
                 Faculty = request.Faculty,
                 Department = request.Department,
-                Instructor = user,
-                InstructorId = userId
+                BaseUser = user,
+                UserId = userId
             };
 
             await _context.Announcements.AddAsync(announcementObj, cancellationToken);

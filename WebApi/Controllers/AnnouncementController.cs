@@ -15,6 +15,7 @@ namespace WebApi.Controllers
 {
 
     [ApiController]
+    [Authorize(Policy = "InstructorPolicy")]
     [Route("api/[controller]/[action]")]
     public class AnnouncementController : ControllerBase
     {
@@ -24,7 +25,6 @@ namespace WebApi.Controllers
             _mediator = mediator;
         }
         [HttpPost]
-        [Authorize(Policy = "InstructorPolicy")]
         [ProducesResponseType(typeof(CreateAnnouncementViewModel), 200)]
         public async Task<IActionResult> CreateAnnouncement(CreateAnnouncementCommand request)
         {
@@ -32,7 +32,6 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "InstructorPolicy")]
         [ProducesResponseType(typeof(RemoveAnnouncementCommand), 200)]
         public async Task<IActionResult> RemoveAnnouncement(RemoveAnnouncementCommand request)
         {
@@ -40,7 +39,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(ViewAnnouncementsViewModel), 200)]
         public async Task<IActionResult> ViewAnnouncements(ViewAnnouncementsQuery request)
         {
@@ -48,7 +47,6 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "InstructorPolicy")]
         [ProducesResponseType(typeof(ViewInstructorAnnouncementsViewModel), 200)]
         public async Task<IActionResult> ViewInstructorAnnouncements(ViewInstructorAnnouncementsQuery request)
         {

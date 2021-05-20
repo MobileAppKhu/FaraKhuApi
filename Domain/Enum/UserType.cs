@@ -2,9 +2,9 @@
 {
     public enum UserType
     {
-        Instructor = 0,
-        Student = 1,
-        PROfficer = 2,
-        Owner = 3
+        Instructor = 1,
+        Student = 2,
+        PROfficer = 3,
+        Owner = 4
     }
 }

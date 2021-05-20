@@ -25,9 +25,9 @@ namespace Infrastructure.Persistence
 
         public async Task Initialize()
         {
-            //await DatabaseContext.Database.MigrateAsync();
-            await DatabaseContext.Database.EnsureDeletedAsync();
-            await DatabaseContext.Database.EnsureCreatedAsync();
+            await DatabaseContext.Database.MigrateAsync();
+            //await DatabaseContext.Database.EnsureDeletedAsync();
+            //await DatabaseContext.Database.EnsureCreatedAsync();
             await RoleInitializer();
             await AvatarInitializer();
             await UserInitializer();
@@ -80,7 +80,6 @@ namespace Infrastructure.Persistence
                 EmailConfirmed = true,
                 Avatar = avatar,
                 AvatarId = "smiley.png"
-
             };
 
             await UserManager.CreateAsync(instructor, "InstructorPassword");
@@ -88,10 +87,10 @@ namespace Infrastructure.Persistence
             
             var student = new Student()
             {
-                FirstName = "Instructor",
+                FirstName = "Student",
                 LastName = "User",
                 Email = "Student@FaraKhu.app",
-                UserType = UserType.Instructor,
+                UserType = UserType.Student,
                 StudentId = "12345",
                 EmailConfirmed = true,
                 Avatar = avatar,
@@ -100,7 +99,7 @@ namespace Infrastructure.Persistence
             };
 
             await UserManager.CreateAsync(student, "StudentPassword");
-            await UserManager.AddToRoleAsync(student, UserType.Instructor.ToString().Normalize());
+            await UserManager.AddToRoleAsync(student, UserType.Student.ToString().Normalize());
 
         }
 

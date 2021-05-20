@@ -44,7 +44,7 @@ namespace Application.Features.Announcement.Queries.ViewInstructorAnnouncements
         public async Task<ViewInstructorAnnouncementsViewModel> Handle(ViewInstructorAnnouncementsQuery request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Instructor user = await _context.Instructors.Include(instructor => instructor.Announcements).
+            BaseUser user = await _context.BaseUsers.Include(baseUser => baseUser.Announcements).
                 FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
             if(user == null)
                 throw new CustomException(new Error

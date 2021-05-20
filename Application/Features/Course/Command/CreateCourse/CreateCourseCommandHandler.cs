@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -43,12 +44,13 @@ namespace Application.Features.Course.Command.CreateCourse
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            
+            string[] endDate = request.EndDate.Split("-");
             Domain.Models.Course courseObj = new Domain.Models.Course
             {
                 CourseTitle = request.CourseTitle,
                 Instructor = user,
-                InstructorId = userId
+                InstructorId = userId,
+                EndDate = new DateTime(Int32.Parse(endDate[0]),Int32.Parse(endDate[1]), Int32.Parse(endDate[2]))
             };
             await _context.Courses.AddAsync(courseObj, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
