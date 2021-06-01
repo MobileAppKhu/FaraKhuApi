@@ -120,7 +120,6 @@ namespace Application.Features.Account.SignUp
 
             var avatar = await _context.Files.FirstOrDefaultAsync(a => a.Id == "smiley.png", cancellationToken);
             user.AvatarId = avatar.Id;
-            user.Avatar = avatar;
             
             
             user.IsValidating = true;
