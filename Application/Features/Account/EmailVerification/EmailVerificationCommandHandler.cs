@@ -59,15 +59,20 @@ namespace Application.Features.Account.EmailVerification
             {
                 user.IsValidating = false;
                 user.EmailConfirmed = true;
+                await UserManager.UpdateAsync(user);
+            }
+            
+            if (user.EmailConfirmed)
+            {
+                await _signInManager.SignInAsync(user, false);
+                await _context.SaveChangesAsync(cancellationToken);
+                return new EmailVerificationViewModel
+                {
+                    ProfileDto = _mapper.Map<ProfileDto>(user)
+                };
             }
 
-            await _signInManager.SignInAsync(user, false);
-            
-            await _context.SaveChangesAsync(cancellationToken);
-            return new EmailVerificationViewModel
-            {
-                ProfileDto = _mapper.Map<ProfileDto>(user)
-            };
+            return null;
         }
     }
 }

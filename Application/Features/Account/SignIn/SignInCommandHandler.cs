@@ -51,6 +51,7 @@ namespace Application.Features.Account.SignIn
                 string validationCode = ConfirmEmailCodeGenerator.GenerateCode();
                 user.ValidationCode = validationCode;
 
+                await _userManager.UpdateAsync(user);
                 await _context.SaveChangesAsync(cancellationToken);
             
                 _emailService.SendEmail(request.Logon,
