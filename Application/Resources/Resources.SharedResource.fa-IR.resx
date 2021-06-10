@@ -105,4 +105,7 @@
     <data name="Friday" xml:space="preserve">
         <value>جمعه</value>
     </data>
+    <data name="InvalidValidationToken" xml:space="preserve">
+        <value>کد تایید نادرست است</value>
+    </data>
 </root>

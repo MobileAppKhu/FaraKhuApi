@@ -61,7 +61,14 @@ namespace Application.Features.Account.EmailVerification
                 user.EmailConfirmed = true;
                 await UserManager.UpdateAsync(user);
             }
-            
+            else
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.InvalidValidationToken,
+                    Message = Localizer["InvalidValidationToken"]
+                });
+            }
             if (user.EmailConfirmed)
             {
                 await _signInManager.SignInAsync(user, false);
@@ -71,7 +78,6 @@ namespace Application.Features.Account.EmailVerification
                     ProfileDto = _mapper.Map<ProfileDto>(user)
                 };
             }
-
             return null;
         }
     }

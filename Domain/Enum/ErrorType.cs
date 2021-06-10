@@ -18,6 +18,7 @@
         NewsNotFound,
         PollIsNotOpen,
         FileNotFound,
-        EventNotFound
+        EventNotFound,
+        InvalidValidationToken
     }
 }

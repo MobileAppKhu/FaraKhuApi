@@ -178,6 +178,15 @@ namespace Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to کد تایید نادرست است.
+        /// </summary>
+        internal static string InvalidValidationToken {
+            get {
+                return ResourceManager.GetString("InvalidValidationToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to نام خانوادگی ضروری است.
         /// </summary>
         internal static string LastnameRequired {
