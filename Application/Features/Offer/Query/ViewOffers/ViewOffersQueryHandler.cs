@@ -28,17 +28,23 @@ namespace Application.Features.Offer.Query.ViewOffers
         }
         public async Task<ViewOffersViewModel> Handle(ViewOffersQuery request, CancellationToken cancellationToken)
         {
-            var offers = await _context.Offers.Include(o => o.BaseUser).
-                Include(o => o.Avatar).ToListAsync(cancellationToken);
+            List<Domain.Models.Offer> offers;
             if (!string.IsNullOrWhiteSpace(request.Search))
-                offers = offers.Where(offer => offer.Title.ToLower().Contains(request.Search.ToLower()) || 
-                                               offer.Description.ToLower().Contains(request.Search.ToLower()))
-                                                                                                    .ToList();
-            if (request.OfferType == OfferType.Buy || request.OfferType == OfferType.Sell)
-                offers = offers.Where(offer => offer.OfferType == request.OfferType).ToList();
+            {
+                offers = _context.Offers.Where(offer => (offer.Title.ToLower().Contains(request.Search.ToLower()) ||
+                                                        offer.Description.ToLower().Contains(request.Search.ToLower()))
+                                                        && offer.OfferType == request.OfferType).ToList();
+            }
+            else
+            {
+                offers = _context.Offers.Where(offers => offers.OfferType == request.OfferType).ToList();
+            }
+            int searchLength = offers.Count;
+            offers = offers.Skip(request.Start).Take(request.Step).ToList();
             return new ViewOffersViewModel
             {
-                Offer = _mapper.Map<ICollection<UserOfferDto>>(offers)
+                Offer = _mapper.Map<ICollection<UserOfferDto>>(offers),
+                SearchLength = searchLength
             };
         }   
     }

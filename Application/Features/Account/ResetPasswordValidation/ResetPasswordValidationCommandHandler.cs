@@ -49,6 +49,13 @@ namespace Application.Features.Account.ResetPasswordValidation
             {
                 baseUser.IsValidating = false;
                 baseUser.ResettingPassword = true;
+            }else
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.InvalidValidationToken,
+                    Message = Localizer["InvalidValidationToken"]
+                });
             }
 
             await _context.SaveChangesAsync(cancellationToken);

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -27,13 +28,24 @@ namespace Application.Features.News.Queries.ViewNews
         }
         public async Task<ViewNewsViewModel> Handle(ViewNewsQuery request, CancellationToken cancellationToken)
         {
-            var news = await _context.News.ToListAsync(cancellationToken);
+            List<Domain.Models.News> news;
             if (!string.IsNullOrWhiteSpace(request.Search))
-                news = news.Where(n => n.Title.ToLower().Contains(request.Search.ToLower()) ||
-                                       n.Description.ToLower().Contains(request.Search.ToLower())).ToList();
+            {
+                news = _context.News.Where(n => n.Title.ToLower().Contains(request.Search.ToLower()) || 
+                                                n.Description.ToLower().Contains(request.Search.ToLower())).ToList();
+            }
+            else
+            {
+                news = _context.News.ToList();
+            }
+
+            int searchCount = news.Count;
+            news = news.Skip(request.Start).Take(request.Step).ToList();
+            
             return new ViewNewsViewModel
             {
-                News = _mapper.Map<List<NewsShortDto>>(news)
+                News = _mapper.Map<List<NewsShortDto>>(news),
+                SearchCount = searchCount
             };
         }
     }
