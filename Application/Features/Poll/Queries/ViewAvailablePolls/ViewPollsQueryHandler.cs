@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
@@ -30,9 +31,12 @@ namespace Application.Features.Poll.Queries.ViewAvailablePolls
         {
             var course = await _context.Courses.Include(c => c.Polls)
                 .FirstOrDefaultAsync(c => c.CourseId == request.CourseId, cancellationToken);
+            int searchLength = course.Polls.Count;
+            course.Polls = course.Polls.Skip(request.Start).Take(request.Step).ToList();
             return new ViewPollsViewModel
             {
-                Polls = _mapper.Map<ICollection<PollQuestionShortDto>>(course.Polls)
+                Polls = _mapper.Map<ICollection<PollQuestionShortDto>>(course.Polls),
+                SearchLenght = searchLength
             };
         }
     }

@@ -1,4 +1,5 @@
-﻿using Domain.Enum;
+﻿using System;
+using Domain.Enum;
 using MediatR;
 
 namespace Application.Features.Event.Command.CreateEvent
@@ -9,13 +10,7 @@ namespace Application.Features.Event.Command.CreateEvent
         
         public string EventDescription { get; set; }
         
-        public string EventTime { get; set; }
+        public DateTime EventTime { get; set; }
         
     }
 }
-/*{
-    "EventName" : "Quiz-1",
-    "EventDescription" : "Quiz Instructor 2",
-    "EventTime":"21-4-24",
-    "EventType" : 1
-}*/

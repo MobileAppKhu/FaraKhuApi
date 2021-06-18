@@ -31,14 +31,17 @@ namespace Application.Features.Offer.Query.ViewOffers
             List<Domain.Models.Offer> offers;
             if (!string.IsNullOrWhiteSpace(request.Search))
             {
-                offers = _context.Offers.Where(offer => (offer.Title.ToLower().Contains(request.Search.ToLower()) ||
-                                                        offer.Description.ToLower().Contains(request.Search.ToLower()))
-                                                        && offer.OfferType == request.OfferType).ToList();
+                offers = _context.Offers.Include(offers => offers.BaseUser)
+                    .Where(offer => (offer.Title.ToLower().Contains(request.Search.ToLower()) ||
+                                     offer.Description.ToLower().Contains(request.Search.ToLower()))
+                                    && offer.OfferType == request.OfferType).ToList();
             }
             else
             {
-                offers = _context.Offers.Where(offers => offers.OfferType == request.OfferType).ToList();
+                offers = _context.Offers.Include(offers => offers.BaseUser)
+                    .Where(offers => offers.OfferType == request.OfferType).ToList();
             }
+
             int searchLength = offers.Count;
             offers = offers.Skip(request.Start).Take(request.Step).ToList();
             return new ViewOffersViewModel
@@ -46,6 +49,6 @@ namespace Application.Features.Offer.Query.ViewOffers
                 Offer = _mapper.Map<ICollection<UserOfferDto>>(offers),
                 SearchLength = searchLength
             };
-        }   
+        }
     }
 }

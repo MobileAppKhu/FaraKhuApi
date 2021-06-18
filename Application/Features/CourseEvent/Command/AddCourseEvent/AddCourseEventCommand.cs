@@ -1,4 +1,5 @@
-﻿using Domain.Enum;
+﻿using System;
+using Domain.Enum;
 using MediatR;
 
 namespace Application.Features.CourseEvent.Command.AddCourseEvent
@@ -7,7 +8,7 @@ namespace Application.Features.CourseEvent.Command.AddCourseEvent
     {
     public string EventName { get; set; }
     public string EventDescription { get; set; }
-    public string EventTime { get; set; }
+    public DateTime EventTime { get; set; }
     public CourseEventType EventType { get; set; }
     public string CourseId { get; set; }
     }

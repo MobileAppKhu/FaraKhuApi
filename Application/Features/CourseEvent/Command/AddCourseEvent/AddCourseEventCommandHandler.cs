@@ -61,7 +61,7 @@ namespace Application.Features.CourseEvent.Command.AddCourseEvent
                 EventType = request.EventType,
                 Course = courseObj,
                 CourseId = request.CourseId,
-                EventTime = DateTimeOffset.Parse(request.EventTime).Date
+                EventTime = request.EventTime
             };
             await _context.CourseEvents.AddAsync(courseEvent, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);

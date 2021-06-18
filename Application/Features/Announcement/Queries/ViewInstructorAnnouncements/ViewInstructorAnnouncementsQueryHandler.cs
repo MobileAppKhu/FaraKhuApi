@@ -53,9 +53,12 @@ namespace Application.Features.Announcement.Queries.ViewInstructorAnnouncements
                     Message = Localizer["Unauthorized"]
                 });
             var announcements = user.Announcements;
+            int searchLength = announcements.Count;
+            announcements = announcements.Skip(request.Start).Take(request.Step).ToList();
             return new ViewInstructorAnnouncementsViewModel
             {
-                Announcements = _mapper.Map<ICollection<ViewAnnouncementDto>>(announcements)
+                Announcements = _mapper.Map<ICollection<ViewAnnouncementDto>>(announcements),
+                SearchLength = searchLength
             };
         }
     }
