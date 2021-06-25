@@ -6,5 +6,6 @@ namespace Application.Features.News.Queries.ViewNews
     public class ViewNewsViewModel
     {
         public List<NewsShortDto> News { get; set; }
+        public int SearchCount { get; set; }
     }
 }

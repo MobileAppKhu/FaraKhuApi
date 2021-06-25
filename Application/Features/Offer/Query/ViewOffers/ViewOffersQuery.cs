@@ -7,5 +7,7 @@ namespace Application.Features.Offer.Query.ViewOffers
     {
         public OfferType OfferType { get; set; }
         public string Search { get; set; }
+        public int Start { get; set; }
+        public int Step { get; set; }
     }
 }

@@ -10,5 +10,6 @@ namespace Application.Features.Announcement.Queries.ViewAnnouncements
     public class ViewAnnouncementsViewModel
     {
         public ICollection<ViewAnnouncementDto> Announcements{get; set;}
+        public int SearchLength { get; set; }
     }
 }

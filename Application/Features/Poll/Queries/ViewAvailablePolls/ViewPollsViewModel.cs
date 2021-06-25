@@ -6,5 +6,6 @@ namespace Application.Features.Poll.Queries.ViewAvailablePolls
     public class ViewPollsViewModel
     {
         public ICollection<PollQuestionShortDto> Polls { get; set; }
+        public int SearchLenght { get; set; }
     }
 }

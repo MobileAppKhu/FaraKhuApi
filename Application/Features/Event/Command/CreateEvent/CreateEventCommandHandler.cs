@@ -49,7 +49,7 @@ namespace Application.Features.Event.Command.CreateEvent
             {
                 EventName = request.EventName,
                 EventDescription = request.EventDescription,
-                EventTime = DateTimeOffset.Parse(request.EventTime).Date,
+                EventTime = request.EventTime,
                 User =  user,
                 UserId = user.Id
             };

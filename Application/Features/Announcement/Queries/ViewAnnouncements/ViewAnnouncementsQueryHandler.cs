@@ -17,7 +17,6 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Announcement.Queries.ViewAnnouncements
 {
-
     public class ViewAnnouncementsQueryHandler : IRequestHandler<ViewAnnouncementsQuery, ViewAnnouncementsViewModel>
     {
         private readonly IDatabaseContext _context;
@@ -39,22 +38,31 @@ namespace Application.Features.Announcement.Queries.ViewAnnouncements
             UserManager = userManager;
             _mapper = mapper;
         }
-        public async Task<ViewAnnouncementsViewModel> Handle(ViewAnnouncementsQuery request, CancellationToken cancellationToken)
+
+        public async Task<ViewAnnouncementsViewModel> Handle(ViewAnnouncementsQuery request,
+            CancellationToken cancellationToken)
         {
             var list = await _context.Announcements
                 .Include(announce => announce.BaseUser).ToListAsync(cancellationToken);
-            
-            if(!string.IsNullOrEmpty(request.Faculty))
+
+
+            if (!string.IsNullOrEmpty(request.Faculty))
             {
                 list = list.Where(announce => announce.Faculty == request.Faculty).ToList();
             }
+
             if (!string.IsNullOrEmpty(request.Department))
             {
                 list = list.Where(announce => announce.Department == request.Department).ToList();
             }
-            ViewAnnouncementsViewModel viewModel = new ViewAnnouncementsViewModel();
-            viewModel.Announcements = _mapper.Map<ICollection<ViewAnnouncementDto>>(list);
-            return viewModel;
+
+            int searchLength = list.Count;
+            list = list.Skip(request.Start).Take(request.Step).ToList();
+            return new ViewAnnouncementsViewModel()
+            {
+                Announcements = _mapper.Map<ICollection<ViewAnnouncementDto>>(list),
+                SearchLength = searchLength
+            };
         }
     }
 }
