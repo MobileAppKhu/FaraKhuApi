@@ -5,6 +5,7 @@ using Application.Features.User.Command.RemoveFavourite;
 using Application.Features.User.Command.RemoveUser;
 using Application.Features.User.Command.UpdateAvatar;
 using Application.Features.User.Command.UpdateFavourite;
+using Application.Features.User.Command.UpdateProfile;
 using Application.Features.User.Queries.GetUserId;
 using Application.Features.User.Queries.ViewAllEvents;
 using Application.Features.User.Queries.ViewProfile;
@@ -90,7 +91,12 @@ namespace WebApi.Controllers
             return Ok(await _mediator.Send(request));
         }
         
-        
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> UpdateProfile(UpdateProfileCommand request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
         
     }
 }
