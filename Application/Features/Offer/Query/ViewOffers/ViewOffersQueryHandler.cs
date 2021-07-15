@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,20 +29,18 @@ namespace Application.Features.Offer.Query.ViewOffers
         }
         public async Task<ViewOffersViewModel> Handle(ViewOffersQuery request, CancellationToken cancellationToken)
         {
-            List<Domain.Models.Offer> offers;
+            List<Domain.Models.Offer> offers = _context.Offers.Include(offer => offer.BaseUser).ToList();
             if (!string.IsNullOrWhiteSpace(request.Search))
             {
-                offers = _context.Offers.Include(offers => offers.BaseUser)
-                    .Where(offer => (offer.Title.ToLower().Contains(request.Search.ToLower()) ||
-                                     offer.Description.ToLower().Contains(request.Search.ToLower()))
-                                    && offer.OfferType == request.OfferType).ToList();
-            }
-            else
-            {
-                offers = _context.Offers.Include(offers => offers.BaseUser)
-                    .Where(offers => offers.OfferType == request.OfferType).ToList();
+                offers = offers.Where(offer => (offer.Title.ToLower().Contains(request.Search.ToLower()) ||
+                                                offer.Description.ToLower().Contains(request.Search.ToLower()))).ToList();
             }
 
+            if(request.OfferType != 0)
+            {
+                offers = offers.Where(offers => offers.OfferType == request.OfferType).ToList();
+            }
+            
             int searchLength = offers.Count;
             offers = offers.Skip(request.Start).Take(request.Step).ToList();
             return new ViewOffersViewModel

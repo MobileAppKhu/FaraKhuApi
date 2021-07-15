@@ -40,24 +40,44 @@ namespace Application.Features.News.Command.UpdateNews
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            var fileEntity = await _context.Files.FirstOrDefaultAsync(f => f.Id == request.FileId,
-                cancellationToken);
-            if (fileEntity == null)
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.FileNotFound,
-                    Message = Localizer["FileNotFound"]
-                });
+           
             var news = await _context.News.Include(n => n.FileEntity).
                 FirstOrDefaultAsync(n => n.NewsId == request.NewsId, cancellationToken);
-            var oldFile = await _context.Files.FirstOrDefaultAsync(f => f.Id == news.FileId, cancellationToken);
+            if (news == null)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.NewsNotFound,
+                    Message = Localizer["NewsNotFound"]
+                });
+            }
+            /*var oldFile = await _context.Files.FirstOrDefaultAsync(f => f.Id == news.FileId, cancellationToken);
 
-            _context.Files.Remove(oldFile);
-            news.Description = request.Description;
-            news.Title = request.Title;
-            news.FileId = request.FileId;
+            _context.Files.Remove(oldFile);*/
+            if (!string.IsNullOrWhiteSpace(request.Description))
+            {
+                news.Description = request.Description;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.Title))
+            {
+                news.Title = request.Title;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.FileId))
+            {
+                var fileEntity = await _context.Files.FirstOrDefaultAsync(f => f.Id == request.FileId,
+                    cancellationToken);
+                if (fileEntity == null)
+                    throw new CustomException(new Error
+                    {
+                        ErrorType = ErrorType.FileNotFound,
+                        Message = Localizer["FileNotFound"]
+                    });
+                news.FileId = fileEntity.Id;
+                news.FileEntity = fileEntity;
+            }
             
-            _context.News.Update(news);
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

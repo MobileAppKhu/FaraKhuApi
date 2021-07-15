@@ -23,7 +23,7 @@ namespace Application.Features.User.Command.UpdateProfile
         private UserManager<BaseUser> UserManager { get; }
         private IMapper _mapper { get; }
 
-        public UpdateProfileCommandHandler( IStringLocalizer<SharedResource> localizer,
+        public UpdateProfileCommandHandler(IStringLocalizer<SharedResource> localizer,
             IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
             , IDatabaseContext context)
         {
@@ -33,11 +33,12 @@ namespace Application.Features.User.Command.UpdateProfile
             UserManager = userManager;
             _mapper = mapper;
         }
-        
+
         public async Task<Unit> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == userId, cancellationToken);
+            var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == userId,
+                cancellationToken);
             if (user == null)
             {
                 throw new CustomException(new Error
@@ -47,8 +48,16 @@ namespace Application.Features.User.Command.UpdateProfile
                 });
             }
 
-            user.FirstName = request.FirstName;
-            user.LastName = request.LastName;
+            if (!string.IsNullOrWhiteSpace(request.FirstName))
+            {
+                user.FirstName = request.FirstName;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.LastName))
+            {
+                user.LastName = request.LastName;
+            }
+
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

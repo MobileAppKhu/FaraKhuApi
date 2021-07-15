@@ -1,5 +1,6 @@
 ﻿
 using System.Formats.Asn1;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
@@ -59,7 +60,6 @@ namespace Application.Features.Account.SignIn
                     validationCode);
                 return null;
             }
-                
             var result = await _signInManager.PasswordSignInAsync(user, request.Password, true, false);
             
             if (!result.Succeeded)

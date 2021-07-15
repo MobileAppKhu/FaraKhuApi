@@ -39,14 +39,17 @@ namespace Application.Features.Course.Command.UpdateCourse
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            Domain.Models.Course courseObj = new Domain.Models.Course
+            if (!string.IsNullOrWhiteSpace(request.CourseTitle))
             {
-                CourseId = request.CourseId,
-                CourseTitle = request.CourseTitle,
-                Instructor = user,
-                InstructorId = userId
-            };
+                Domain.Models.Course courseObj = new Domain.Models.Course
+                {
+                    CourseId = request.CourseId,
+                    CourseTitle = request.CourseTitle,
+                    Instructor = user,
+                    InstructorId = userId
+                };
             _context.Courses.Update(courseObj);
+            }
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }
