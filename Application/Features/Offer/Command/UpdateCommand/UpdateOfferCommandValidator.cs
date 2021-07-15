@@ -8,16 +8,7 @@ namespace Application.Features.Offer.Command.UpdateCommand
     {
         public UpdateOfferCommandValidator(IStringLocalizer<SharedResource> localizer)
         {
-            RuleFor(r => r.Title)
-                .NotEmpty()
-                .WithMessage(localizer["EmptyInput"]);
-            RuleFor(r => r.Description)
-                .NotEmpty()
-                .WithMessage(localizer["EmptyInput"]);
-            RuleFor(r => r.OfferType)
-                .NotEmpty()
-                .WithMessage(localizer["EmptyInout"]);
-            RuleFor(r => r.Price)
+            RuleFor(r => r.OfferId)
                 .NotEmpty()
                 .WithMessage(localizer["EmptyInput"]);
         }

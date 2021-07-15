@@ -19,6 +19,9 @@
         PollIsNotOpen,
         FileNotFound,
         EventNotFound,
-        InvalidValidationToken
+        InvalidValidationToken,
+        AnswerNotFound,
+        QuestionNotFound,
+        OfferNotFound
     }
 }

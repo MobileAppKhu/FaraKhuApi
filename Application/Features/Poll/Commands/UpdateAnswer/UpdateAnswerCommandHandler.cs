@@ -46,10 +46,16 @@ namespace Application.Features.Poll.Commands.UpdateAnswer
                 });
             var answer = await _context.PollAnswers.Include(a => a.Question)
                 .FirstOrDefaultAsync(a => a.AnswerId == request.AnswerId, cancellationToken);
+            if (answer == null)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.AnswerNotFound,
+                    Message = Localizer["AnswerNotFound"]
+                });
+            }
 
             answer.AnswerDescription = request.AnswerDescription;
-            
-            _context.PollAnswers.Update(answer);
             await _context.SaveChangesAsync(cancellationToken);
             
             return Unit.Value;

@@ -9,12 +9,6 @@ namespace Application.Features.User.Command.UpdateProfile
     {
         public UpdateProfileCommandValidator(IStringLocalizer<SharedResource> localizer)
         {
-            RuleFor(request => request.FirstName)
-                .NotEmpty()
-                .WithMessage(localizer["NotEmpty"]);
-            RuleFor(request => request.LastName)
-                .NotEmpty()
-                .WithMessage(localizer["NotEmpty"]);
         }
     }
 }

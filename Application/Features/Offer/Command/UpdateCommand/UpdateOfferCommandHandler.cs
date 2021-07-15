@@ -42,24 +42,44 @@ namespace Application.Features.Offer.Command.UpdateCommand
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            var avatarObj = await _context.Files.FirstOrDefaultAsync(a => a.Id == request.AvatarId,
-                cancellationToken);
-            if (avatarObj == null)
-                throw new CustomException(new Error
-                    {ErrorType = ErrorType.FileNotFound, Message = Localizer["FileNotFound"]});
-            Domain.Models.Offer offer = new Domain.Models.Offer
+            var offerObj = await _context.Offers.FirstOrDefaultAsync(a => a.OfferId == request.OfferId, cancellationToken);
+            if (offerObj == null)
             {
-                OfferId = request.OfferId,
-                Title = request.Title,
-                Description = request.Description,
-                Price = request.Price,
-                OfferType = request.OfferType,
-                BaseUser = user,
-                UserId = user.Id,
-                Avatar = avatarObj,
-                AvatarId = request.AvatarId
-            };
-            _context.Offers.Update(offer);
+                throw new CustomException(new Error
+                    {ErrorType = ErrorType.OfferNotFound, Message = Localizer["OfferNotFound"]});
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.Price))
+            {
+                offerObj.Price = request.Price;
+            }
+            
+            if (!string.IsNullOrWhiteSpace(request.Title))
+            {
+                offerObj.Title = request.Title;
+            }
+            
+            if (!string.IsNullOrWhiteSpace(request.Description))
+            {
+                offerObj.Description = request.Description;
+            }
+
+            if (request.OfferType == OfferType.Buy || request.OfferType == OfferType.Sell)
+            {
+                offerObj.OfferType = request.OfferType;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.AvatarId))
+            {
+                var avatarObj = await _context.Files.FirstOrDefaultAsync(a => a.Id == request.AvatarId,
+                    cancellationToken);
+                if (avatarObj == null)
+                    throw new CustomException(new Error
+                        {ErrorType = ErrorType.FileNotFound, Message = Localizer["FileNotFound"]});
+                offerObj.Avatar = avatarObj;
+                offerObj.AvatarId = avatarObj.Id;
+            }
+            
             await _context.SaveChangesAsync(cancellationToken);
             
             return Unit.Value;

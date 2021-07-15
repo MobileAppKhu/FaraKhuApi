@@ -8,9 +8,6 @@ namespace Application.Features.Poll.Commands.UpdateAnswer
     {
         public UpdateAnswerCommandValidator(IStringLocalizer<SharedResource> localizer)
         {
-            RuleFor(r => r.AnswerDescription)
-                .NotEmpty()
-                .WithMessage(localizer["EmptyInput"]);
             RuleFor(r => r.AnswerId)
                 .NotEmpty()
                 .WithMessage(localizer["EmptyInput"]);

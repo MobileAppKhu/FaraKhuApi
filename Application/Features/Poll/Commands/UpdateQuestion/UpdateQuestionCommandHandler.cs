@@ -43,16 +43,33 @@ namespace Application.Features.Poll.Commands.UpdateQuestion
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-
-            var question = new PollQuestion
+            var questionObj =
+                await _context.PollQuestions.FirstOrDefaultAsync(
+                    pollQuestion => pollQuestion.QuestionId == request.QuestionId, cancellationToken);
+            if (questionObj == null)
             {
-                QuestionId = request.QuestionId,
-                QuestionDescription = request.QuestionDescription,
-                IsOpen = request.IsOpen,
-                MultiVote = request.MultiVote
-            };
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.QuestionNotFound,
+                    Message = Localizer["QuestionNotFound"]
+                });
+            }
 
-            _context.PollQuestions.Update(question);
+            if (!string.IsNullOrWhiteSpace(request.QuestionDescription))
+            {
+                questionObj.QuestionDescription = request.QuestionDescription;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.IsOpen))
+            {
+                questionObj.IsOpen = request.IsOpen.Equals("t");
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.MultiVote))
+            {
+                questionObj.MultiVote = request.MultiVote.Equals("t");
+            }
+            
             await _context.SaveChangesAsync(cancellationToken);
             
             return Unit.Value;
