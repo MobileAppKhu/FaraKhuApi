@@ -44,9 +44,19 @@ namespace Application.Features.Event.Command.UpdateEvent
 
             if (eventObj != null)
             {
-                eventObj.EventDescription = request.EventDescription;
-                eventObj.EventName = request.EventName;
-                eventObj.EventTime = DateTimeOffset.Parse(request.EventTime).Date;
+                if (!string.IsNullOrWhiteSpace(request.EventName))
+                {
+                    eventObj.EventName = request.EventName;
+                }
+                if (!string.IsNullOrWhiteSpace(request.EventDescription))
+                {
+                    eventObj.EventDescription = request.EventDescription;
+                }
+                if (!string.IsNullOrWhiteSpace(request.EventTime))
+                {
+                    eventObj.EventTime = DateTimeOffset.Parse(request.EventTime).Date;
+                }
+
                 _context.Events.Update(eventObj);
                 await _context.SaveChangesAsync(cancellationToken);
             }

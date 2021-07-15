@@ -11,12 +11,7 @@ namespace Application.Features.Event.Command.UpdateEvent
             RuleFor(r => r.EventId)
                 .NotEmpty()
                 .WithMessage(localizer["NotEmpty"]);
-            RuleFor(r => r.EventName)
-                .NotEmpty()
-                .WithMessage(localizer["NotEmpty"]);
-            RuleFor(r => r.EventTime)
-                .NotEmpty()
-                .WithMessage(localizer["NotEmpty"]);
+                
         }
     }
 }

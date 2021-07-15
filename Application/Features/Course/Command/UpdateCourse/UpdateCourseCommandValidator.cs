@@ -11,9 +11,6 @@ namespace Application.Features.Course.Command.UpdateCourse
             RuleFor(r => r.CourseId)
                 .NotEmpty()
                 .WithMessage(localizer["NotEmpty"]);
-            RuleFor(r => r.CourseTitle)
-                .NotEmpty()
-                .WithMessage(localizer["NotEmpty"]);
         }
     }
 }
