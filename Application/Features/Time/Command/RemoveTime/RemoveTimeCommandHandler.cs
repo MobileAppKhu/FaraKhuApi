@@ -47,6 +47,7 @@ namespace Application.Features.Time.Command.RemoveTime
             var timeObj = await _context.Times.FirstOrDefaultAsync(t => t.TimeId == request.TimeId, cancellationToken);
             if(timeObj != null)
                 _context.Times.Remove(timeObj);
+            await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -53,7 +54,7 @@ namespace Application.Features.Poll.Commands.CreateQuestion
             var poll = new PollQuestion
             {
                 QuestionDescription = request.QuestionDescription,
-                MultiVote = request.MultiVote,
+                MultiVote = bool.Parse(request.MultiVote),
                 Course = course,
                 CourseId = course.CourseId
             };

@@ -2,11 +2,11 @@
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Announcement.Queries.ViewInstructorAnnouncements
+namespace Application.Features.News.Queries.ViewNews
 {
-    public class ViewInstructorAnnouncementsQueryValidator : AbstractValidator<ViewInstructorAnnouncementsQuery>
+    public class ViewNewsQueryValidator : AbstractValidator<ViewNewsQuery>
     {
-        public ViewInstructorAnnouncementsQueryValidator(IStringLocalizer<SharedResource> localizer)
+        public ViewNewsQueryValidator(IStringLocalizer<SharedResource> localizer)
         {
             RuleFor(r => r.Start)
                 .NotEmpty()

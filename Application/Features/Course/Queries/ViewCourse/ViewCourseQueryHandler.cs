@@ -46,8 +46,9 @@ namespace Application.Features.Course.Queries.ViewCourse
                 });
             var courseObj = _context.Courses.Include(c => c.Students)
                 .Include(c => c.CourseEvents)
-                .Include(c => c.Times).
-                Include(c => c.Polls).FirstOrDefault(c => c.CourseId == request.CourseId);
+                .Include(c => c.Times)
+                .Include(c => c.Polls)
+                .Include(c => c.Instructor).FirstOrDefault(c => c.CourseId == request.CourseId);
             
             return new ViewCourseViewModel
             {

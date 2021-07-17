@@ -8,8 +8,6 @@ namespace Application.Features.Time.Command.RemoveTime
     {
         public RemoveTimeCommandValidator(IStringLocalizer<SharedResource> localizer)
         {
-            RuleFor(r => r.CourseId)
-                .NotEmpty();
             RuleFor(r => r.TimeId)
                 .NotEmpty();
         }

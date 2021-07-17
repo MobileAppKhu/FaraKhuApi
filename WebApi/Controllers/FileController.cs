@@ -33,7 +33,7 @@ namespace WebApi.Controllers
             }));
         }
 
-        [HttpPost]
+        [HttpGet]
         [ProducesResponseType(typeof(FileStreamResult), 200)]
         public async Task<IActionResult> Download(DownloadQuery request)
         {

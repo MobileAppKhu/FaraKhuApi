@@ -47,7 +47,7 @@ namespace Application.Features.Poll.Commands.RetractVote
                     Message = Localizer["Unauthorized"]
                 });
             var answer = await _context.PollAnswers.Include(a => a.Voters)
-                .FirstOrDefaultAsync(a => a.AnswerId == request.AnswerId, cancellationToken);
+                .Include(a => a.Question).FirstOrDefaultAsync(a => a.AnswerId == request.AnswerId, cancellationToken);
             if (!answer.Question.IsOpen)
                 throw new CustomException(new Error
                 {
