@@ -35,9 +35,9 @@ namespace WebApi.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(FileStreamResult), 200)]
-        public async Task<IActionResult> Download(DownloadQuery request)
+        public async Task<IActionResult> Download(String fileId)
         {
-            var downloadFile = (await _mediator.Send(request)).DownloadDto;
+            var downloadFile = (await _mediator.Send(new DownloadQuery{FileId = fileId})).DownloadDto;
 
             if (downloadFile.ContentType?.StartsWith("image") ?? false)
                 HttpContext.Response.Headers.Append("Cache-Control",
