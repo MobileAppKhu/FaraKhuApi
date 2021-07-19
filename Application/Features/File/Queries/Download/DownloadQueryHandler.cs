@@ -10,6 +10,7 @@ using Domain.Enum;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 
@@ -40,7 +41,7 @@ namespace Application.Features.File.Queries.Download
         {
             var id = request.FileId;
 
-            var file = await _context.Files.FindAsync(id);
+            var file = await _context.Files.FirstOrDefaultAsync(entity => entity.Id == id,cancellationToken);
             if (file == null)
                 throw new CustomException(new Error
                     {ErrorType = ErrorType.FileNotFound, Message = Localizer["FileNotFound"]});
