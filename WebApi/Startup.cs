@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Application;
 using Application.Common.Interfaces;
@@ -41,7 +42,9 @@ namespace WebApi
 
             services.AddScoped<IDatabaseContext, DatabaseContext>();
             services.AddScoped<IEmailService, EmailService>();
-
+            
+            if (!Directory.Exists(Configuration["StorePath"]))
+                Directory.CreateDirectory(Configuration["StorePath"]);
 
             services.AddControllers();
 
