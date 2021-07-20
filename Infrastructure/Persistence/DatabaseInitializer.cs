@@ -140,6 +140,8 @@ namespace Infrastructure.Persistence
             await DatabaseContext.Files.AddAsync(avatar);
             var stream = System.IO.File.Create(Configuration["StorePath"] + avatar.Id);
             await fileStream.CopyToAsync(stream);
+            fileStream.Close();
+            stream.Close();
             return avatar;
         }
     }
