@@ -1,11 +1,14 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Domain.BaseModels;
 using Domain.Enum;
 using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,12 +18,14 @@ namespace Infrastructure.Persistence
     {
         private RoleManager<IdentityRole> RoleManager { get; }
         private DatabaseContext DatabaseContext { get; }
+        private IConfiguration Configuration { get; }
         private UserManager<BaseUser> UserManager { get; }
 
         public DatabaseInitializer(IServiceProvider scopeServiceProvider)
         {
             RoleManager = scopeServiceProvider.GetService<RoleManager<IdentityRole>>();
             DatabaseContext = scopeServiceProvider.GetService<DatabaseContext>();
+            Configuration = scopeServiceProvider.GetService<IConfiguration>();
             UserManager = scopeServiceProvider.GetService<UserManager<BaseUser>>();
         }
 
@@ -108,48 +113,36 @@ namespace Infrastructure.Persistence
 
         private async Task AvatarInitializer()
         {
-            var smiley = new FileEntity
-            {
-                Id = "smiley.png",
-                Name = "smiley.png",
-                Size = 22480,
-                Type = FileType.Image,
-                ContentType = "image/jpeg",
-            };
-            
-            var blink = new FileEntity
-            {
-                Id = "blink.png",
-                Name = "blink.png",
-                Size = 10521,
-                Type = FileType.Image,
-                ContentType = "image/jpeg"
-            };
-            
-            var sad = new FileEntity
-            {
-                Id = "sad.png",
-                Name = "sad.png",
-                Size = 29209,
-                Type = FileType.Image,
-                ContentType = "image/jpeg"
-            };
-            
-            var poker = new FileEntity
-            {
-                Id = "poker.png",
-                Name = "poker.png",
-                Size = 27621,
-                Type = FileType.Image,
-                ContentType = "image/jpeg"
-            };
+            var smiley = await UploadFile("/Persistence/Files/smiley.png", FileType.Image);
+            var sad = await UploadFile("/Persistence/Files/sad.png", FileType.Image); 
+            var blink = await UploadFile("/Persistence/Files/blink.png", FileType.Image); 
+            var poker = await UploadFile("/Persistence/Files/poker.png", FileType.Image);
 
             await DatabaseContext.Files.AddAsync(smiley);
             await DatabaseContext.Files.AddAsync(sad);
             await DatabaseContext.Files.AddAsync(blink);
             await DatabaseContext.Files.AddAsync(poker);
             await DatabaseContext.SaveChangesAsync();
-
+        }
+        
+        private async Task<FileEntity> UploadFile(string path, FileType fileType)
+        {
+            var directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var fileStream = System.IO.File.OpenRead(directory + path);
+            var avatar = new FileEntity
+            {
+                Id = Path.GetFileName(fileStream.Name),
+                Type = fileType,
+                Size = fileStream.Length,
+                ContentType = "image/jpeg",
+                Name = Path.GetFileName(fileStream.Name)
+            };
+            await DatabaseContext.Files.AddAsync(avatar);
+            var stream = System.IO.File.Create(Configuration["StorePath"] + avatar.Id);
+            await fileStream.CopyToAsync(stream);
+            fileStream.Close();
+            stream.Close();
+            return avatar;
         }
     }
 }

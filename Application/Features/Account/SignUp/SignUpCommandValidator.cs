@@ -25,7 +25,7 @@ namespace Application.Features.Account.SignUp
                 .WithMessage(localizer["NotEmpty"])
                 .Must(e => e.IsEmail())
                 .WithMessage(localizer["InvalidEmail"]);
-
+            
         }
     }
 }
