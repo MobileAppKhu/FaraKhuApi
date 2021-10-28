@@ -15,15 +15,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.User.Queries.ViewProfile
+namespace Application.Features.User.Queries.SearchProfile
 {
-    public class ViewProfileQueryHandler : IRequestHandler<ViewProfileQuery, ViewProfileViewModel>
+    public class SearchProfileQueryHandler : IRequestHandler<SearchProfileQuery, SearchProfileViewModel>
     {
         private readonly IMapper _mapper;
         public IStringLocalizer<SharedResource> Localizer { get; }
         private IHttpContextAccessor HttpContextAccessor { get; }
         private readonly IDatabaseContext _context;
-        public ViewProfileQueryHandler(IMapper mapper, UserManager<BaseUser> userManager,
+        public SearchProfileQueryHandler(IMapper mapper, UserManager<BaseUser> userManager,
             IStringLocalizer<SharedResource> localizer, IHttpContextAccessor httpContextAccessor
             , IDatabaseContext context)
         {
@@ -32,7 +32,7 @@ namespace Application.Features.User.Queries.ViewProfile
             HttpContextAccessor = httpContextAccessor;
             _context = context;
         }
-        public async Task<ViewProfileViewModel> Handle(ViewProfileQuery request, CancellationToken cancellationToken)
+        public async Task<SearchProfileViewModel> Handle(SearchProfileQuery request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _context.BaseUsers.
@@ -44,7 +44,7 @@ namespace Application.Features.User.Queries.ViewProfile
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            return new ViewProfileViewModel
+            return new SearchProfileViewModel
             {
                 Profile = _mapper.Map<ProfileDto>(user)
             };

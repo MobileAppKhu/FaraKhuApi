@@ -1,6 +1,6 @@
-﻿using Application.Features.Announcement.Commands.CreateAnnouncement;
+﻿using Application.Features.Announcement.Commands.AddAnnouncement;
 using Application.Features.Announcement.Commands.RemoveAnnouncement;
-using Application.Features.Announcement.Queries.ViewAnnouncements;
+using Application.Features.Announcement.Queries.SearchAnnouncements;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Application.Features.Announcement.Queries.ViewInstructorAnnouncements;
+using Application.Features.Announcement.Queries.SearchInstructorAnnouncements;
 
 namespace WebApi.Controllers
 {
@@ -25,8 +25,8 @@ namespace WebApi.Controllers
             _mediator = mediator;
         }
         [HttpPost]
-        [ProducesResponseType(typeof(CreateAnnouncementViewModel), 200)]
-        public async Task<IActionResult> CreateAnnouncement(CreateAnnouncementCommand request)
+        [ProducesResponseType(typeof(AddAnnouncementViewModel), 200)]
+        public async Task<IActionResult> AddAnnouncement(AddAnnouncementCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
@@ -40,15 +40,15 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        [ProducesResponseType(typeof(ViewAnnouncementsViewModel), 200)]
-        public async Task<IActionResult> ViewAnnouncements(ViewAnnouncementsQuery request)
+        [ProducesResponseType(typeof(SearchAnnouncementsViewModel), 200)]
+        public async Task<IActionResult> SearchAnnouncements(SearchAnnouncementsQuery request)
         {
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(ViewInstructorAnnouncementsViewModel), 200)]
-        public async Task<IActionResult> ViewInstructorAnnouncements(ViewInstructorAnnouncementsQuery request)
+        [ProducesResponseType(typeof(SearchInstructorAnnouncementsViewModel), 200)]
+        public async Task<IActionResult> SearchInstructorAnnouncements(SearchInstructorAnnouncementsQuery request)
         {
             return Ok(await _mediator.Send(request));
         }

@@ -16,9 +16,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.User.Queries.ViewAllEvents
+namespace Application.Features.User.Queries.SearchAllEvents
 {
-    public class ViewAllEventsQueryHandler : IRequestHandler<ViewAllEventsQuery, ViewAllEventsViewModel>
+    public class SearchAllEventsQueryHandler : IRequestHandler<SearchAllEventsQuery, SearchAllEventsViewModel>
     {
         private readonly IMapper _mapper;
         public UserManager<BaseUser> UserManager { get; }
@@ -29,7 +29,7 @@ namespace Application.Features.User.Queries.ViewAllEvents
 
         private readonly IDatabaseContext _context;
 
-        public ViewAllEventsQueryHandler(IMapper mapper, UserManager<BaseUser> userManager,
+        public SearchAllEventsQueryHandler(IMapper mapper, UserManager<BaseUser> userManager,
             IStringLocalizer<SharedResource> localizer, IHttpContextAccessor httpContextAccessor
             , IDatabaseContext context)
         {
@@ -40,7 +40,7 @@ namespace Application.Features.User.Queries.ViewAllEvents
             _context = context;
         }
         
-        public async Task<ViewAllEventsViewModel> Handle(ViewAllEventsQuery request, CancellationToken cancellationToken)
+        public async Task<SearchAllEventsViewModel> Handle(SearchAllEventsQuery request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await UserManager.FindByIdAsync(userId);
@@ -65,7 +65,7 @@ namespace Application.Features.User.Queries.ViewAllEvents
                     Include(i => i.Courses).ThenInclude(c => c.Instructor).
                     FirstOrDefault(s => s.Id == userId);
 
-            return new ViewAllEventsViewModel
+            return new SearchAllEventsViewModel
             {
                 Events = _mapper.Map<AllEventsDto>(baseUser)
             };

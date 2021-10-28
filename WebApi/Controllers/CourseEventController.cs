@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Application.Features.Course.Command.UpdateCourse;
-using Application.Features.CourseEvent.Command.AddCourseEvent;
-using Application.Features.CourseEvent.Command.RemoveCourseEvent;
+using Application.Features.Course.Commands.EditCourse;
+using Application.Features.CourseEvent.Commands.AddCourseEvent;
+using Application.Features.CourseEvent.Commands.DeleteCourseEvent;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +27,7 @@ namespace WebApi.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> RemoveCourseEvent(RemoveCourseEventCommand request)
+        public async Task<IActionResult> DeleteCourseEvent(DeleteCourseEventCommand request)
         {
             return Ok(await _mediator.Send(request));
         }

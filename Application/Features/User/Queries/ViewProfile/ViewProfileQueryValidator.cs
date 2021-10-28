@@ -2,11 +2,11 @@
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.User.Queries.ViewProfile
+namespace Application.Features.User.Queries.SearchProfile
 {
-    public class ViewProfileQueryValidator : AbstractValidator<ViewProfileQuery>
+    public class SearchProfileQueryValidator : AbstractValidator<SearchProfileQuery>
     {
-        public ViewProfileQueryValidator(IStringLocalizer<SharedResource> localizer)
+        public SearchProfileQueryValidator(IStringLocalizer<SharedResource> localizer)
         {
             RuleFor(r => r.UserId)
                 .NotEmpty()

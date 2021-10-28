@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
-using Application.Features.Course.Command.AddStudent;
-using Application.Features.Course.Command.CreateCourse;
-using Application.Features.Course.Command.RemoveCourse;
-using Application.Features.Course.Command.RemoveStudent;
-using Application.Features.Course.Command.UpdateCourse;
-using Application.Features.Course.Queries.ViewCourse;
-using Application.Features.Course.Queries.ViewMyCourses;
+using Application.Features.Course.Commands.AddStudent;
+using Application.Features.Course.Commands.AddCourse;
+using Application.Features.Course.Commands.DeleteCourse;
+using Application.Features.Course.Commands.DeleteStudent;
+using Application.Features.Course.Commands.EditCourse;
+using Application.Features.Course.Queries.SearchCourse;
+using Application.Features.Course.Queries.SearchMyCourses;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,20 +25,20 @@ namespace WebApi.Controllers
         
         [HttpPost]
         [Authorize(Policy = "InstructorPolicy")]
-        [ProducesResponseType(typeof(CreateCourseViewModel),200)]
-        public async Task<IActionResult> CreateCourse(CreateCourseCommand request)
+        [ProducesResponseType(typeof(AddCourseViewModel),200)]
+        public async Task<IActionResult> AddCourse(AddCourseCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
         [HttpPost]
         [Authorize(Policy = "InstructorPolicy")]
-        public async Task<IActionResult> UpdateCourse(UpdateCourseCommand request)
+        public async Task<IActionResult> EditCourse(EditCourseCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
         [HttpPost]
         [Authorize(Policy = "InstructorPolicy")]
-        public async Task<IActionResult> RemoveCourse(RemoveCourseCommand request)
+        public async Task<IActionResult> DeleteCourse(DeleteCourseCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
@@ -53,22 +53,22 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [Authorize(Policy = "InstructorPolicy")]
-        [ProducesResponseType(typeof(RemoveStudentViewModel), 200)]
-        public async Task<IActionResult> RemoveStudent(RemoveStudentCommand request)
+        [ProducesResponseType(typeof(DeleteStudentViewModel), 200)]
+        public async Task<IActionResult> DeleteStudent(DeleteStudentCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
         [HttpPost]
         [Authorize]
-        [ProducesResponseType(typeof(ViewCourseViewModel), 200)]
-        public async Task<IActionResult> ViewCourse(ViewCourseQuery request)
+        [ProducesResponseType(typeof(SearchCourseViewModel), 200)]
+        public async Task<IActionResult> SearchCourse(SearchCourseQuery request)
         {
             return Ok(await _mediator.Send(request));
         }
         [HttpPost]
         [Authorize]
-        [ProducesResponseType(typeof(ViewMyCoursesViewModel), 200)]
-        public async Task<IActionResult> ViewMyCourses(ViewMyCoursesQuery request)
+        [ProducesResponseType(typeof(SearchMyCoursesViewModel), 200)]
+        public async Task<IActionResult> SearchMyCourses(SearchMyCoursesQuery request)
         {
             return Ok(await _mediator.Send(request));
         }

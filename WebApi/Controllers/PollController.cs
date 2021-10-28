@@ -1,14 +1,14 @@
 ﻿using System.Threading.Tasks;
-using Application.Features.Poll.Commands.CreateAnswer;
-using Application.Features.Poll.Commands.CreateQuestion;
-using Application.Features.Poll.Commands.RemoveAnswer;
+using Application.Features.Poll.Commands.AddAnswer;
+using Application.Features.Poll.Commands.AddQuestion;
+using Application.Features.Poll.Commands.DeleteAnswer;
 using Application.Features.Poll.Commands.RemoveQuestion;
 using Application.Features.Poll.Commands.RetractVote;
-using Application.Features.Poll.Commands.UpdateAnswer;
-using Application.Features.Poll.Commands.UpdateQuestion;
+using Application.Features.Poll.Commands.EditAnswer;
+using Application.Features.Poll.Commands.EditQuestion;
 using Application.Features.Poll.Commands.Vote;
-using Application.Features.Poll.Queries.ViewAvailablePolls;
-using Application.Features.Poll.Queries.ViewPoll;
+using Application.Features.Poll.Queries.SearchAvailablePolls;
+using Application.Features.Poll.Queries.SearchPoll;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,37 +26,40 @@ namespace WebApi.Controllers
         }
         [HttpPost]
         [Authorize(Policy = "InstructorPolicy")]
-        [ProducesResponseType(typeof(CreateQuestionViewModel), 200)]
-        public async Task<IActionResult> CreatePollQuestion(CreateQuestionCommand request)
+        [ProducesResponseType(typeof(AddQuestionViewModel), 200)]
+        public async Task<IActionResult> CreatePollQuestion(AddQuestionCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
         [HttpPost]
         [Authorize(Policy = "InstructorPolicy")]
-        [ProducesResponseType(typeof(CreateAnswerViewModel), 200)]
-        public async Task<IActionResult> CreatePollAnswer(CreateAnswerCommand request)
+        [ProducesResponseType(typeof(AddAnswerViewModel), 200)]
+        public async Task<IActionResult> CreatePollAnswer(AddAnswerCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
         [HttpPost]
         [Authorize(Policy = "InstructorPolicy")]
-        [ProducesResponseType(typeof(RemoveAnswerViewModel), 200)]
-        public async Task<IActionResult> RemovePollAnswer(RemoveAnswerCommand request)
+        [ProducesResponseType(typeof(DeleteAnswerViewModel), 200)]
+        public async Task<IActionResult> RemovePollAnswer(DeleteAnswerCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
+        [HttpPost]
         [Authorize(Policy = "InstructorPolicy")]
         public async Task<IActionResult> RemovePollQuestion(RemoveQuestionCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
+        [HttpPost]
         [Authorize(Policy = "InstructorPolicy")]
-        public async Task<IActionResult> UpdatePollQuestion(UpdateQuestionCommand request)
+        public async Task<IActionResult> UpdatePollQuestion(EditQuestionCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
+        [HttpPost]
         [Authorize(Policy = "InstructorPolicy")]
-        public async Task<IActionResult> UpdatePollAnswer(UpdateAnswerCommand request)
+        public async Task<IActionResult> UpdatePollAnswer(EditAnswerCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
@@ -76,15 +79,15 @@ namespace WebApi.Controllers
         }
         [HttpPost]
         [Authorize]
-        [ProducesResponseType(typeof(ViewPollsViewModel), 200)]
-        public async Task<IActionResult> ViewAvailablePolls(ViewPollsQuery request)
+        [ProducesResponseType(typeof(SearchPollsViewModel), 200)]
+        public async Task<IActionResult> SearchAvailablePolls(SearchPollsQuery request)
         {
             return Ok(await _mediator.Send(request));
         }
         [HttpPost]
         [Authorize]
-        [ProducesResponseType(typeof(ViewPollsViewModel), 200)]
-        public async Task<IActionResult> ViewPoll(ViewPollQuery request)
+        [ProducesResponseType(typeof(SearchPollsViewModel), 200)]
+        public async Task<IActionResult> SearchPoll(SearchPollQuery request)
         {
             return Ok(await _mediator.Send(request));
         }

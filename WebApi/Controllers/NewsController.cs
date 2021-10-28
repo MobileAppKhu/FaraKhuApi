@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
-using Application.Features.News.Command.AddNews;
-using Application.Features.News.Command.RemoveNews;
-using Application.Features.News.Command.UpdateNews;
-using Application.Features.News.Queries.ViewIndividualNews;
-using Application.Features.News.Queries.ViewNews;
+using Application.Features.News.Commands.AddNews;
+using Application.Features.News.Commands.DeleteNews;
+using Application.Features.News.Commands.EditNews;
+using Application.Features.News.Queries.SearchIndividualNews;
+using Application.Features.News.Queries.SearchNews;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -30,29 +30,29 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveNews(RemoveNewsCommand request)
+        public async Task<IActionResult> DeleteNews(DeleteNewsCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPost]
         [AllowAnonymous]
-        [ProducesResponseType(typeof(ViewNewsViewModel), 200)]
-        public async Task<IActionResult> ViewNews(ViewNewsQuery request)
+        [ProducesResponseType(typeof(SearchNewsViewModel), 200)]
+        public async Task<IActionResult> SearchNews(SearchNewsQuery request)
         {
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPost]
         [AllowAnonymous]
-        [ProducesResponseType(typeof(ViewIndividualNewsViewModel), 200)]
-        public async Task<IActionResult> ViewIndividualNews(ViewIndividualNewsQuery request)
+        [ProducesResponseType(typeof(SearchIndividualNewsViewModel), 200)]
+        public async Task<IActionResult> SearchIndividualNews(SearchIndividualNewsQuery request)
         {
             return Ok(await _mediator.Send(request));
         }
         
         [HttpPost]
-        public async Task<IActionResult> UpdateNews(UpdateNewsCommand request)
+        public async Task<IActionResult> EditNews(EditNewsCommand request)
         {
             return Ok(await _mediator.Send(request));
         }

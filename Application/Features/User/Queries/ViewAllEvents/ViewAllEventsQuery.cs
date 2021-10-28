@@ -1,8 +1,8 @@
 ﻿using MediatR;
 
-namespace Application.Features.User.Queries.ViewAllEvents
+namespace Application.Features.User.Queries.SearchAllEvents
 {
-    public class ViewAllEventsQuery : IRequest<ViewAllEventsViewModel>
+    public class SearchAllEventsQuery : IRequest<SearchAllEventsViewModel>
     {
     }
 }

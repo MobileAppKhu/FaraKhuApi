@@ -1,14 +1,14 @@
 ﻿using System.Threading.Tasks;
-using Application.Features.User.Command.AddFavourite;
-using Application.Features.User.Command.CreateUser;
-using Application.Features.User.Command.RemoveFavourite;
-using Application.Features.User.Command.RemoveUser;
-using Application.Features.User.Command.UpdateAvatar;
-using Application.Features.User.Command.UpdateFavourite;
-using Application.Features.User.Command.UpdateProfile;
+using Application.Features.User.Commands.AddFavourite;
+using Application.Features.User.Commands.AddUser;
+using Application.Features.User.Commands.RemoveFavourite;
+using Application.Features.User.Commands.RemoveUser;
+using Application.Features.User.Commands.UpdateAvatar;
+using Application.Features.User.Commands.UpdateFavourite;
+using Application.Features.User.Commands.UpdateProfile;
 using Application.Features.User.Queries.GetUserId;
-using Application.Features.User.Queries.ViewAllEvents;
-using Application.Features.User.Queries.ViewProfile;
+using Application.Features.User.Queries.SearchAllEvents;
+using Application.Features.User.Queries.SearchProfile;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,14 +26,14 @@ namespace WebApi.Controllers
         }
         
         [HttpPost]
-        [ProducesResponseType(typeof(ViewAllEventsViewModel),200)]
-        public async Task<IActionResult> GetAllEvents(ViewAllEventsQuery request)
+        [ProducesResponseType(typeof(SearchAllEventsViewModel),200)]
+        public async Task<IActionResult> GetAllEvents(SearchAllEventsQuery request)
         {
             return Ok(await _mediator.Send(request));
         }
         [HttpPost]
-        [ProducesResponseType(typeof(ViewProfileViewModel),200)]
-        public async Task<IActionResult> ViewProfile(ViewProfileQuery request)
+        [ProducesResponseType(typeof(SearchProfileViewModel),200)]
+        public async Task<IActionResult> SearchProfile(SearchProfileQuery request)
         {
             return Ok(await _mediator.Send(request));
         }
@@ -41,8 +41,8 @@ namespace WebApi.Controllers
         [HttpPost]
         [Authorize(Policy = "OwnerPolicy")]
 
-        [ProducesResponseType(typeof(CreateUserViewModel),200)]
-        public async Task<IActionResult> CreateUser(CreateUserCommand request)
+        [ProducesResponseType(typeof(AddUserViewModel),200)]
+        public async Task<IActionResult> AddUser(AddUserCommand request)
         {
             return Ok(await _mediator.Send(request));
         }

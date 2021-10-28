@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Application.Features.Suggestion.Command.CreateSuggestion;
-using Application.Features.Suggestion.Command.RemoveSuggestion;
-using Application.Features.Suggestion.Queries.ViewSuggestions;
+using Application.Features.Suggestion.Commands.AddSuggestion;
+using Application.Features.Suggestion.Commands.RemoveSuggestion;
+using Application.Features.Suggestion.Queries.SearchSuggestions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,8 +20,8 @@ namespace WebApi.Controllers
         
         [HttpPost]
         [Authorize]
-        [ProducesResponseType(typeof(CreateSuggestionViewModel), 200)]
-        public async Task<IActionResult> CreateSuggestion(CreateSuggestionCommand request)
+        [ProducesResponseType(typeof(AddSuggestionViewModel), 200)]
+        public async Task<IActionResult> AddSuggestion(AddSuggestionCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
@@ -33,8 +33,8 @@ namespace WebApi.Controllers
         }
         [HttpPost]
         [Authorize(Policy = "PROfficerPolicy")]
-        [ProducesResponseType(typeof(ViewSuggestionsViewModel), 200)]
-        public async Task<IActionResult> ViewSuggestion(ViewSuggestionsQuery request)
+        [ProducesResponseType(typeof(SearchSuggestionsViewModel), 200)]
+        public async Task<IActionResult> SearchSuggestion(SearchSuggestionsQuery request)
         {
             return Ok(await _mediator.Send(request));
         }
