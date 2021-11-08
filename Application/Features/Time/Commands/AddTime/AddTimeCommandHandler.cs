@@ -65,7 +65,7 @@ namespace Application.Features.Time.Commands.AddTime
                 CourseId = courseObj?.CourseId,
                 StartTime = new DateTime(2000,12,25,Int32.Parse(startTimes[0]), Int32.Parse(startTimes[1]), 0),
                 EndTime = new DateTime(2000,12,25,Int32.Parse(endTime[0]), Int32.Parse(endTime[1]),0),
-                WeekDay = Localizer[request.WeekDay.ToString()]
+                WeekDay = request.WeekDay
             };
             await _context.Times.AddAsync(timeObj, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);

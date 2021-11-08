@@ -6,6 +6,7 @@ namespace Application.DTOs.Time
 {
     public class SearchEventTimeDto : IMapFrom<Domain.Models.Time>
     {
+        // TODO
         public string TimeId { get; set; }
         public string StartTime { get; set; }
         public string EndTime { get; set; }
@@ -22,7 +23,7 @@ namespace Application.DTOs.Time
                                            " " + src.Course.Instructor.LastName))
                 .ForMember(e => e.CourseTitle,
                     opt =>
-                        opt.MapFrom(src => src.Course.CourseTitle))
+                        opt.MapFrom(src => src.Course.CourseType))
                 .ForMember(d => d.StartTime, opt
                     => opt.MapFrom(src => src.StartTime.ToString("h:mm:ss tt zz")))
                 .ForMember(d => d.EndTime, opt 

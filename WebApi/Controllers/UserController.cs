@@ -19,7 +19,7 @@ namespace WebApi.Controllers
     [Route("api/[controller]/[action]")]
     public class UserController : ControllerBase
     {
-        private IMediator _mediator;
+        private readonly IMediator _mediator;
         public UserController(IMediator mediator)
         {
             _mediator = mediator;

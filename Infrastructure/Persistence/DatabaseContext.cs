@@ -20,7 +20,7 @@ namespace Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            
+
             var dateTimeConverter = new ValueConverter<DateTime, DateTime>(
                 v => v.ToUniversalTime(),
                 v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
@@ -42,7 +42,7 @@ namespace Infrastructure.Persistence
                         property.SetValueConverter(nullableDateTimeConverter);
                 }
             }
-            
+
             builder.ApplyConfigurationsFromAssembly(typeof(DatabaseContext).Assembly);
         }
 
@@ -52,7 +52,7 @@ namespace Infrastructure.Persistence
         public DbSet<BaseUser> BaseUsers { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Time> Times { get; set; }
-        
+
         public DbSet<CourseEvent> CourseEvents { get; set; }
         public DbSet<Announcement> Announcements { get; set; }
         public DbSet<Offer> Offers { get; set; }
@@ -61,9 +61,8 @@ namespace Infrastructure.Persistence
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-
             var result = await base.SaveChangesAsync(cancellationToken);
-            
+
 
             return result;
         }
@@ -72,5 +71,8 @@ namespace Infrastructure.Persistence
         public DbSet<PollAnswer> PollAnswers { get; set; }
         public DbSet<FileEntity> Files { get; set; }
         public DbSet<Favourite> Favourites { get; set; }
+        public DbSet<Faculty> Faculties { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<CourseType> CourseTypes { get; set; }
     }
 }

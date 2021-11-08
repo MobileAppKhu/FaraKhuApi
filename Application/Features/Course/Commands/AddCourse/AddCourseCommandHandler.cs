@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
@@ -14,6 +15,7 @@ using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace Application.Features.Course.Commands.AddCourse
@@ -44,14 +46,45 @@ namespace Application.Features.Course.Commands.AddCourse
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
+            CourseType courseType = await _context.CourseTypes.FirstOrDefaultAsync(type => type.CourseTypeId == request.CourseTypeId,
+                cancellationToken);
             Domain.Models.Course courseObj = new Domain.Models.Course
             {
-                CourseTitle = request.CourseTitle,
+                CourseTypeId = request.CourseTypeId,
+                CourseType = courseType,
                 Instructor = user,
                 InstructorId = userId,
                 EndDate = request.EndDate
             };
             await _context.Courses.AddAsync(courseObj, cancellationToken);
+            
+            List<Student> students =
+                _context.Students.Include(student => student.Courses).Where(student => request.AddStudentDto.StudentIds.Contains(student.StudentId)).ToList();
+            if (students != null && students.Count != request.AddStudentDto.StudentIds.Count)
+            {
+                // return error
+            }
+
+            foreach (var student in students)
+            {
+                student.Courses.Add(courseObj);
+            }
+
+            foreach (var time in request.AddTimeDtos)
+            {
+                string[] startTimes = time.StartTime.Split("-");
+                string[] endTime = time.EndTime.Split("-");
+                await _context.Times.AddAsync(new Domain.Models.Time
+                {
+                    Course = courseObj,
+                    CourseId = courseObj.CourseId,
+                    StartTime = new DateTime(2000,12,25,Int32.Parse(startTimes[0]), Int32.Parse(startTimes[1]), 0),
+                    EndTime = new DateTime(2000,12,25,Int32.Parse(endTime[0]), Int32.Parse(endTime[1]),0),
+                    WeekDay = time.WeekDay
+                    
+                }, cancellationToken);
+            }
+
             await _context.SaveChangesAsync(cancellationToken);
             return new AddCourseViewModel
             {
