@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.DTOs.Course;
+using Application.DTOs.Time;
 using Application.Resources;
 using AutoMapper;
 using Domain.BaseModels;
@@ -48,6 +49,14 @@ namespace Application.Features.Course.Commands.AddCourse
                 });
             CourseType courseType = await _context.CourseTypes.FirstOrDefaultAsync(type => type.CourseTypeId == request.CourseTypeId,
                 cancellationToken);
+            if (courseType == null)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.CourseNotFound,
+                    Message = Localizer["CourseNotFound"]
+                });
+            }
             Domain.Models.Course courseObj = new Domain.Models.Course
             {
                 CourseTypeId = request.CourseTypeId,
@@ -60,9 +69,13 @@ namespace Application.Features.Course.Commands.AddCourse
             
             List<Student> students =
                 _context.Students.Include(student => student.Courses).Where(student => request.AddStudentDto.StudentIds.Contains(student.StudentId)).ToList();
-            if (students != null && students.Count != request.AddStudentDto.StudentIds.Count)
+            if (students.Count != request.AddStudentDto.StudentIds.Count)
             {
-                // return error
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.StudentNotFound,
+                    Message = Localizer["StudentNotFound"]
+                });
             }
 
             foreach (var student in students)
@@ -83,6 +96,27 @@ namespace Application.Features.Course.Commands.AddCourse
                     WeekDay = time.WeekDay
                     
                 }, cancellationToken);
+            }
+            
+            foreach (var timei in courseObj.Times)
+            {
+                foreach (var timej in courseObj.Times)
+                {
+                    if (timei.Equals(timej))
+                    {
+                        continue;
+                    }
+                    if ((timei.WeekDay == timej.WeekDay) &&
+                        ((timei.StartTime < timej.StartTime && timei.EndTime > timej.StartTime) ||
+                         (timei.EndTime > timej.EndTime && timei.StartTime < timej.EndTime)))
+                    {
+                        throw new CustomException(new Error
+                        {
+                            ErrorType = ErrorType.TimeConflict,
+                            Message = Localizer["TimeConflict"]
+                        });
+                    }
+                }
             }
 
             await _context.SaveChangesAsync(cancellationToken);

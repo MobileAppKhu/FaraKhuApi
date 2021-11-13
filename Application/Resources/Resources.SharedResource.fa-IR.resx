@@ -117,4 +117,16 @@
     <data name="QuestionNotFound" xml:space="preserve">
         <value>سوال نظرسنجی یافت نشد</value>
     </data>
+    <data name="StudentNotFound" xml:space="preserve">
+        <value>دانشجو یافت نشد</value>
+    </data>
+    <data name="TimeConflict" xml:space="preserve">
+        <value>زمان ها تداخل دارند</value>
+    </data>
+    <data name="TimeNotFound" xml:space="preserve">
+        <value>زمان یافت نشد</value>
+    </data>
+    <data name="CourseTypeNotFound" xml:space="preserve">
+        <value>عنوان درس موجود نمی باشد</value>
+    </data>
 </root>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -34,12 +35,16 @@ namespace Infrastructure.Persistence
             //await DatabaseContext.Database.MigrateAsync();
             await DatabaseContext.Database.EnsureDeletedAsync();
             await DatabaseContext.Database.EnsureCreatedAsync();
-            if(DatabaseContext.UserRoles.Any())
+            if (DatabaseContext.UserRoles.Any())
                 return;
             await RoleInitializer();
             await AvatarInitializer();
             await UserInitializer();
+            await FacultyInitializer();
+            await DepartmentInitializer();
+            await CourseTypeInitializer();
         }
+
         private async Task RoleInitializer()
         {
             await RoleManager.CreateAsync(new IdentityRole {Name = "Student".Normalize()});
@@ -73,7 +78,6 @@ namespace Infrastructure.Persistence
                 EmailConfirmed = true,
                 Avatar = avatar,
                 AvatarId = "smiley.png"
-
             };
             await UserManager.CreateAsync(owner, "OwnerPassword");
             await UserManager.AddToRoleAsync(owner, UserType.Owner.ToString().Normalize());
@@ -92,7 +96,7 @@ namespace Infrastructure.Persistence
 
             await UserManager.CreateAsync(instructor, "InstructorPassword");
             await UserManager.AddToRoleAsync(instructor, UserType.Instructor.ToString().Normalize());
-            
+
             var student = new Student()
             {
                 FirstName = "Student",
@@ -103,19 +107,17 @@ namespace Infrastructure.Persistence
                 EmailConfirmed = true,
                 Avatar = avatar,
                 AvatarId = "smiley.png"
-
             };
 
             await UserManager.CreateAsync(student, "StudentPassword");
             await UserManager.AddToRoleAsync(student, UserType.Student.ToString().Normalize());
-
         }
 
         private async Task AvatarInitializer()
         {
             var smiley = await UploadFile("/Persistence/Files/smiley.png", FileType.Image);
-            var sad = await UploadFile("/Persistence/Files/sad.png", FileType.Image); 
-            var blink = await UploadFile("/Persistence/Files/blink.png", FileType.Image); 
+            var sad = await UploadFile("/Persistence/Files/sad.png", FileType.Image);
+            var blink = await UploadFile("/Persistence/Files/blink.png", FileType.Image);
             var poker = await UploadFile("/Persistence/Files/poker.png", FileType.Image);
 
             await DatabaseContext.Files.AddAsync(smiley);
@@ -124,7 +126,7 @@ namespace Infrastructure.Persistence
             await DatabaseContext.Files.AddAsync(poker);
             await DatabaseContext.SaveChangesAsync();
         }
-        
+
         private async Task<FileEntity> UploadFile(string path, FileType fileType)
         {
             var directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -143,6 +145,98 @@ namespace Infrastructure.Persistence
             fileStream.Close();
             stream.Close();
             return avatar;
+        }
+        private async Task FacultyInitializer()
+        {
+            List<Faculty> faculties = new List<Faculty>();
+            faculties.Add(new Faculty
+            {
+                FacultyCode = "1",
+                FacultyTitle = "فنی و مهندسی"
+            });
+            faculties.Add(new Faculty
+            {
+                FacultyCode = "2",
+                FacultyTitle = "شیمی و فیزیک"
+            });
+
+            await DatabaseContext.Faculties.AddRangeAsync(faculties);
+            await DatabaseContext.SaveChangesAsync();
+        }
+        
+        
+        private async Task DepartmentInitializer()
+        {
+            List<Faculty> faculties = DatabaseContext.Faculties.ToList();
+            List<Department> departments = new List<Department>();
+            departments.Add(new Department
+            {
+                Faculty = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "1"),
+                FacultyId = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "1").FacultyId,
+                DepartmentCode = "11",
+                DepartmentTitle = "کامپیوتر"
+            });
+            departments.Add(new Department
+            {
+                Faculty = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "1"),
+                FacultyId = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "1").FacultyId,
+                DepartmentCode = "12",
+                DepartmentTitle = "برق"
+            });
+            departments.Add(new Department
+            {
+                Faculty = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "2"),
+                FacultyId = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "2").FacultyId,
+                DepartmentCode = "21",
+                DepartmentTitle = "مکانیک"
+            });
+            departments.Add(new Department
+            {
+                Faculty = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "2"),
+                FacultyId = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "2").FacultyId,
+                DepartmentCode = "22",
+                DepartmentTitle = "شیمی آلی"
+            });
+
+            await DatabaseContext.Departments.AddRangeAsync(departments);
+            await DatabaseContext.SaveChangesAsync();
+        }
+        
+        private async Task CourseTypeInitializer()
+        {
+            List<Department> departments = DatabaseContext.Departments.ToList();
+            List<CourseType> courseTypes = new List<CourseType>();
+            courseTypes.Add(new CourseType
+            {
+                Department = departments.FirstOrDefault(department => department.DepartmentCode == "11"),
+                DepartmentId = departments.FirstOrDefault(department => department.DepartmentCode == "11").DepartmentId,
+                CourseTypeCode = "111",
+                CourseTypeTitle = "مبانی کامپیوتر"
+            });
+            courseTypes.Add(new CourseType
+            {
+                Department = departments.FirstOrDefault(department => department.DepartmentCode == "12"),
+                DepartmentId = departments.FirstOrDefault(department => department.DepartmentCode == "12").DepartmentId,
+                CourseTypeCode = "121",
+                CourseTypeTitle = "مبانی برق"
+            });
+            courseTypes.Add(new CourseType
+            {
+                Department = departments.FirstOrDefault(department => department.DepartmentCode == "21"),
+                DepartmentId = departments.FirstOrDefault(department => department.DepartmentCode == "21").DepartmentId,
+                CourseTypeCode = "211",
+                CourseTypeTitle = "مبانی مکانیک"
+            });
+            courseTypes.Add(new CourseType
+            {
+                Department = departments.FirstOrDefault(department => department.DepartmentCode == "22"),
+                DepartmentId = departments.FirstOrDefault(department => department.DepartmentCode == "22").DepartmentId,
+                CourseTypeCode = "221",
+                CourseTypeTitle = "مبانی شیمی"
+            });
+
+            await DatabaseContext.CourseTypes.AddRangeAsync(courseTypes);
+            await DatabaseContext.SaveChangesAsync();
         }
     }
 }

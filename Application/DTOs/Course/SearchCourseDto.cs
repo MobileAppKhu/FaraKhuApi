@@ -11,7 +11,9 @@ namespace Application.DTOs.Course
     public class SearchCourseDto : IMapFrom<Domain.Models.Course>
     {
         public string CourseId { get; set; }
-        public string CourseTitle { get; set; }
+        public string CourseType { get; set; }
+        public string Department { get; set; }
+        public string Faculty { get; set; }
 
         public ICollection<SearchCourseTimeDto> Times { get; set; }
 
@@ -26,7 +28,16 @@ namespace Application.DTOs.Course
             profile.CreateMap<Domain.Models.Course, SearchCourseDto>()
                 .ForMember(d => d.AvailablePolls,
                     opt =>
-                        opt.MapFrom(src => src.Polls.Count));
+                        opt.MapFrom(src => src.Polls.Count))
+                .ForMember(d => d.Faculty,
+                    opt =>
+                        opt.MapFrom(src => src.CourseType.Department.Faculty.FacultyTitle))
+                .ForMember(d => d.Department,
+                    opt =>
+                        opt.MapFrom(src => src.CourseType.Department.DepartmentTitle))
+                .ForMember(d => d.CourseType,
+                    opt =>
+                        opt.MapFrom(src => src.CourseType.CourseTypeTitle));
         }
     }
 }

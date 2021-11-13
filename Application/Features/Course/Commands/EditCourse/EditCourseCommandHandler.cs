@@ -6,15 +6,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.DTOs.Student;
 using Application.Resources;
-using AutoMapper;
 using Domain.BaseModels;
 using Domain.Enum;
 using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
@@ -54,8 +51,11 @@ namespace Application.Features.Course.Commands.EditCourse
 
             if (editingCourse == null)
             {
-                // return error
-                return Unit.Value;
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.CourseNotFound,
+                    Message = Localizer["CourseNotFound"]
+                });
             }
 
             if (request.AddStudentDto != null && request.AddStudentDto.StudentIds.Count != 0)
@@ -64,7 +64,11 @@ namespace Application.Features.Course.Commands.EditCourse
                     .Where(student => request.AddStudentDto.StudentIds.Contains(student.StudentId)).ToList();
                 if (addStudents.Count != request.AddStudentDto.StudentIds.Count)
                 {
-                    // return error
+                    throw new CustomException(new Error
+                    {
+                        ErrorType = ErrorType.StudentNotFound,
+                        Message = Localizer["StudentNotFound"]
+                    });
                 }
 
                 foreach (var student in addStudents)
@@ -86,7 +90,11 @@ namespace Application.Features.Course.Commands.EditCourse
                 {
                     if (!editingCourse.Students.Contains(student))
                     {
-                        // return error
+                        throw new CustomException(new Error
+                        {
+                            ErrorType = ErrorType.StudentNotFound,
+                            Message = Localizer["StudentNotFound"]
+                        });
                     }
 
                     editingCourse.Students.Remove(student);
@@ -120,12 +128,20 @@ namespace Application.Features.Course.Commands.EditCourse
                 {
                     if (editTimeDto.TimeId == null)
                     {
-                        // return error
+                        throw new CustomException(new Error
+                        {
+                            ErrorType = ErrorType.TimeNotFound,
+                            Message = Localizer["TimeNotFound"]
+                        });
                     }
-                    var time = editingCourse.Times.First(t => t.TimeId == editTimeDto.TimeId);
+                    var time = editingCourse.Times.First(t => t.TimeId == editTimeDto.TimeId && t.CourseId == request.CourseId);
                     if (time == null)
                     {
-                        // return error
+                        throw new CustomException(new Error
+                        {
+                            ErrorType = ErrorType.TimeNotFound,
+                            Message = Localizer["TimeNotFound"]
+                        });
                     }
 
                     if (!String.IsNullOrEmpty(editTimeDto.StartTime))
@@ -163,7 +179,11 @@ namespace Application.Features.Course.Commands.EditCourse
                         ((timei.StartTime < timej.StartTime && timei.EndTime > timej.StartTime) ||
                          (timei.EndTime > timej.EndTime && timei.StartTime < timej.EndTime)))
                     {
-                        // return error
+                        throw new CustomException(new Error
+                        {
+                            ErrorType = ErrorType.TimeConflict,
+                            Message = Localizer["TimeConflict"]
+                        });
                     }
                 }
             }

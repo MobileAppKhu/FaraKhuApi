@@ -10,8 +10,6 @@ namespace Application.Features.Course.Commands.AddCourse
 {
     public class AddCourseCommand : IRequest<AddCourseViewModel>
     {
-        public Faculty Faculty { get; set; }
-        public Department Department { get; set; }
         public String CourseTypeId{ get; set; }
         public List<AddTimeDto> AddTimeDtos { get; set; }
         public AddStudentDto AddStudentDto { get; set; }

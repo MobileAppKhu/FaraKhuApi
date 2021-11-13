@@ -9,6 +9,7 @@ namespace Infrastructure.Persistence.Configuration
         public void Configure(EntityTypeBuilder<Department> builder)
         {
             builder.HasKey(e => e.DepartmentId);
+            builder.Property(e => e.DepartmentId).ValueGeneratedOnAdd();
             builder.Property(e => e.DepartmentTitle).IsRequired();
             builder.Property(e => e.DepartmentCode).IsRequired();
             builder.HasOne(e => e.Faculty)

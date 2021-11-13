@@ -88,6 +88,15 @@ namespace Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to عنوان درس موجود نمی باشد.
+        /// </summary>
+        internal static string CourseTypeNotFound {
+            get {
+                return ResourceManager.GetString("CourseTypeNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to رمز عبور جدید نباید تکراری باشد.
         /// </summary>
         internal static string DuplicatePassword {
@@ -277,6 +286,15 @@ namespace Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to دانشجو یافت نشد.
+        /// </summary>
+        internal static string StudentNotFound {
+            get {
+                return ResourceManager.GetString("StudentNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to یکشنبه.
         /// </summary>
         internal static string Sunday {
@@ -291,6 +309,24 @@ namespace Application.Resources {
         internal static string Thursday {
             get {
                 return ResourceManager.GetString("Thursday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to زمان ها تداخل دارند.
+        /// </summary>
+        internal static string TimeConflict {
+            get {
+                return ResourceManager.GetString("TimeConflict", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to زمان یافت نشد.
+        /// </summary>
+        internal static string TimeNotFound {
+            get {
+                return ResourceManager.GetString("TimeNotFound", resourceCulture);
             }
         }
         
