@@ -11,7 +11,6 @@ namespace Application.Features.Course.Commands.EditCourse
         public AddStudentDto AddStudentDto { get; set; }
         public DeleteStudentDto DeleteStudentDto { get; set; }
         public List<AddTimeDto> AddTimeDtos { get; set; }
-        public List<EditTimeDto> EditTimeDtos { get; set; }
         public DeleteTimeDto DeleteTimeDto { get; set; }
     }
 }

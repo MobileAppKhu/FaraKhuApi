@@ -104,7 +104,6 @@ namespace Application.Features.Course.Commands.EditCourse
             // add time
             if (request.AddTimeDtos != null && request.AddTimeDtos.Count != 0)
             {
-                
                 foreach (var addTimeDto in request.AddTimeDtos)
                 {
                     string[] startTime = addTimeDto.StartTime.Split("-");
@@ -121,52 +120,19 @@ namespace Application.Features.Course.Commands.EditCourse
                     });
                 }
             }
-            // edit time
-            if (request.EditTimeDtos.Count != 0)
+
+            // delete time
+            if (request.DeleteTimeDto != null && request.DeleteTimeDto.TimeIds.Count != 0)
             {
-                foreach (var editTimeDto in request.EditTimeDtos)
+                foreach (var time in editingCourse.Times)
                 {
-                    if (editTimeDto.TimeId == null)
+                    if (request.DeleteTimeDto.TimeIds.Contains(time.TimeId))
                     {
-                        throw new CustomException(new Error
-                        {
-                            ErrorType = ErrorType.TimeNotFound,
-                            Message = Localizer["TimeNotFound"]
-                        });
-                    }
-                    var time = editingCourse.Times.First(t => t.TimeId == editTimeDto.TimeId && t.CourseId == request.CourseId);
-                    if (time == null)
-                    {
-                        throw new CustomException(new Error
-                        {
-                            ErrorType = ErrorType.TimeNotFound,
-                            Message = Localizer["TimeNotFound"]
-                        });
-                    }
-
-                    if (!String.IsNullOrEmpty(editTimeDto.StartTime))
-                    {
-                        string[] startTime = editTimeDto.StartTime.Split("-");
-                        editingCourse.Times.FirstOrDefault(t => t.TimeId == editTimeDto.TimeId).StartTime =
-                            new DateTime(2000, 12, 25, Int32.Parse(startTime[0]),
-                                Int32.Parse(startTime[1]), 0);
-                    }
-                    if (!String.IsNullOrEmpty(editTimeDto.EndTime))
-                    {
-                        string[] endTime = editTimeDto.EndTime.Split("-");
-                        editingCourse.Times.FirstOrDefault(t => t.TimeId == editTimeDto.TimeId).EndTime =
-                            new DateTime(2000, 12, 25, Int32.Parse(endTime[0]),
-                                Int32.Parse(endTime[1]), 0);
-                    }
-
-                    if (editTimeDto.WeekDay != null)
-                    {
-                        editingCourse.Times.FirstOrDefault(t => t.TimeId == editTimeDto.TimeId).WeekDay =
-                            editTimeDto.WeekDay;
+                        editingCourse.Times.Remove(time);
                     }
                 }
             }
-            
+
             foreach (var timei in editingCourse.Times)
             {
                 foreach (var timej in editingCourse.Times)
@@ -175,6 +141,7 @@ namespace Application.Features.Course.Commands.EditCourse
                     {
                         continue;
                     }
+
                     if ((timei.WeekDay == timej.WeekDay) &&
                         ((timei.StartTime < timej.StartTime && timei.EndTime > timej.StartTime) ||
                          (timei.EndTime > timej.EndTime && timei.StartTime < timej.EndTime)))

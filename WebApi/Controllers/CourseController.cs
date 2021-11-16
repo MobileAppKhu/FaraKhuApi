@@ -1,8 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Application.Features.Course.Commands.AddStudent;
 using Application.Features.Course.Commands.AddCourse;
 using Application.Features.Course.Commands.DeleteCourse;
-using Application.Features.Course.Commands.DeleteStudent;
 using Application.Features.Course.Commands.EditCourse;
 using Application.Features.Course.Queries.SearchCourse;
 using Application.Features.Course.Queries.SearchMyCourses;
@@ -30,12 +28,14 @@ namespace WebApi.Controllers
         {
             return Ok(await _mediator.Send(request));
         }
+        
         [HttpPost]
         [Authorize(Policy = "InstructorPolicy")]
         public async Task<IActionResult> EditCourse(EditCourseCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
+        
         [HttpPost]
         [Authorize(Policy = "InstructorPolicy")]
         public async Task<IActionResult> DeleteCourse(DeleteCourseCommand request)
@@ -43,21 +43,6 @@ namespace WebApi.Controllers
             return Ok(await _mediator.Send(request));
         }
         
-        [HttpPost]
-        [Authorize(Policy = "InstructorPolicy")]
-        [ProducesResponseType(typeof(AddStudentViewModel),200)]
-        public async Task<IActionResult> AddStudent(AddStudentCommand request)
-        {
-            return Ok(await _mediator.Send(request));
-        }
-
-        [HttpPost]
-        [Authorize(Policy = "InstructorPolicy")]
-        [ProducesResponseType(typeof(DeleteStudentViewModel), 200)]
-        public async Task<IActionResult> DeleteStudent(DeleteStudentCommand request)
-        {
-            return Ok(await _mediator.Send(request));
-        }
         [HttpPost]
         [Authorize]
         [ProducesResponseType(typeof(SearchCourseViewModel), 200)]

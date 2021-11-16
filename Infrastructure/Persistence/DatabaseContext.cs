@@ -52,21 +52,11 @@ namespace Infrastructure.Persistence
         public DbSet<BaseUser> BaseUsers { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Time> Times { get; set; }
-
         public DbSet<CourseEvent> CourseEvents { get; set; }
         public DbSet<Announcement> Announcements { get; set; }
         public DbSet<Offer> Offers { get; set; }
         public DbSet<News> News { get; set; }
         public DbSet<Suggestion> Suggestions { get; set; }
-
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
-        {
-            var result = await base.SaveChangesAsync(cancellationToken);
-
-
-            return result;
-        }
-
         public DbSet<PollQuestion> PollQuestions { get; set; }
         public DbSet<PollAnswer> PollAnswers { get; set; }
         public DbSet<FileEntity> Files { get; set; }
@@ -74,5 +64,13 @@ namespace Infrastructure.Persistence
         public DbSet<Faculty> Faculties { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<CourseType> CourseTypes { get; set; }
+
+        public DbSet<Ticket> Tickets { get; set; }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            var result = await base.SaveChangesAsync(cancellationToken);
+            return result;
+        }
     }
 }

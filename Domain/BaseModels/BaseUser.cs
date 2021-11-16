@@ -24,5 +24,6 @@ namespace Domain.BaseModels
         public ICollection<Suggestion> Suggestions { get; set; }
         public ICollection<Favourite> Favourites { get; set; }
         public ICollection<Announcement> Announcements { get; set; }
+        public ICollection<Ticket> Tickets { get; set; }
     }
 }
