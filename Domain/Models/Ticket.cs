@@ -10,7 +10,7 @@ namespace Domain.Models
         public string Description { get; set; }
         public TicketStatus Status { get; set; }
         public TicketPriority Priority { get; set; }
-        public DateTime DeadLine { get; set; }
+        public DateTime? DeadLine { get; set; }
         public string CreatorId { get; set; }
         public BaseUser Creator { get; set; }
     }

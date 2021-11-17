@@ -45,13 +45,13 @@ namespace Application.Features.Ticket.Commands.AddTicket
                     Message = Localizer["Unauthorized"]
                 });
             }
-            //if deadline is null should do sth :))
+            //check if this works
             var ticket = new Domain.Models.Ticket
             {
                 Description = request.Description,
                 Priority = request.Priority,
                 Status = TicketStatus.Init,
-                DeadLine = request.DeadLine,
+                DeadLine = request.DeadLine != null ? request.DeadLine : null,
                 CreatorId = userId,
                 Creator = user
             };
