@@ -97,6 +97,5 @@ namespace WebApi.Controllers
         {
             return Ok(await _mediator.Send(request));
         }
-        
     }
 }

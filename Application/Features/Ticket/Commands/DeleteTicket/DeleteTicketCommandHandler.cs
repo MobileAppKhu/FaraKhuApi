@@ -1,11 +1,10 @@
-﻿using System;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Features.Ticket.Commands.EditTicket;
 using Application.Resources;
-using AutoMapper;
 using Domain.BaseModels;
 using Domain.Enum;
 using MediatR;
@@ -13,22 +12,23 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Ticket.Commands.EditTicket
+namespace Application.Features.Ticket.Commands.DeleteTicket
 {
-    public class EditTicketCommandHandler : IRequestHandler<EditTicketCommand>
+    public class DeleteTicketCommandHandler : IRequestHandler<DeleteTicketCommand>
     {
         private readonly IDatabaseContext _context;
         private IHttpContextAccessor HttpContextAccessor { get; }
         private IStringLocalizer<SharedResource> Localizer { get; }
 
-        public EditTicketCommandHandler(IHttpContextAccessor httpContextAccessor,
+        public DeleteTicketCommandHandler(IHttpContextAccessor httpContextAccessor,
             IDatabaseContext context, IStringLocalizer<SharedResource> localizer)
         {
             _context = context;
             HttpContextAccessor = httpContextAccessor;
             Localizer = localizer;
         }
-        public async Task<Unit> Handle(EditTicketCommand request, CancellationToken cancellationToken)
+
+        public async Task<Unit> Handle(DeleteTicketCommand request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == userId, cancellationToken);
@@ -41,9 +41,10 @@ namespace Application.Features.Ticket.Commands.EditTicket
                 });
             }
 
-            var editingTicket =
+            var deletingTicket =
                 await _context.Tickets.FirstOrDefaultAsync(ticket => ticket.TicketId == request.TicketId, cancellationToken);
-            if (userId == editingTicket.CreatorId && user.UserType != UserType.Owner)
+
+            if (deletingTicket.CreatorId != userId || user.UserType != UserType.Owner)
             {
                 throw new CustomException(new Error
                 {
@@ -52,22 +53,9 @@ namespace Application.Features.Ticket.Commands.EditTicket
                 });
             }
 
-            if (!String.IsNullOrWhiteSpace(request.Description))
-            {
-                editingTicket.Description = request.Description;
-            }
-
-            if (request.Priority != null)
-            {
-                editingTicket.Priority = (TicketPriority)request.Priority;
-            }
-
-            if (request.DeadLine != null)
-            {
-                editingTicket.DeadLine = request.DeadLine;
-            }
-            
+            _context.Tickets.Remove(deletingTicket);
             await _context.SaveChangesAsync(cancellationToken);
+            
             return Unit.Value;
         }
     }

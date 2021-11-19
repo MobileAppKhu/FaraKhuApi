@@ -8,6 +8,6 @@ namespace Application.Features.Ticket.Commands.AddTicket
     {
         public string Description { get; set; }
         public TicketPriority Priority { get; set; }
-        public DateTime DeadLine { get; set; }
+        public DateTime? DeadLine { get; set; }
     }
 }

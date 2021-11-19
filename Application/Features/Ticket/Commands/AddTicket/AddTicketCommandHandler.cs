@@ -51,7 +51,7 @@ namespace Application.Features.Ticket.Commands.AddTicket
                 Description = request.Description,
                 Priority = request.Priority,
                 Status = TicketStatus.Init,
-                DeadLine = request.DeadLine != null ? request.DeadLine : null,
+                DeadLine = request.DeadLine,
                 CreatorId = userId,
                 Creator = user
             };
