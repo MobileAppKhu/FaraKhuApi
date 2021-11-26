@@ -26,6 +26,9 @@
         StudentNotFound,
         TimeConflict,
         TimeNotFound,
-        CourseTypeNotFound
+        CourseTypeNotFound,
+        DepartmentNotFound,
+        AnnouncementNotFound,
+        InstructorNotFound
     }
 }

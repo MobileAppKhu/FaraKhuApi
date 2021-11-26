@@ -61,6 +61,15 @@ namespace Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to فراخوان پیدا نشد.
+        /// </summary>
+        internal static string AnnouncementNotFound {
+            get {
+                return ResourceManager.GetString("AnnouncementNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to جواب نظر سنجی یافت نشد.
         /// </summary>
         internal static string AnswerNotFound {
@@ -93,6 +102,15 @@ namespace Application.Resources {
         internal static string CourseTypeNotFound {
             get {
                 return ResourceManager.GetString("CourseTypeNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to واحد آموزشی یافت نشد.
+        /// </summary>
+        internal static string DepartmentNotFound {
+            get {
+                return ResourceManager.GetString("DepartmentNotFound", resourceCulture);
             }
         }
         
@@ -165,6 +183,15 @@ namespace Application.Resources {
         internal static string Friday {
             get {
                 return ResourceManager.GetString("Friday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to استاد یافت نشد.
+        /// </summary>
+        internal static string InstructorNotFound {
+            get {
+                return ResourceManager.GetString("InstructorNotFound", resourceCulture);
             }
         }
         

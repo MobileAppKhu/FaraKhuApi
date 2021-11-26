@@ -34,33 +34,19 @@ namespace Application.Features.Event.Commands.EditEvent
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             BaseUser user = await _context.BaseUsers.FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
-            if(user == null)
+            if (user == null)
+            {
                 throw new CustomException(new Error
                 {
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
-                });
-            var eventObj = _context.Events.FirstOrDefault(e => e.EventId == request.EventId);
-
-            if (eventObj != null)
-            {
-                if (!string.IsNullOrWhiteSpace(request.EventName))
-                {
-                    eventObj.EventName = request.EventName;
-                }
-                if (!string.IsNullOrWhiteSpace(request.EventDescription))
-                {
-                    eventObj.EventDescription = request.EventDescription;
-                }
-                if (!string.IsNullOrWhiteSpace(request.EventTime))
-                {
-                    eventObj.EventTime = DateTimeOffset.Parse(request.EventTime).Date;
-                }
-
-                _context.Events.Update(eventObj);
-                await _context.SaveChangesAsync(cancellationToken);
+                }); 
             }
-            else
+                
+            var eventObj = _context.Events
+                .Include(e => e.User)
+                .FirstOrDefault(e => e.EventId == request.EventId);
+            if (eventObj == null)
             {
                 throw new CustomException(new Error
                 {
@@ -69,7 +55,29 @@ namespace Application.Features.Event.Commands.EditEvent
                 });
             }
 
+            if (eventObj.User != user && user.UserType != UserType.Owner)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.Unauthorized,
+                    Message = Localizer["Unauthorized"]
+                }); 
+            }
             
+            if (!string.IsNullOrWhiteSpace(request.EventName))
+            {
+                eventObj.EventName = request.EventName;
+            }
+            if (!string.IsNullOrWhiteSpace(request.EventDescription))
+            {
+                eventObj.EventDescription = request.EventDescription;
+            }
+            if (!string.IsNullOrWhiteSpace(request.EventTime))
+            {
+                eventObj.EventTime = DateTimeOffset.Parse(request.EventTime).Date;
+            }
+
+            await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }
     }

@@ -1,9 +1,8 @@
 ﻿using MediatR;
 
-
-namespace Application.Features.Announcement.Commands.RemoveAnnouncement
+namespace Application.Features.Announcement.Commands.DeleteAnnouncement
 {
-    public class RemoveAnnouncementCommand : IRequest<RemoveAnnouncementViewModel>
+    public class DeleteAnnouncementCommand : IRequest<Unit>
     {
         public string AnnouncementId { get; set; }
     }

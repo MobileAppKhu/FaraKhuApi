@@ -45,6 +45,14 @@ namespace Application.Features.News.Commands.AddNews
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
+            if (user.UserType != UserType.PROfficer && user.UserType != UserType.Owner)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.Unauthorized,
+                    Message = Localizer["Unauthorized"]
+                });
+            }
             var fileEntity = await _context.Files.FirstOrDefaultAsync(f => f.Id == request.FileId,
                 cancellationToken);
 

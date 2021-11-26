@@ -22,28 +22,46 @@ namespace Application.Features.Course.Commands.DeleteCourse
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
         private IHttpContextAccessor HttpContextAccessor { get; }
-        
-        public DeleteCourseCommandHandler( IStringLocalizer<SharedResource> localizer,
+
+        public DeleteCourseCommandHandler(IStringLocalizer<SharedResource> localizer,
             IHttpContextAccessor httpContextAccessor, IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
             HttpContextAccessor = httpContextAccessor;
         }
+
         public async Task<Unit> Handle(DeleteCourseCommand request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             Instructor user = _context.Instructors.FirstOrDefault(u => u.Id == userId);
-            if(user == null)
+            if (user == null)
                 throw new CustomException(new Error
                 {
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            var courseObj = _context.Courses.Include(c => c.Students).
-                FirstOrDefault(c => c.CourseId == request.CourseId);
-            if(courseObj != null) 
-                _context.Courses.Remove(courseObj);
+            var courseObj = _context.Courses.Include(c => c.Students)
+                .FirstOrDefault(c => c.CourseId == request.CourseId);
+            if (courseObj == null)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.CourseNotFound,
+                    Message = Localizer["CourseNotFound"]
+                });
+            }
+            
+            if (courseObj.Instructor != user && user.UserType != UserType.Owner)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.Unauthorized,
+                    Message = Localizer["Unauthorized"]
+                });
+            }
+
+            _context.Courses.Remove(courseObj);
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

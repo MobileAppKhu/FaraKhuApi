@@ -6,12 +6,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Features.Announcement.Commands.DeleteAnnouncement;
 
-namespace Application.Features.Announcement.Commands.RemoveAnnouncement
+namespace Application.Features.Announcement.Commands.DeleteAnnouncement
 {
-    public class RemoveAnnouncementValidator : AbstractValidator<RemoveAnnouncementCommand>
+    public class DeleteAnnouncementValidator : AbstractValidator<DeleteAnnouncementCommand>
     {
-        public RemoveAnnouncementValidator(IStringLocalizer<SharedResource> localizer)
+        public DeleteAnnouncementValidator(IStringLocalizer<SharedResource> localizer)
         {
             RuleFor(obj => obj.AnnouncementId)
                 .NotEmpty().WithMessage("AnnouncementIdRequired");

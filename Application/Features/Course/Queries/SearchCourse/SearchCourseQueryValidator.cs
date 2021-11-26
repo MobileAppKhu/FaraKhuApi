@@ -8,9 +8,7 @@ namespace Application.Features.Course.Queries.SearchCourse
     {
         public SearchCourseQueryValidator(IStringLocalizer<SharedResource> localizer)
         {
-            RuleFor(r => r.CourseId)
-                .NotEmpty()
-                .WithMessage(localizer["NotEmpty"]);
+            //TODO
         }
     }
 }

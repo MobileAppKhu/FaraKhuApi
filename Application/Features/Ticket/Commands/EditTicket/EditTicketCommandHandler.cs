@@ -43,7 +43,8 @@ namespace Application.Features.Ticket.Commands.EditTicket
 
             var editingTicket =
                 await _context.Tickets.FirstOrDefaultAsync(ticket => ticket.TicketId == request.TicketId, cancellationToken);
-            if (userId == editingTicket.CreatorId && user.UserType != UserType.Owner)
+            
+            if (userId != editingTicket.CreatorId && user.UserType != UserType.Owner)
             {
                 throw new CustomException(new Error
                 {
@@ -65,6 +66,11 @@ namespace Application.Features.Ticket.Commands.EditTicket
             if (request.DeadLine != null)
             {
                 editingTicket.DeadLine = request.DeadLine;
+            }
+
+            if (request.TicketStatus != null && user.UserType == UserType.Owner)
+            {
+                editingTicket.Status = (TicketStatus)request.TicketStatus;
             }
             
             await _context.SaveChangesAsync(cancellationToken);

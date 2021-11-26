@@ -129,4 +129,13 @@
     <data name="CourseTypeNotFound" xml:space="preserve">
         <value>عنوان درس موجود نمی باشد</value>
     </data>
+    <data name="DepartmentNotFound" xml:space="preserve">
+        <value>واحد آموزشی یافت نشد</value>
+    </data>
+    <data name="AnnouncementNotFound" xml:space="preserve">
+        <value>فراخوان پیدا نشد</value>
+    </data>
+    <data name="InstructorNotFound" xml:space="preserve">
+        <value>استاد یافت نشد</value>
+    </data>
 </root>

@@ -29,14 +29,14 @@ namespace Application.Features.Poll.Queries.SearchAvailablePolls
         }
         public async Task<SearchPollsViewModel> Handle(SearchPollsQuery request, CancellationToken cancellationToken)
         {
-            var course = await _context.Courses.Include(c => c.Polls)
-                .FirstOrDefaultAsync(c => c.CourseId == request.CourseId, cancellationToken);
-            int searchLength = course.Polls.Count;
-            course.Polls = course.Polls.Skip(request.Start).Take(request.Step).ToList();
+            List<PollQuestion> polls = await _context.PollQuestions.Include(question => question.Answers)
+                .Where(question => question.CourseId == request.CourseId).Take(request.Step)
+                .Skip(request.Start).ToListAsync(cancellationToken);
+            int searchLength = await _context.PollQuestions.CountAsync(question => question.CourseId == request.CourseId, cancellationToken);
             return new SearchPollsViewModel
             {
-                Polls = _mapper.Map<ICollection<PollQuestionShortDto>>(course.Polls),
-                SearchLenght = searchLength
+                Polls = _mapper.Map<ICollection<PollQuestionShortDto>>(polls),
+                SearchLength = searchLength
             };
         }
     }

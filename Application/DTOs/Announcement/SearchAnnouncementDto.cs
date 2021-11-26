@@ -22,8 +22,14 @@ namespace Application.DTOs.Announcement
         {
             profile.CreateMap<Domain.Models.Announcement, SearchAnnouncementDto>()
                 .ForMember(a => a.UserFullname,
-                opt =>
-                    opt.MapFrom(src => src.BaseUser.FirstName + " " + src.BaseUser.LastName));
+                    opt =>
+                        opt.MapFrom(src => src.BaseUser.FirstName + " " + src.BaseUser.LastName))
+                .ForMember(a => a.Department,
+                    opt =>
+                        opt.MapFrom(src => src.Department.DepartmentTitle))
+                .ForMember(a => a.Faculty,
+                    opt =>
+                        opt.MapFrom(src => src.Department.Faculty.FacultyTitle));
         }
     }
 }

@@ -58,6 +58,15 @@ namespace Application.Features.Course.Commands.EditCourse
                 });
             }
 
+            if (editingCourse.Instructor != user && user.UserType != UserType.Owner)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.Unauthorized,
+                    Message = Localizer["Unauthorized"]
+                });
+            }
+
             if (request.AddStudentDto != null && request.AddStudentDto.StudentIds.Count != 0)
             {
                 List<Student> addStudents = _context.Students
@@ -79,12 +88,8 @@ namespace Application.Features.Course.Commands.EditCourse
 
             if (request.DeleteStudentDto != null && request.DeleteStudentDto.StudentIds.Count != 0)
             {
-                List<Student> deleteStudents = _context.Students
-                    .Where(student => request.DeleteStudentDto.StudentIds.Contains(student.StudentId)).ToList();
-                if (deleteStudents.Count != request.DeleteStudentDto.StudentIds.Count)
-                {
-                    // return error
-                }
+                List<Student> deleteStudents = await _context.Students
+                    .Where(student => request.DeleteStudentDto.StudentIds.Contains(student.StudentId)).ToListAsync(cancellationToken);
 
                 foreach (var student in deleteStudents)
                 {
@@ -130,6 +135,14 @@ namespace Application.Features.Course.Commands.EditCourse
                     {
                         editingCourse.Times.Remove(time);
                     }
+                    else
+                    {
+                        throw new CustomException(new Error
+                        {
+                            ErrorType = ErrorType.TimeNotFound,
+                            Message = Localizer["TimeNotFound"]
+                        });
+                    }
                 }
             }
 
@@ -154,7 +167,6 @@ namespace Application.Features.Course.Commands.EditCourse
                     }
                 }
             }
-
 
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;

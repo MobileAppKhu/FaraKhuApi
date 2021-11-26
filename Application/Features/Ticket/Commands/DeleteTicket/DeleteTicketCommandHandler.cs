@@ -44,7 +44,7 @@ namespace Application.Features.Ticket.Commands.DeleteTicket
             var deletingTicket =
                 await _context.Tickets.FirstOrDefaultAsync(ticket => ticket.TicketId == request.TicketId, cancellationToken);
 
-            if (deletingTicket.CreatorId != userId || user.UserType != UserType.Owner)
+            if (deletingTicket.CreatorId != userId && user.UserType != UserType.Owner)
             {
                 throw new CustomException(new Error
                 {

@@ -11,6 +11,7 @@ using Domain.Enum;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace Application.Features.Event.Commands.DeleteEvent
@@ -34,14 +35,35 @@ namespace Application.Features.Event.Commands.DeleteEvent
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
             if (user == null)
+            {
                 throw new CustomException(new Error
                 {
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            var eventObj = _context.Events.FirstOrDefault(e => e.EventId == request.EventId);
-            if (eventObj != null)
-                _context.Events.Remove(eventObj);
+            }
+                
+            var eventObj = _context.Events
+                .Include(e => e.User)
+                .FirstOrDefault(e => e.EventId == request.EventId);
+            if (eventObj == null)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.CourseEventNotFound,
+                    Message = Localizer["CourseEventNotFound"]
+                });
+            }
+
+            if (eventObj.User != user && user.UserType != UserType.Owner)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.Unauthorized,
+                    Message = Localizer["Unauthorized"]
+                });
+            }
+            _context.Events.Remove(eventObj);
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

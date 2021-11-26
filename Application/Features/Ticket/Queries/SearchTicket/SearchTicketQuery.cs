@@ -10,6 +10,7 @@ namespace Application.Features.Ticket.Queries.SearchTicket
         public List<String> TicketIds { get; set; }
         public List<TicketPriority> TicketPriorities { get; set; }
         public List<TicketStatus> TicketStatusList { get; set; }
+        public string Description { get; set; }
         public int Start { get; set; }
         public int Step { get; set; }
         public TicketColumn TicketColumn { get; set; }

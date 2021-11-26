@@ -2,7 +2,6 @@
 using Application.Features.Event.Commands.AddEvent;
 using Application.Features.Event.Commands.DeleteEvent;
 using Application.Features.Event.Commands.EditEvent;
-using Application.Features.Event.Queries.SearchPersonalEvent;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,14 +35,5 @@ namespace WebApi.Controllers
         {
             return Ok(await _mediator.Send(request));
         }
-        
-        [HttpPost]
-        [ProducesResponseType(typeof(SearchPersonalEventViewModel),200)]
-        public async Task<IActionResult> SearchPersonalEvent(SearchPersonalEventQuery request)
-        {
-            return Ok(await _mediator.Send(request));
-        }
-        
     }
-    
 }

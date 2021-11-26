@@ -18,18 +18,19 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Features.Announcement.Commands.DeleteAnnouncement;
 
-namespace Application.Features.Announcement.Commands.RemoveAnnouncement
+namespace Application.Features.Announcement.Commands.DeleteAnnouncement
 {
-    public class RemoveAnnouncementCommandHandler : IRequestHandler<RemoveAnnouncementCommand, RemoveAnnouncementViewModel>
+    public class DeleteAnnouncementCommandHandler : IRequestHandler<DeleteAnnouncementCommand>
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
         private IHttpContextAccessor HttpContextAccessor { get; }
         private UserManager<BaseUser> UserManager { get; }
-        private IMapper _mapper { get; }
+        private IMapper Mapper { get; }
 
-        public RemoveAnnouncementCommandHandler(IStringLocalizer<SharedResource> localizer,
+        public DeleteAnnouncementCommandHandler(IStringLocalizer<SharedResource> localizer,
             IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
             , IDatabaseContext context)
         {
@@ -37,9 +38,9 @@ namespace Application.Features.Announcement.Commands.RemoveAnnouncement
             Localizer = localizer;
             HttpContextAccessor = httpContextAccessor;
             UserManager = userManager;
-            _mapper = mapper;
+            Mapper = mapper;
         }
-        public async Task<RemoveAnnouncementViewModel> Handle(RemoveAnnouncementCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteAnnouncementCommand request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
@@ -55,7 +56,7 @@ namespace Application.Features.Announcement.Commands.RemoveAnnouncement
             if (announcementObj != null)
                 _context.Announcements.Remove(announcementObj);
             await _context.SaveChangesAsync(cancellationToken);
-            return new RemoveAnnouncementViewModel();
+            return Unit.Value;
         }
     }
 }

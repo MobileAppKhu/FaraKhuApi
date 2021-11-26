@@ -14,9 +14,6 @@ namespace Application.Features.Ticket.Commands.AddTicket
             RuleFor(r => r.Priority)
                 .NotEmpty()
                 .WithMessage(localizer["NotEmpty"]);
-            RuleFor(r => r.DeadLine)
-                .NotEmpty()
-                .WithMessage(localizer["NotEmpty"]);
         }
     }
 }

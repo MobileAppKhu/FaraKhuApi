@@ -29,14 +29,14 @@ namespace WebApi.Controllers
         
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> EditTicket(EditTicketCommandHandler request)
+        public async Task<IActionResult> EditTicket(EditTicketCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
         
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> DeleteTicket(DeleteTicketCommandHandler request)
+        public async Task<IActionResult> DeleteTicket(DeleteTicketCommand request)
         {
             return Ok(await _mediator.Send(request));
         }

@@ -26,7 +26,7 @@ namespace Application.Features.Course.Commands.AddCourse
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
         private IHttpContextAccessor HttpContextAccessor { get; }
-        private IMapper _mapper { get; }
+        private IMapper Mapper { get; }
 
         public AddCourseCommandHandler( IStringLocalizer<SharedResource> localizer,
             IHttpContextAccessor httpContextAccessor, IMapper mapper
@@ -35,7 +35,7 @@ namespace Application.Features.Course.Commands.AddCourse
             _context = context;
             Localizer = localizer;
             HttpContextAccessor = httpContextAccessor;
-            _mapper = mapper;
+            Mapper = mapper;
         }
         public async Task<AddCourseViewModel> Handle(AddCourseCommand request, CancellationToken cancellationToken)
         {
@@ -122,7 +122,7 @@ namespace Application.Features.Course.Commands.AddCourse
             await _context.SaveChangesAsync(cancellationToken);
             return new AddCourseViewModel
             {
-                Course = _mapper.Map<SearchCourseDto>(courseObj)
+                Course = Mapper.Map<SearchCourseDto>(courseObj)
             };
         }
     }

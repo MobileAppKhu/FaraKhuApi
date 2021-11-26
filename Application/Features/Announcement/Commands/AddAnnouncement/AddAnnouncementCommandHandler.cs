@@ -17,6 +17,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.Announcement.Commands.AddAnnouncement
 {
@@ -28,8 +29,8 @@ namespace Application.Features.Announcement.Commands.AddAnnouncement
 
         private IHttpContextAccessor HttpContextAccessor { get; }
 
-        
-        private IMapper _mapper { get; }
+
+        private IMapper Mapper { get; }
 
         public AddAnnouncementCommandHandler(IStringLocalizer<SharedResource> localizer,
             IHttpContextAccessor httpContextAccessor, IMapper mapper
@@ -38,9 +39,11 @@ namespace Application.Features.Announcement.Commands.AddAnnouncement
             _context = context;
             Localizer = localizer;
             HttpContextAccessor = httpContextAccessor;
-            _mapper = mapper;
+            Mapper = mapper;
         }
-        public async Task<AddAnnouncementViewModel> Handle(AddAnnouncementCommand request, CancellationToken cancellationToken)
+
+        public async Task<AddAnnouncementViewModel> Handle(AddAnnouncementCommand request,
+            CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
@@ -50,14 +53,44 @@ namespace Application.Features.Announcement.Commands.AddAnnouncement
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
+            Department departmentObj = null;
+            if (!string.IsNullOrWhiteSpace(request.Department))
+            {
+                departmentObj =
+                    await _context.Departments.Include(department => department.Faculty)
+                        .FirstOrDefaultAsync(department => department.DepartmentId == request.Department,
+                        cancellationToken);
+                if (departmentObj == null)
+                {
+                    throw new CustomException(new Error
+                    {
+                        ErrorType = ErrorType.DepartmentNotFound,
+                        Message = Localizer["DepartmentNotFound"]
+                    });
+                }
+            }
+
+            var avatarObj =
+                await _context.Files.FirstOrDefaultAsync(entity => entity.Id == request.Avatar, cancellationToken);
+            if (avatarObj == null)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.FileNotFound,
+                    Message = Localizer["FileNotFound"]
+                });
+            }
+
             Domain.Models.Announcement announcementObj = new Domain.Models.Announcement
             {
                 AnnouncementTitle = request.Title,
                 AnnouncementDescription = request.Description,
-                Faculty = request.Faculty,
-                Department = request.Department,
+                Department = departmentObj,
+                DepartmentId = request.Department,
                 BaseUser = user,
-                UserId = userId
+                UserId = userId,
+                Avatar = avatarObj,
+                AvatarId = request.Avatar
             };
 
             await _context.Announcements.AddAsync(announcementObj, cancellationToken);
@@ -65,8 +98,8 @@ namespace Application.Features.Announcement.Commands.AddAnnouncement
 
             return new AddAnnouncementViewModel
             {
-                Announcement = _mapper.Map<SearchAnnouncementDto>(announcementObj)
-            }; 
+                Announcement = Mapper.Map<SearchAnnouncementDto>(announcementObj)
+            };
         }
     }
 }
