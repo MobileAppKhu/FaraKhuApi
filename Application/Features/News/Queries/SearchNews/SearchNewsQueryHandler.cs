@@ -19,32 +19,29 @@ namespace Application.Features.News.Queries.SearchNews
     public class SearchNewsQueryHandler : IRequestHandler<SearchNewsQuery, SearchNewsViewModel>
     {
         private readonly IDatabaseContext _context;
-        private IMapper _mapper { get; }
+        private IMapper Mapper { get; }
 
         public SearchNewsQueryHandler(IMapper mapper, IDatabaseContext context)
         {
             _context = context;
-            _mapper = mapper;
+            Mapper = mapper;
         }
         public async Task<SearchNewsViewModel> Handle(SearchNewsQuery request, CancellationToken cancellationToken)
         {
-            List<Domain.Models.News> news;
+            IQueryable<Domain.Models.News> newsQueryable = _context.News;
+            
             if (!string.IsNullOrWhiteSpace(request.Search))
             {
-                news = _context.News.Where(n => n.Title.ToLower().Contains(request.Search.ToLower()) || 
-                                                n.Description.ToLower().Contains(request.Search.ToLower())).ToList();
-            }
-            else
-            {
-                news = _context.News.ToList();
+                newsQueryable = newsQueryable.Where(n => n.Title.ToLower().Contains(request.Search.ToLower()) || 
+                                                         n.Description.ToLower().Contains(request.Search.ToLower()));
             }
 
-            int searchCount = news.Count;
-            news = news.Skip(request.Start).Take(request.Step).ToList();
+            int searchCount = await newsQueryable.CountAsync(cancellationToken);
+            List<Domain.Models.News> news = newsQueryable.Skip(request.Start).Take(request.Step).ToList();
             
             return new SearchNewsViewModel
             {
-                News = _mapper.Map<List<NewsShortDto>>(news),
+                News = Mapper.Map<List<NewsShortDto>>(news),
                 SearchCount = searchCount
             };
         }

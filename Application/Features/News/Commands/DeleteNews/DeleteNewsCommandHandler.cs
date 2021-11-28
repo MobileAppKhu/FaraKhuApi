@@ -33,12 +33,23 @@ namespace Application.Features.News.Commands.DeleteNews
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
-            if(user == null)
+            if (user == null)
+            {
                 throw new CustomException(new Error
                 {
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
+            }
+
+            if (user.UserType != UserType.PROfficer && user.UserType != UserType.Owner)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.Unauthorized,
+                    Message = Localizer["Unauthorized"]
+                });
+            }
             Domain.Models.News news = await _context.News.
                 FirstOrDefaultAsync(n => n.NewsId == request.NewsId, cancellationToken);
             if (news != null)

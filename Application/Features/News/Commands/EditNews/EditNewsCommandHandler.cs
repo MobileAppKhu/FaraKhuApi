@@ -34,12 +34,15 @@ namespace Application.Features.News.Commands.EditNews
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
-            if(user == null)
+            if (user == null)
+            {
                 throw new CustomException(new Error
                 {
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
-                });
+                }); 
+            }
+                
            
             var news = await _context.News.Include(n => n.FileEntity).
                 FirstOrDefaultAsync(n => n.NewsId == request.NewsId, cancellationToken);
@@ -54,6 +57,14 @@ namespace Application.Features.News.Commands.EditNews
             /*var oldFile = await _context.Files.FirstOrDefaultAsync(f => f.Id == news.FileId, cancellationToken);
 
             _context.Files.Remove(oldFile);*/
+            if (user.UserType != UserType.PROfficer && user.UserType != UserType.Owner)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.Unauthorized,
+                    Message = Localizer["Unauthorized"]
+                }); 
+            }
             if (!string.IsNullOrWhiteSpace(request.Description))
             {
                 news.Description = request.Description;
