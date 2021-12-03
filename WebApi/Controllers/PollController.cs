@@ -1,10 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Application.Features.Poll.Commands.AddAnswer;
 using Application.Features.Poll.Commands.AddQuestion;
-using Application.Features.Poll.Commands.DeleteAnswer;
-using Application.Features.Poll.Commands.RemoveQuestion;
+using Application.Features.Poll.Commands.DeleteQuestion;
 using Application.Features.Poll.Commands.RetractVote;
-using Application.Features.Poll.Commands.EditAnswer;
 using Application.Features.Poll.Commands.EditQuestion;
 using Application.Features.Poll.Commands.Vote;
 using Application.Features.Poll.Queries.SearchAvailablePolls;
@@ -33,20 +30,6 @@ namespace WebApi.Controllers
         }
         [HttpPost]
         [Authorize(Policy = "InstructorPolicy")]
-        [ProducesResponseType(typeof(AddAnswerViewModel), 200)]
-        public async Task<IActionResult> CreatePollAnswer(AddAnswerCommand request)
-        {
-            return Ok(await _mediator.Send(request));
-        }
-        [HttpPost]
-        [Authorize(Policy = "InstructorPolicy")]
-        [ProducesResponseType(typeof(DeleteAnswerViewModel), 200)]
-        public async Task<IActionResult> RemovePollAnswer(DeleteAnswerCommand request)
-        {
-            return Ok(await _mediator.Send(request));
-        }
-        [HttpPost]
-        [Authorize(Policy = "InstructorPolicy")]
         public async Task<IActionResult> RemovePollQuestion(RemoveQuestionCommand request)
         {
             return Ok(await _mediator.Send(request));
@@ -54,12 +37,6 @@ namespace WebApi.Controllers
         [HttpPost]
         [Authorize(Policy = "InstructorPolicy")]
         public async Task<IActionResult> UpdatePollQuestion(EditQuestionCommand request)
-        {
-            return Ok(await _mediator.Send(request));
-        }
-        [HttpPost]
-        [Authorize(Policy = "InstructorPolicy")]
-        public async Task<IActionResult> UpdatePollAnswer(EditAnswerCommand request)
         {
             return Ok(await _mediator.Send(request));
         }

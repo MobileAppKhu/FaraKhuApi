@@ -2,9 +2,9 @@
 {
     public enum CourseColumn
     {
-        CourseId,
-        CourseTypeId,
-        EndDate,
-        InstructorId
+        CourseId = 1,
+        CourseTypeId = 2,
+        EndDate = 3,
+        InstructorId = 4
     }
 }

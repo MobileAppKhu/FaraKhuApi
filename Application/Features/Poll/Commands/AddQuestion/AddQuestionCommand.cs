@@ -1,4 +1,5 @@
-﻿using Domain.Enum;
+﻿using System.Collections.Generic;
+using Domain.Enum;
 using MediatR;
 
 namespace Application.Features.Poll.Commands.AddQuestion
@@ -8,5 +9,7 @@ namespace Application.Features.Poll.Commands.AddQuestion
         public string QuestionDescription { get; set; }
         public string MultiVote { get; set; } // Check if poll allows MultiVote
         public string CourseId { get; set; }
+
+        public List<string> Answers { get; set; }
     }
 }

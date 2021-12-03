@@ -40,12 +40,14 @@ namespace Application.Features.Poll.Commands.RetractVote
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             Student user = await _context.Students.Include(s => s.PollAnswers).
                 FirstOrDefaultAsync(s => s.Id == userId, cancellationToken);
-            if(user == null)
+            if (user == null)
+            {
                 throw new CustomException(new Error
                 {
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
+            }
             var answer = await _context.PollAnswers.Include(a => a.Voters)
                 .Include(a => a.Question).FirstOrDefaultAsync(a => a.AnswerId == request.AnswerId, cancellationToken);
             if (!answer.Question.IsOpen)

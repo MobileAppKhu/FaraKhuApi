@@ -2,10 +2,10 @@
 {
     public enum TicketColumn
     {
-        TicketId,
-        Description,
-        Priority,
-        Status,
-        DeadLine
+        TicketId = 1,
+        Description = 2,
+        Priority = 3,
+        Status = 4,
+        DeadLine = 5
     }
 }

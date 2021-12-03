@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Features.Poll.Commands.RemoveQuestion
+namespace Application.Features.Poll.Commands.DeleteQuestion
 {
     public class RemoveQuestionCommand : IRequest<Unit>
     {

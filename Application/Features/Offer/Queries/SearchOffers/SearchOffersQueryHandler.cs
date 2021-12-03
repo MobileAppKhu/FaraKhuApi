@@ -1,51 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Application.DTOs.Offer;
-using Application.Resources;
 using AutoMapper;
-using Domain.BaseModels;
-using Domain.Enum;
 using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Localization;
 
 namespace Application.Features.Offer.Queries.SearchOffers
 {
     public class SearchOffersQueryHandler : IRequestHandler<SearchOffersQuery, SearchOffersViewModel>
     {
         private readonly IDatabaseContext _context;
-        private IMapper _mapper { get; }
+        private IMapper Mapper { get; }
 
         public SearchOffersQueryHandler(IMapper mapper, IDatabaseContext context)
         {
             _context = context;
-            _mapper = mapper;
+            Mapper = mapper;
         }
+
         public async Task<SearchOffersViewModel> Handle(SearchOffersQuery request, CancellationToken cancellationToken)
         {
-            List<Domain.Models.Offer> offers = _context.Offers.Include(offer => offer.BaseUser).ToList();
+            IQueryable<Domain.Models.Offer> offerQueryable = _context.Offers.Include(offer => offer.BaseUser);
             if (!string.IsNullOrWhiteSpace(request.Search))
             {
-                offers = offers.Where(offer => (offer.Title.ToLower().Contains(request.Search.ToLower()) ||
-                                                offer.Description.ToLower().Contains(request.Search.ToLower()))).ToList();
+                offerQueryable = offerQueryable.Where(offer =>
+                    offer.Title.ToLower().Contains(request.Search.ToLower()) ||
+                    offer.Description.ToLower().Contains(request.Search.ToLower()));
             }
 
-            if(request.OfferType != 0)
+            if (request.OfferType != 0)
             {
-                offers = offers.Where(offers => offers.OfferType == request.OfferType).ToList();
+                offerQueryable = offerQueryable.Where(offer => offer.OfferType == request.OfferType);
             }
-            
-            int searchLength = offers.Count;
-            offers = offers.Skip(request.Start).Take(request.Step).ToList();
+
+            int searchLength = await offerQueryable.CountAsync(cancellationToken);
+            List<Domain.Models.Offer> offers = offerQueryable.Skip(request.Start).Take(request.Step).ToList();
             return new SearchOffersViewModel
             {
-                Offer = _mapper.Map<ICollection<UserOfferDto>>(offers),
+                Offer = Mapper.Map<ICollection<UserOfferDto>>(offers),
                 SearchLength = searchLength
             };
         }

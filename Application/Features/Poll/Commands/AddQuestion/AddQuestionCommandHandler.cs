@@ -42,15 +42,26 @@ namespace Application.Features.Poll.Commands.AddQuestion
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             Instructor user = await _context.Instructors.FirstOrDefaultAsync(i => i.Id == userId, cancellationToken);
             if (user == null)
+            {
                 throw new CustomException(new Error
                 {
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
+            }
 
             var course = await _context.Courses.Include(c => c.Instructor)
                 .Include(c => c.Polls).FirstOrDefaultAsync(c => c.CourseId == request.CourseId
                 , cancellationToken);
+
+            if (course.Instructor != user)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.Unauthorized,
+                    Message = Localizer["Unauthorized"]
+                });
+            }
             var poll = new PollQuestion
             {
                 QuestionDescription = request.QuestionDescription,
@@ -58,6 +69,16 @@ namespace Application.Features.Poll.Commands.AddQuestion
                 Course = course,
                 CourseId = course.CourseId
             };
+
+            foreach (var answerDescription in request.Answers)
+            {
+                poll.Answers.Add(new PollAnswer
+                {
+                    Question = poll,
+                    QuestionId = poll.QuestionId,
+                    AnswerDescription = answerDescription
+                });
+            }
             await _context.PollQuestions.AddAsync(poll, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
 

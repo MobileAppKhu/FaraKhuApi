@@ -23,7 +23,7 @@ namespace Application.Features.Offer.Commands.EditOffer
         private IHttpContextAccessor HttpContextAccessor { get; }
         private UserManager<BaseUser> UserManager { get; }
 
-        public EditOfferCommandHandler( IStringLocalizer<SharedResource> localizer,
+        public EditOfferCommandHandler(IStringLocalizer<SharedResource> localizer,
             IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager
             , IDatabaseContext context)
         {
@@ -32,33 +32,47 @@ namespace Application.Features.Offer.Commands.EditOffer
             HttpContextAccessor = httpContextAccessor;
             UserManager = userManager;
         }
+
         public async Task<Unit> Handle(EditOfferCommand request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
-            if(user == null)
+            if (user == null)
+            {
                 throw new CustomException(new Error
                 {
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            var offerObj = await _context.Offers.FirstOrDefaultAsync(a => a.OfferId == request.OfferId, cancellationToken);
+            }
+
+            var offerObj =
+                await _context.Offers.Include(offer => offer.BaseUser).FirstOrDefaultAsync(a => a.OfferId == request.OfferId, cancellationToken);
             if (offerObj == null)
             {
                 throw new CustomException(new Error
                     {ErrorType = ErrorType.OfferNotFound, Message = Localizer["OfferNotFound"]});
             }
 
+            if (offerObj.BaseUser != user && user.UserType == UserType.Owner)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.Unauthorized,
+                    Message = Localizer["Unauthorized"]
+                });
+            }
+
             if (!string.IsNullOrWhiteSpace(request.Price))
             {
                 offerObj.Price = request.Price;
             }
-            
+
             if (!string.IsNullOrWhiteSpace(request.Title))
             {
                 offerObj.Title = request.Title;
             }
-            
+
             if (!string.IsNullOrWhiteSpace(request.Description))
             {
                 offerObj.Description = request.Description;
@@ -79,9 +93,8 @@ namespace Application.Features.Offer.Commands.EditOffer
                 offerObj.Avatar = avatarObj;
                 offerObj.AvatarId = avatarObj.Id;
             }
-            
+
             await _context.SaveChangesAsync(cancellationToken);
-            
             return Unit.Value;
         }
     }

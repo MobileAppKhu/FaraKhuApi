@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Linq;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
@@ -21,7 +22,7 @@ namespace Application.Features.Poll.Commands.EditQuestion
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
         private IHttpContextAccessor HttpContextAccessor { get; }
-        private IMapper _mapper { get; }
+        private IMapper Mapper { get; }
 
         public EditQuestionCommandHandler( IStringLocalizer<SharedResource> localizer,
             IHttpContextAccessor httpContextAccessor, IMapper mapper
@@ -30,7 +31,7 @@ namespace Application.Features.Poll.Commands.EditQuestion
             _context = context;
             Localizer = localizer;
             HttpContextAccessor = httpContextAccessor;
-            _mapper = mapper;
+            Mapper = mapper;
         }
         public async Task<Unit> Handle(EditQuestionCommand request, CancellationToken cancellationToken)
         {
@@ -44,8 +45,10 @@ namespace Application.Features.Poll.Commands.EditQuestion
                     Message = Localizer["Unauthorized"]
                 });
             var questionObj =
-                await _context.PollQuestions.FirstOrDefaultAsync(
-                    pollQuestion => pollQuestion.QuestionId == request.QuestionId, cancellationToken);
+                await _context.PollQuestions.Include(question => question.Course)
+                    .ThenInclude(course => course.Instructor)
+                    .Include(question => question.Answers)
+                    .FirstOrDefaultAsync(pollQuestion => pollQuestion.QuestionId == request.QuestionId, cancellationToken);
             if (questionObj == null)
             {
                 throw new CustomException(new Error
@@ -53,6 +56,47 @@ namespace Application.Features.Poll.Commands.EditQuestion
                     ErrorType = ErrorType.QuestionNotFound,
                     Message = Localizer["QuestionNotFound"]
                 });
+            }
+
+            if (questionObj.Course.Instructor != user && user.UserType != UserType.Owner)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.Unauthorized,
+                    Message = Localizer["Unauthorized"]
+                });
+            }
+
+            if (request.DeleteAnswers.Count != 0)
+            {
+                var deleteAnswers = await _context.PollAnswers.Where(answer =>
+                        answer.QuestionId == questionObj.QuestionId && request.DeleteAnswers.Contains(answer.AnswerId))
+                    .ToListAsync(cancellationToken);
+                if (deleteAnswers.Count != request.DeleteAnswers.Count)
+                {
+                    throw new CustomException(new Error
+                    {
+                        ErrorType = ErrorType.AnswerNotFound,
+                        Message = Localizer["AnswerNotFound"]
+                    });
+                }
+                foreach (var answer in deleteAnswers)
+                {
+                    questionObj.Answers.Remove(answer);
+                }
+            }
+
+            if (request.AddAnswers.Count != 0)
+            {
+                foreach (var answerDescription in request.AddAnswers)
+                {
+                    questionObj.Answers.Add(new PollAnswer
+                    {
+                        Question = questionObj,
+                        QuestionId = questionObj.QuestionId,
+                        AnswerDescription = answerDescription
+                    });
+                }
             }
 
             if (!string.IsNullOrWhiteSpace(request.QuestionDescription))
@@ -71,7 +115,6 @@ namespace Application.Features.Poll.Commands.EditQuestion
             }
             
             await _context.SaveChangesAsync(cancellationToken);
-            
             return Unit.Value;
         }
     }

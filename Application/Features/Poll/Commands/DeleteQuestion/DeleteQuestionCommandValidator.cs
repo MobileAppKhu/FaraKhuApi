@@ -2,7 +2,7 @@
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Poll.Commands.RemoveQuestion
+namespace Application.Features.Poll.Commands.DeleteQuestion
 {
     public class RemoveQuestionCommandValidator : AbstractValidator<RemoveQuestionCommand>
     {

@@ -1,18 +1,13 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Application.DTOs.News;
-using Application.Resources;
 using AutoMapper;
-using Domain.BaseModels;
+using Domain.Enum;
 using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Localization;
 
 namespace Application.Features.News.Queries.SearchNews
 {
@@ -36,12 +31,32 @@ namespace Application.Features.News.Queries.SearchNews
                                                          n.Description.ToLower().Contains(request.Search.ToLower()));
             }
 
+            switch (request.NewsColumn)
+            {
+                case NewsColumn.NewsId:
+                    newsQueryable = request.OrderDirection
+                        ? newsQueryable.OrderBy(news => news.NewsId)
+                        : newsQueryable.OrderByDescending(news => news.NewsId);
+                    break;
+                case NewsColumn.Title:
+                    newsQueryable = request.OrderDirection
+                        ? newsQueryable.OrderBy(news => news.Title).ThenBy(news => news.NewsId)
+                        : newsQueryable.OrderByDescending(news => news.Title).ThenByDescending(news => news.NewsId);
+                    break;
+                case NewsColumn.Description:
+                    newsQueryable = request.OrderDirection
+                        ? newsQueryable.OrderBy(news => news.Description).ThenBy(news => news.NewsId)
+                        : newsQueryable.OrderByDescending(news => news.Description)
+                            .ThenByDescending(news => news.NewsId);
+                    break;
+            }
+
             int searchCount = await newsQueryable.CountAsync(cancellationToken);
-            List<Domain.Models.News> news = newsQueryable.Skip(request.Start).Take(request.Step).ToList();
+            List<Domain.Models.News> newsList = newsQueryable.Skip(request.Start).Take(request.Step).ToList();
             
             return new SearchNewsViewModel
             {
-                News = Mapper.Map<List<NewsShortDto>>(news),
+                News = Mapper.Map<List<NewsDto>>(newsList),
                 SearchCount = searchCount
             };
         }

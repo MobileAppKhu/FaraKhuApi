@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System.Collections.Generic;
+using MediatR;
 
 namespace Application.Features.Poll.Commands.EditQuestion
 {
@@ -8,5 +9,7 @@ namespace Application.Features.Poll.Commands.EditQuestion
         public string QuestionDescription { get; set; }
         public string MultiVote { get; set; } // Check if poll allows MultiVote
         public string IsOpen { get; set; } // Check if poll is open (or closed)
+        public List<string> DeleteAnswers { get; set; }
+        public List<string> AddAnswers { get; set; }
     }
 }

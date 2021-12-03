@@ -9,7 +9,7 @@ namespace Application.Features.Poll.Commands.AddQuestion
     {
         public AddQuestionCommandValidator(IStringLocalizer<SharedResource> localizer)
         {
-            /*RuleFor(r => r.CourseId)
+            RuleFor(r => r.CourseId)
                 .NotEmpty()
                 .WithMessage(localizer["EmptyInput"]);
             RuleFor(r => r.MultiVote)
@@ -17,7 +17,7 @@ namespace Application.Features.Poll.Commands.AddQuestion
                 .WithMessage(localizer["EmptyInput"]);
             RuleFor(r => r.QuestionDescription)
                 .NotEmpty()
-                .WithMessage(localizer["EmptyInput"]);*/
+                .WithMessage(localizer["EmptyInput"]);
         }
     }
 }

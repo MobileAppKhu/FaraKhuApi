@@ -47,10 +47,20 @@ namespace Application.Features.Poll.Commands.Vote
                     Message = Localizer["Unauthorized"]
                 });
             
-            var answer = await _context.PollAnswers.Include(a => a.Voters)
-                .Include(a => a.Question).ThenInclude(q => q.Answers)
-                .ThenInclude(a => a.Voters)
+            var answer = await _context.PollAnswers
+                .Include(a => a.Voters)
+                .Include(a => a.Question)
+                .ThenInclude(a => a.Course)
+                .ThenInclude(course => course.Students)
                 .FirstOrDefaultAsync(a => a.AnswerId == request.AnswerId, cancellationToken);
+            if (!answer.Question.Course.Students.Contains(user))
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.Unauthorized,
+                    Message = Localizer["Unauthorized"]
+                });
+            }
             if (!answer.Question.IsOpen)
                 throw new CustomException(new Error
                 {

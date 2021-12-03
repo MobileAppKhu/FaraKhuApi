@@ -2,9 +2,9 @@
 {
     public enum EventColumn
     {
-        EventId,
-        EventName,
-        EventDescription,
-        EventTime
+        EventId = 1,
+        EventName = 2,
+        EventDescription = 3,
+        EventTime = 4
     }
 }

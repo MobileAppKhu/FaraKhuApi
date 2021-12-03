@@ -2,10 +2,10 @@
 {
     public enum AnnouncementColumn
     {
-        AnnouncementId,
-        Title,
-        Description,
-        DepartmentId,
-        UserId
+        AnnouncementId = 1,
+        Title = 2,
+        Description = 3,
+        DepartmentId = 4,
+        UserId = 5
     }
 }

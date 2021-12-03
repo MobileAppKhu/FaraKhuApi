@@ -2,7 +2,6 @@
 using Application.Features.News.Commands.AddNews;
 using Application.Features.News.Commands.DeleteNews;
 using Application.Features.News.Commands.EditNews;
-using Application.Features.News.Queries.SearchIndividualNews;
 using Application.Features.News.Queries.SearchNews;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -15,7 +14,7 @@ namespace WebApi.Controllers
     [Route("api/[controller]/[action]")]
     public class NewsController : ControllerBase
     {
-        private IMediator _mediator;
+        private readonly IMediator _mediator;
 
         public NewsController(IMediator mediator)
         {
@@ -39,14 +38,6 @@ namespace WebApi.Controllers
         [AllowAnonymous]
         [ProducesResponseType(typeof(SearchNewsViewModel), 200)]
         public async Task<IActionResult> SearchNews(SearchNewsQuery request)
-        {
-            return Ok(await _mediator.Send(request));
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [ProducesResponseType(typeof(SearchIndividualNewsViewModel), 200)]
-        public async Task<IActionResult> SearchIndividualNews(SearchIndividualNewsQuery request)
         {
             return Ok(await _mediator.Send(request));
         }
