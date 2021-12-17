@@ -30,6 +30,6 @@
         DepartmentNotFound,
         AnnouncementNotFound,
         InstructorNotFound,
-        CommentNotFound
+        FavouriteNotFound
     }
 }

@@ -11,7 +11,7 @@ namespace WebApi.Controllers
 {
 
     [ApiController]
-    [Authorize(Policy = "InstructorPolicy")]
+    [Authorize]
     [Route("api/[controller]/[action]")]
     public class AnnouncementController : ControllerBase
     {

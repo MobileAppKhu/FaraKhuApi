@@ -138,4 +138,7 @@
     <data name="InstructorNotFound" xml:space="preserve">
         <value>استاد یافت نشد</value>
     </data>
+    <data name="FavouriteNotFound" xml:space="preserve">
+        <value>علاقه مندی یافت نشد</value>
+    </data>
 </root>

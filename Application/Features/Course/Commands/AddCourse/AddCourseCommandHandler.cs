@@ -47,14 +47,17 @@ namespace Application.Features.Course.Commands.AddCourse
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            CourseType courseType = await _context.CourseTypes.FirstOrDefaultAsync(type => type.CourseTypeId == request.CourseTypeId,
+            CourseType courseType = await _context.CourseTypes
+                .Include(type => type.Department)
+                .ThenInclude(department => department.Faculty)
+                .FirstOrDefaultAsync(type => type.CourseTypeId == request.CourseTypeId,
                 cancellationToken);
             if (courseType == null)
             {
                 throw new CustomException(new Error
                 {
-                    ErrorType = ErrorType.CourseNotFound,
-                    Message = Localizer["CourseNotFound"]
+                    ErrorType = ErrorType.CourseTypeNotFound,
+                    Message = Localizer["CourseTypeNotFound"]
                 });
             }
             Domain.Models.Course courseObj = new Domain.Models.Course

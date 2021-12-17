@@ -12,9 +12,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.User.Commands.RemoveUser
+namespace Application.Features.User.Commands.DeleteUser
 {
-    public class RemoveUserCommandHandler : IRequestHandler<RemoveUserCommand>
+    public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
     {
         private readonly IDatabaseContext _context;
         
@@ -25,7 +25,7 @@ namespace Application.Features.User.Commands.RemoveUser
         private UserManager<BaseUser> _userManager { get; }
         private IMapper _mapper { get; }
 
-        public RemoveUserCommandHandler( IStringLocalizer<SharedResource> localizer,
+        public DeleteUserCommandHandler( IStringLocalizer<SharedResource> localizer,
             IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
             , IDatabaseContext context)
         {
@@ -35,7 +35,7 @@ namespace Application.Features.User.Commands.RemoveUser
             _userManager = userManager;
             _mapper = mapper;
         }
-        public async Task<Unit> Handle(RemoveUserCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
             var user = await _context.BaseUsers.FirstOrDefaultAsync(u => u.Id == request.UserId,
                                                                     cancellationToken);

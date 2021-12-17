@@ -14,6 +14,7 @@ using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
 namespace Application.Features.User.Commands.AddUser
@@ -74,6 +75,10 @@ namespace Application.Features.User.Commands.AddUser
                         });
                     break;
             }
+            
+            // get smiley.png(default avatar picture)
+            var smiley =
+                await _context.Files.FirstOrDefaultAsync(entity => entity.Id == "smiley.png", cancellationToken);
 
             BaseUser user = null;
             switch (request.UserType)
@@ -84,7 +89,8 @@ namespace Application.Features.User.Commands.AddUser
                         Email = request.Email.EmailNormalize(),
                         FirstName = request.FirstName,
                         LastName = request.LastName,
-                        InstructorId = request.Id
+                        InstructorId = request.Id,
+                        AvatarId = smiley.Id
                     };
                     break;
                 case UserType.Student:
@@ -93,7 +99,8 @@ namespace Application.Features.User.Commands.AddUser
                         Email = request.Email.EmailNormalize(),
                         FirstName = request.FirstName,
                         LastName = request.LastName,
-                        StudentId = request.Id
+                        StudentId = request.Id,
+                        AvatarId = smiley.Id
                     };
                     break;
                 case UserType.PROfficer:
@@ -101,7 +108,8 @@ namespace Application.Features.User.Commands.AddUser
                     {
                         Email = request.Email.EmailNormalize(),
                         FirstName = request.FirstName,
-                        LastName = request.LastName
+                        LastName = request.LastName,
+                        AvatarId = smiley.Id
                     };
                     break;
             }

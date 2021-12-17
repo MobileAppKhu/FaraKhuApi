@@ -12,7 +12,8 @@ namespace Infrastructure.Persistence.Configuration
             builder.Property(time => time.TimeId).ValueGeneratedOnAdd();
             builder.HasOne(time => time.Course)
                 .WithMany(course => course.Times)
-                .HasForeignKey(time => time.CourseId);
+                .HasForeignKey(time => time.CourseId)
+                .OnDelete(DeleteBehavior.Cascade);
             builder.Property(time => time.StartTime).IsRequired();
             builder.Property(time => time.EndTime).IsRequired();
         }

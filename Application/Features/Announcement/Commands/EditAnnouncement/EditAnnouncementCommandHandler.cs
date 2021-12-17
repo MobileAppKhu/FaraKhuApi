@@ -76,7 +76,7 @@ namespace Application.Features.Announcement.Commands.EditAnnouncement
 
             if (!string.IsNullOrWhiteSpace(request.Title))
             {
-                editingAnnouncement.AnnouncementTitle = request.AnnouncementId;
+                editingAnnouncement.AnnouncementTitle = request.Title;
             }
 
             if (!string.IsNullOrWhiteSpace(request.Department))
@@ -95,6 +95,22 @@ namespace Application.Features.Announcement.Commands.EditAnnouncement
 
                 editingAnnouncement.DepartmentId = request.Department;
                 editingAnnouncement.Department = departmentObj;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.AvatarId))
+            {
+                var avatar = await
+                    _context.Files.FirstOrDefaultAsync(entity => entity.Id == request.AvatarId, cancellationToken);
+                if (avatar == null)
+                {
+                    throw new CustomException(new Error
+                    {
+                        ErrorType = ErrorType.FileNotFound,
+                        Message = Localizer["FileNotFound"]
+                    });
+                }
+                editingAnnouncement.Avatar = avatar;
+                editingAnnouncement.AvatarId = request.AvatarId;
             }
 
             await _context.SaveChangesAsync(cancellationToken);
