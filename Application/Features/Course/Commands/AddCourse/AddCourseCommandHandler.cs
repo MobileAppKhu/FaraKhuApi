@@ -47,7 +47,10 @@ namespace Application.Features.Course.Commands.AddCourse
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            CourseType courseType = await _context.CourseTypes.FirstOrDefaultAsync(type => type.CourseTypeId == request.CourseTypeId,
+            CourseType courseType = await _context.CourseTypes
+                .Include(type => type.Department)
+                .ThenInclude(department => department.Faculty)
+                .FirstOrDefaultAsync(type => type.CourseTypeId == request.CourseTypeId,
                 cancellationToken);
             if (courseType == null)
             {

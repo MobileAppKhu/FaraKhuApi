@@ -42,7 +42,8 @@ namespace Application.Features.Course.Commands.EditCourse
                     Message = Localizer["Unauthorized"]
                 });
             var editingCourse =
-                await _context.Courses.Include(course => course.Students).Include(course => course.Times)
+                await _context.Courses.Include(course => course.Students)
+                    .Include(course => course.Times)
                     .Include(course => course.CourseEvents)
                     .Include(course => course.Instructor)
                     .Include(course => course.Polls)
@@ -65,6 +66,25 @@ namespace Application.Features.Course.Commands.EditCourse
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.CourseTypeId))
+            {
+                var courseType = await
+                    _context.CourseTypes.FirstOrDefaultAsync(type => type.CourseTypeId == request.CourseTypeId,
+                        cancellationToken);
+                if (courseType == null)
+                {
+                    throw new CustomException(new Error
+                    {
+                        ErrorType = ErrorType.CourseTypeNotFound,
+                        Message = Localizer["CourseTypeNotFound"]
+                    });
+                }
+
+                editingCourse.CourseType = courseType;
+                editingCourse.CourseTypeId = request.CourseTypeId;
+
             }
 
             if (request.AddStudentDto != null && request.AddStudentDto.StudentIds.Count != 0)
@@ -105,6 +125,26 @@ namespace Application.Features.Course.Commands.EditCourse
                     editingCourse.Students.Remove(student);
                 }
             }
+            
+            // delete time
+            if (request.DeleteTimeDto != null && request.DeleteTimeDto.TimeIds.Count != 0)
+            {
+                foreach (var time in editingCourse.Times)
+                {
+                    if (request.DeleteTimeDto.TimeIds.Contains(time.TimeId))
+                    {
+                        editingCourse.Times.Remove(time);
+                    }
+                    else
+                    {
+                        throw new CustomException(new Error
+                        {
+                            ErrorType = ErrorType.TimeNotFound,
+                            Message = Localizer["TimeNotFound"]
+                        });
+                    }
+                }
+            }
 
             // add time
             if (request.AddTimeDtos != null && request.AddTimeDtos.Count != 0)
@@ -123,26 +163,6 @@ namespace Application.Features.Course.Commands.EditCourse
                         EndTime = new DateTime(2000, 12, 25, Int32.Parse(endTime[0]),
                             Int32.Parse(endTime[1]), 0)
                     });
-                }
-            }
-
-            // delete time
-            if (request.DeleteTimeDto != null && request.DeleteTimeDto.TimeIds.Count != 0)
-            {
-                foreach (var time in editingCourse.Times)
-                {
-                    if (request.DeleteTimeDto.TimeIds.Contains(time.TimeId))
-                    {
-                        editingCourse.Times.Remove(time);
-                    }
-                    else
-                    {
-                        throw new CustomException(new Error
-                        {
-                            ErrorType = ErrorType.TimeNotFound,
-                            Message = Localizer["TimeNotFound"]
-                        });
-                    }
                 }
             }
 

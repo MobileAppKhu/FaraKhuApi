@@ -1,9 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Application.Features.User.Commands.AddFavourite;
 using Application.Features.User.Commands.AddUser;
-using Application.Features.User.Commands.RemoveFavourite;
 using Application.Features.User.Commands.DeleteUser;
-using Application.Features.User.Commands.UpdateFavourite;
 using Application.Features.User.Queries.GetUserId;
 using Application.Features.User.Queries.SearchAllEvents;
 using Application.Features.User.Queries.SearchProfile;
@@ -52,28 +49,6 @@ namespace WebApi.Controllers
             return Ok(await _mediator.Send(request));
         }
 
-        [HttpPost]
-        [Authorize]
-        [ProducesResponseType(typeof(AddFavouriteViewModel),200)]
-        public async Task<IActionResult> AddFavourite(AddFavouriteCommand request)
-        {
-            return Ok(await _mediator.Send(request));
-        }
-        
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> UpdateFavourite(UpdateFavouriteCommand request)
-        {
-            return Ok(await _mediator.Send(request));
-        }
-        
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> DeleteFavourite(RemoveFavouriteCommand request)
-        {
-            return Ok(await _mediator.Send(request));
-        }
-        
         [HttpPost]
         [Authorize]
         [ProducesResponseType(typeof(GetUserViewModel),200)]

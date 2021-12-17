@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Resources;
-using AutoMapper;
 using Domain.BaseModels;
 using Domain.Enum;
 using Domain.Models;
@@ -24,17 +23,15 @@ namespace Application.Features.Account.Commands.EditProfile
         private IStringLocalizer<SharedResource> Localizer { get; }
         private IHttpContextAccessor HttpContextAccessor { get; }
         private UserManager<BaseUser> UserManager { get; }
-        private IMapper _mapper { get; }
 
         public EditProfileCommandHandler(IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
+            IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager
             , IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
             HttpContextAccessor = httpContextAccessor;
             UserManager = userManager;
-            _mapper = mapper;
         }
 
         public async Task<Unit> Handle(EditProfileCommand request, CancellationToken cancellationToken)

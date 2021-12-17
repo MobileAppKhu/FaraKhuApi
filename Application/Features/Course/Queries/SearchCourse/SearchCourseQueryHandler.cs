@@ -53,7 +53,10 @@ namespace Application.Features.Course.Queries.SearchCourse
                 .Include(course => course.Instructor)
                 .Include(course => course.Students)
                 .Include(course => course.Polls)
-                .Include(course => course.Times);
+                .Include(course => course.Times)
+                .Include(course => course.CourseType)
+                .ThenInclude(type => type.Department)
+                .ThenInclude(department => department.Faculty);
 
             if (!string.IsNullOrWhiteSpace(request.CourseId))
             {
@@ -94,9 +97,6 @@ namespace Application.Features.Course.Queries.SearchCourse
             if (request.EndDate != null)
             {
                 coursesQueryable = coursesQueryable.Where(course => course.EndDate == request.EndDate);
-            }
-            {
-                
             }
 
             switch (request.CourseColumn)
