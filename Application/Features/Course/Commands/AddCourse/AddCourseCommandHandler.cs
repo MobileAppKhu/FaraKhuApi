@@ -53,8 +53,8 @@ namespace Application.Features.Course.Commands.AddCourse
             {
                 throw new CustomException(new Error
                 {
-                    ErrorType = ErrorType.CourseNotFound,
-                    Message = Localizer["CourseNotFound"]
+                    ErrorType = ErrorType.CourseTypeNotFound,
+                    Message = Localizer["CourseTypeNotFound"]
                 });
             }
             Domain.Models.Course courseObj = new Domain.Models.Course

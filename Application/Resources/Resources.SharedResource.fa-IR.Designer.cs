@@ -169,6 +169,15 @@ namespace Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to علاقه مندی یافت نشد.
+        /// </summary>
+        internal static string FavouriteNotFound {
+            get {
+                return ResourceManager.GetString("FavouriteNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to نام ضروری است.
         /// </summary>
         internal static string FirstnameRequired {

@@ -2,11 +2,11 @@
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.User.Commands.RemoveUser
+namespace Application.Features.User.Commands.DeleteUser
 {
-    public class RemoveUserCommandValidator : AbstractValidator<RemoveUserCommand>
+    public class DeleteUserCommandValidator : AbstractValidator<DeleteUserCommand>
     {
-        public RemoveUserCommandValidator(IStringLocalizer<SharedResource> localizer)
+        public DeleteUserCommandValidator(IStringLocalizer<SharedResource> localizer)
         {
             RuleFor(r => r.UserId)
                 .NotEmpty()
