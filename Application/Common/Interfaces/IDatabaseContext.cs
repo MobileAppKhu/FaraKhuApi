@@ -25,6 +25,6 @@ namespace Application.Common.Interfaces
         public DbSet<PollAnswer> PollAnswers { get; set; }
         public DbSet<FileEntity> Files { get; set; }
         public DbSet<Favourite> Favourites { get; set; }
-        public DbSet<>
+        public DbSet<Comment> Comments { get; set; }
     }
 }
