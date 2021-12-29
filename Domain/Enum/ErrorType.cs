@@ -29,7 +29,7 @@
         CourseTypeNotFound,
         DepartmentNotFound,
         AnnouncementNotFound,
-        InstructorNotFound,
-        FavouriteNotFound
+        FavouriteNotFound,
+        NotificationNotFound
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.DTOs.CourseEvent;
+using Application.Features.Notification.SystemCallCommands;
 using Application.Resources;
 using AutoMapper;
 using Domain.BaseModels;
@@ -53,6 +54,7 @@ namespace Application.Features.CourseEvent.Commands.AddCourseEvent
             Domain.Models.Course courseObj = _context.Courses
                 .Include(c => c.CourseEvents)
                 .Include(c => c.Instructor)
+                .Include(c => c. Students)
                 .FirstOrDefault(c => c.CourseId == request.CourseId);
             
             if (courseObj == null)
@@ -82,8 +84,17 @@ namespace Application.Features.CourseEvent.Commands.AddCourseEvent
                 CourseId = request.CourseId,
                 EventTime = request.EventTime
             };
-            
+
             await _context.CourseEvents.AddAsync(courseEvent, cancellationToken);
+            
+            foreach (var student in courseObj.Students)
+            {
+                NotificationAdder.AddNotification(_context,
+                    Localizer["YouHaveANewCourseEvent"],
+                    courseEvent.CourseEventId, NotificationObjectType.CourseEvent,
+                    NotificationOperation.NewCourseEvent, student);
+            }
+            
             await _context.SaveChangesAsync(cancellationToken);
             return new AddCourseEventViewModel
             {

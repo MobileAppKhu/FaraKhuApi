@@ -8,6 +8,7 @@ using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.DTOs.Course;
 using Application.DTOs.Time;
+using Application.Features.Notification.SystemCallCommands;
 using Application.Resources;
 using AutoMapper;
 using Domain.BaseModels;
@@ -28,7 +29,7 @@ namespace Application.Features.Course.Commands.AddCourse
         private IHttpContextAccessor HttpContextAccessor { get; }
         private IMapper Mapper { get; }
 
-        public AddCourseCommandHandler( IStringLocalizer<SharedResource> localizer,
+        public AddCourseCommandHandler(IStringLocalizer<SharedResource> localizer,
             IHttpContextAccessor httpContextAccessor, IMapper mapper
             , IDatabaseContext context)
         {
@@ -37,11 +38,12 @@ namespace Application.Features.Course.Commands.AddCourse
             HttpContextAccessor = httpContextAccessor;
             Mapper = mapper;
         }
+
         public async Task<AddCourseViewModel> Handle(AddCourseCommand request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             Instructor user = _context.Instructors.FirstOrDefault(u => u.Id == userId);
-            if(user == null)
+            if (user == null)
                 throw new CustomException(new Error
                 {
                     ErrorType = ErrorType.Unauthorized,
@@ -51,7 +53,7 @@ namespace Application.Features.Course.Commands.AddCourse
                 .Include(type => type.Department)
                 .ThenInclude(department => department.Faculty)
                 .FirstOrDefaultAsync(type => type.CourseTypeId == request.CourseTypeId,
-                cancellationToken);
+                    cancellationToken);
             if (courseType == null)
             {
                 throw new CustomException(new Error
@@ -60,6 +62,7 @@ namespace Application.Features.Course.Commands.AddCourse
                     Message = Localizer["CourseTypeNotFound"]
                 });
             }
+
             Domain.Models.Course courseObj = new Domain.Models.Course
             {
                 CourseTypeId = request.CourseTypeId,
@@ -69,9 +72,10 @@ namespace Application.Features.Course.Commands.AddCourse
                 EndDate = request.EndDate
             };
             await _context.Courses.AddAsync(courseObj, cancellationToken);
-            
+
             List<Student> students =
-                _context.Students.Include(student => student.Courses).Where(student => request.AddStudentDto.StudentIds.Contains(student.StudentId)).ToList();
+                _context.Students.Include(student => student.Courses)
+                    .Where(student => request.AddStudentDto.StudentIds.Contains(student.StudentId)).ToList();
             if (students.Count != request.AddStudentDto.StudentIds.Count)
             {
                 throw new CustomException(new Error
@@ -84,6 +88,10 @@ namespace Application.Features.Course.Commands.AddCourse
             foreach (var student in students)
             {
                 student.Courses.Add(courseObj);
+                NotificationAdder.AddNotification(_context,
+                    Localizer["YouHaveBeenAddedToACourse"],
+                    courseObj.CourseId, NotificationObjectType.Course, NotificationOperation.AddStudentToCourse,
+                    student);
             }
 
             foreach (var time in request.AddTimeDtos)
@@ -94,13 +102,12 @@ namespace Application.Features.Course.Commands.AddCourse
                 {
                     Course = courseObj,
                     CourseId = courseObj.CourseId,
-                    StartTime = new DateTime(2000,12,25,Int32.Parse(startTimes[0]), Int32.Parse(startTimes[1]), 0),
-                    EndTime = new DateTime(2000,12,25,Int32.Parse(endTime[0]), Int32.Parse(endTime[1]),0),
+                    StartTime = new DateTime(2000, 12, 25, Int32.Parse(startTimes[0]), Int32.Parse(startTimes[1]), 0),
+                    EndTime = new DateTime(2000, 12, 25, Int32.Parse(endTime[0]), Int32.Parse(endTime[1]), 0),
                     WeekDay = time.WeekDay
-                    
                 }, cancellationToken);
             }
-            
+
             foreach (var timei in courseObj.Times)
             {
                 foreach (var timej in courseObj.Times)
@@ -109,6 +116,7 @@ namespace Application.Features.Course.Commands.AddCourse
                     {
                         continue;
                     }
+
                     if ((timei.WeekDay == timej.WeekDay) &&
                         ((timei.StartTime < timej.StartTime && timei.EndTime > timej.StartTime) ||
                          (timei.EndTime > timej.EndTime && timei.StartTime < timej.EndTime)))

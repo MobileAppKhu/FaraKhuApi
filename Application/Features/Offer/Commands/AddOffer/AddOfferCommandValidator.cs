@@ -1,5 +1,4 @@
 ﻿using Application.Resources;
-using Domain.Enum;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 

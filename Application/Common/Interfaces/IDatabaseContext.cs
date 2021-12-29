@@ -29,5 +29,6 @@ namespace Application.Common.Interfaces
         public DbSet<Department> Departments { get; set; }
         public DbSet<CourseType> CourseTypes { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
     }
 }

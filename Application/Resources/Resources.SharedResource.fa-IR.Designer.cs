@@ -268,6 +268,15 @@ namespace Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to اطلاعیه یافت نشد.
+        /// </summary>
+        internal static string NotificationNotFound {
+            get {
+                return ResourceManager.GetString("NotificationNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to آگهی یافت نشد.
         /// </summary>
         internal static string OfferNotFound {
@@ -426,6 +435,42 @@ namespace Application.Resources {
         internal static string Wednesday {
             get {
                 return ResourceManager.GetString("Wednesday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to شما یک رخداد درسی جدید دارید.
+        /// </summary>
+        internal static string YouHaveANewCourseEvent {
+            get {
+                return ResourceManager.GetString("YouHaveANewCourseEvent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to شما به یک درس جدید اضافه شده اید.
+        /// </summary>
+        internal static string YouHaveBeenAddedToACourse {
+            get {
+                return ResourceManager.GetString("YouHaveBeenAddedToACourse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to تیکت شما مورد بررسی قرار گرفت و مشکل رفع گردید.
+        /// </summary>
+        internal static string YourTicketHasBeenSolved {
+            get {
+                return ResourceManager.GetString("YourTicketHasBeenSolved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to تیکت شما درحال بررسی است.
+        /// </summary>
+        internal static string YourTicketIsInProgress {
+            get {
+                return ResourceManager.GetString("YourTicketIsInProgress", resourceCulture);
             }
         }
     }

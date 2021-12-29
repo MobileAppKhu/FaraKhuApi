@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Application.DTOs.Offer;
 using AutoMapper;
+using Domain.Enum;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -34,6 +35,43 @@ namespace Application.Features.Offer.Queries.SearchOffers
             if (request.OfferType != 0)
             {
                 offerQueryable = offerQueryable.Where(offer => offer.OfferType == request.OfferType);
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.User))
+            {
+                offerQueryable = offerQueryable.Where(offer => offer.UserId == request.User);
+            }
+
+            switch (request.OfferColumn)
+            {
+                case OfferColumn.OfferId:
+                    offerQueryable = request.OrderDirection
+                        ? offerQueryable.OrderBy(offer => offer.OfferId)
+                        : offerQueryable.OrderByDescending(offer => offer.OfferId);
+                    break;
+                case OfferColumn.Title:
+                    offerQueryable = request.OrderDirection
+                        ? offerQueryable.OrderBy(offer => offer.Title).ThenBy(offer => offer.OfferId) 
+                        : offerQueryable.OrderByDescending(offer => offer.Title).ThenByDescending(offer => offer.AvatarId);
+                    break;
+                case OfferColumn.Description:
+                    offerQueryable = request.OrderDirection
+                        ? offerQueryable.OrderBy(offer => offer.Description).ThenBy(offer => offer.OfferId)
+                        : offerQueryable.OrderByDescending(offer => offer.Description)
+                            .ThenByDescending(offer => offer.OfferId);
+                    break;
+                case OfferColumn.OfferType:
+                    offerQueryable = request.OrderDirection
+                        ? offerQueryable.OrderBy(offer => offer.OfferType).ThenBy(offer => offer.OfferId)
+                        : offerQueryable.OrderByDescending(offer => offer.OfferType)
+                            .ThenByDescending(offer => offer.OfferId);
+                    break;
+                case OfferColumn.Price:
+                    offerQueryable = request.OrderDirection
+                        ? offerQueryable.OrderBy(offer => offer.Price).ThenBy(offer => offer.OfferId)
+                        : offerQueryable.OrderByDescending(offer => offer.Price)
+                            .ThenByDescending(offer => offer.OfferId);
+                    break;
             }
 
             int searchLength = await offerQueryable.CountAsync(cancellationToken);

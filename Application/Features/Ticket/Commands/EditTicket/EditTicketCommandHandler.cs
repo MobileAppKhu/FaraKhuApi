@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Features.Notification.SystemCallCommands;
 using Application.Resources;
 using AutoMapper;
 using Domain.BaseModels;
@@ -42,7 +43,8 @@ namespace Application.Features.Ticket.Commands.EditTicket
             }
 
             var editingTicket =
-                await _context.Tickets.FirstOrDefaultAsync(ticket => ticket.TicketId == request.TicketId, cancellationToken);
+                await _context.Tickets.Include(ticket => ticket.Creator)
+                    .FirstOrDefaultAsync(ticket => ticket.TicketId == request.TicketId, cancellationToken);
             
             if (userId != editingTicket.CreatorId && user.UserType != UserType.Owner)
             {
@@ -71,6 +73,18 @@ namespace Application.Features.Ticket.Commands.EditTicket
             if (request.TicketStatus != null && user.UserType == UserType.Owner)
             {
                 editingTicket.Status = (TicketStatus)request.TicketStatus;
+                if (request.TicketStatus == TicketStatus.InProgress)
+                {
+                    NotificationAdder.AddNotification(_context, Localizer["YourTicketIsInProgress"],
+                        editingTicket.TicketId, NotificationObjectType.Ticket, NotificationOperation.TicketImprovement,
+                        editingTicket.Creator);
+                }
+                if (request.TicketStatus == TicketStatus.Solved)
+                {
+                    NotificationAdder.AddNotification(_context, Localizer["YourTicketHasBeenSolved"],
+                        editingTicket.TicketId, NotificationObjectType.Ticket, NotificationOperation.TicketImprovement,
+                        editingTicket.Creator);
+                }
             }
             
             await _context.SaveChangesAsync(cancellationToken);
