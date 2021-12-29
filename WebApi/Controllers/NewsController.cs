@@ -1,7 +1,11 @@
 ﻿using System.Threading.Tasks;
+using Application.Features.News.Commands.AddComment;
 using Application.Features.News.Commands.AddNews;
+using Application.Features.News.Commands.CommentApproval;
 using Application.Features.News.Commands.DeleteNews;
 using Application.Features.News.Commands.EditNews;
+using Application.Features.News.Commands.RemoveNews;
+using Application.Features.News.Queries.GetComments;
 using Application.Features.News.Queries.SearchNews;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -44,6 +48,31 @@ namespace WebApi.Controllers
         
         [HttpPost]
         public async Task<IActionResult> EditNews(EditNewsCommand request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddComment(AddCommentCommand request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetComments(CommentsQuery request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "OwnerPolicy")]
+        public async Task<IActionResult> CommentApproval(CommentApprovalCommand request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveComment(RemoveCommentCommand request)
         {
             return Ok(await _mediator.Send(request));
         }

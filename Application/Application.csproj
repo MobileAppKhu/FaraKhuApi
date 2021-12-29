@@ -6,6 +6,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Domain\Domain.csproj" />
+      <ProjectReference Include="..\Utilities\Utilities.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -35,6 +36,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="DTOs\Comment" />
       <Folder Include="Features\Account\Commands" />
       <Folder Include="Features\File\Commands" />
       <Folder Include="Features\File\Queries" />
