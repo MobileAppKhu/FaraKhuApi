@@ -22,6 +22,7 @@ namespace Application.DTOs.Course
         public SearchCourseInstructorDto Instructor { get; set; }
 
         public ICollection<SearchCourseCourseEventDto> CourseEvents { get; set; }
+        public string AvatarId { get; set; }
         public int AvailablePolls { get; set; }
         public void Mapping(Profile profile)
         {

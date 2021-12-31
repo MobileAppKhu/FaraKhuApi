@@ -68,11 +68,12 @@ namespace Application.Features.Account.SignIn
                     ErrorType = ErrorType.InvalidInput,
                     Message = _localizer["InvalidInput"]
                 });
-
-            return new SignInViewModel
+            var signInViewModel = new SignInViewModel
             {
                 ProfileDto = _mapper.Map<ProfileDto>(user)
             };
+            signInViewModel.ProfileDto.Roles = _userManager.GetRolesAsync(user).Result.ToArray();
+            return signInViewModel;
         }
     }
 }

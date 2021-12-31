@@ -156,4 +156,7 @@
     <data name="YourTicketHasBeenSolved" xml:space="preserve">
         <value>تیکت شما مورد بررسی قرار گرفت و مشکل رفع گردید</value>
     </data>
+    <data name="FileNotFound" xml:space="preserve">
+        <value>فایل مورد نظر یافت نشد</value>
+    </data>
 </root>

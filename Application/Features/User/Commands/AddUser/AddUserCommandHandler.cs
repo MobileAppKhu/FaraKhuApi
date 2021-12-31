@@ -90,7 +90,8 @@ namespace Application.Features.User.Commands.AddUser
                         FirstName = request.FirstName,
                         LastName = request.LastName,
                         InstructorId = request.Id,
-                        AvatarId = smiley.Id
+                        AvatarId = smiley.Id,
+                        EmailConfirmed = true
                     };
                     break;
                 case UserType.Student:
@@ -100,7 +101,8 @@ namespace Application.Features.User.Commands.AddUser
                         FirstName = request.FirstName,
                         LastName = request.LastName,
                         StudentId = request.Id,
-                        AvatarId = smiley.Id
+                        AvatarId = smiley.Id,
+                        EmailConfirmed = true
                     };
                     break;
                 case UserType.PROfficer:
@@ -109,7 +111,8 @@ namespace Application.Features.User.Commands.AddUser
                         Email = request.Email.EmailNormalize(),
                         FirstName = request.FirstName,
                         LastName = request.LastName,
-                        AvatarId = smiley.Id
+                        AvatarId = smiley.Id,
+                        EmailConfirmed = true
                     };
                     break;
             }

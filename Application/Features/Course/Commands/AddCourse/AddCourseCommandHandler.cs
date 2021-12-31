@@ -130,6 +130,17 @@ namespace Application.Features.Course.Commands.AddCourse
                 }
             }
 
+            var avatarObj =
+                await _context.Files.FirstOrDefaultAsync(avatar => avatar.Id == request.AvatarId, cancellationToken);
+            if (avatarObj == null)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.FileNotFound,
+                    Message = Localizer["FileNotFound"]
+                });
+            }
+
             await _context.SaveChangesAsync(cancellationToken);
             return new AddCourseViewModel
             {

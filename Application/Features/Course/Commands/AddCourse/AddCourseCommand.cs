@@ -14,5 +14,6 @@ namespace Application.Features.Course.Commands.AddCourse
         public List<AddTimeDto> AddTimeDtos { get; set; }
         public AddStudentDto AddStudentDto { get; set; }
         public DateTime EndDate { get; set; }
+        public string AvatarId { get; set; }
     }
 }

@@ -7,6 +7,7 @@ using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.DTOs.Offer;
 using Application.DTOs.Poll;
+using Application.Features.Notification.SystemCallCommands;
 using Application.Resources;
 using AutoMapper;
 using Domain.BaseModels;
@@ -50,8 +51,11 @@ namespace Application.Features.Poll.Commands.AddQuestion
                 });
             }
 
-            var course = await _context.Courses.Include(c => c.Instructor)
-                .Include(c => c.Polls).FirstOrDefaultAsync(c => c.CourseId == request.CourseId
+            var course = await _context.Courses
+                .Include(c => c.Instructor)
+                .Include(c => c.Polls)
+                .Include(c => c.Students)
+                .FirstOrDefaultAsync(c => c.CourseId == request.CourseId
                 , cancellationToken);
 
             if (course.Instructor != user)
@@ -80,6 +84,15 @@ namespace Application.Features.Poll.Commands.AddQuestion
                 });
             }
             await _context.PollQuestions.AddAsync(poll, cancellationToken);
+            
+            foreach (var student in course.Students)
+            {
+                NotificationAdder.AddNotification(_context,
+                    Localizer["YouHaveANewCourseEvent"],
+                    poll.QuestionId, NotificationObjectType.Poll,
+                    NotificationOperation.NewPoll, student);
+            }
+            
             await _context.SaveChangesAsync(cancellationToken);
 
             return new AddQuestionViewModel

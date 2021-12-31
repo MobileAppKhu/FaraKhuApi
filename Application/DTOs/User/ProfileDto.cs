@@ -16,6 +16,7 @@ namespace Application.DTOs.User
         public string UserType { get; set; }
         public string Email { get; set; }
         public string AvatarId { get; set; }
+        public string[] Roles { get; set; }
         public ICollection<FavouriteDto> Favourites { get; set; }
         public void Mapping(Profile profile)
         {

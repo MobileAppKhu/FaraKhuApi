@@ -1,5 +1,4 @@
-﻿using System.Data;
-using Application.Resources;
+﻿using Application.Resources;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
@@ -19,6 +18,9 @@ namespace Application.Features.Course.Commands.AddCourse
                 .NotEmpty()
                 .WithMessage(localizer["NotEmpty"]);
             RuleFor(r => r.AddStudentDto)
+                .NotEmpty()
+                .WithMessage(localizer["NotEmpty"]);
+            RuleFor(r => r.AvatarId)
                 .NotEmpty()
                 .WithMessage(localizer["NotEmpty"]);
         }

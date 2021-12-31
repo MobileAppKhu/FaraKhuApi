@@ -1,10 +1,5 @@
 ﻿using Application.Common.Mappings;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.DTOs.Announcement
 {
@@ -15,8 +10,10 @@ namespace Application.DTOs.Announcement
         public string AnnouncementDescription { get; set; }
         public string Department { get; set; }
         public string Faculty { get; set; }
-        
+
         public string UserFullname { get; set; }
+        public string CreatorAvatarId { get; set; }
+        public string AvatarId { get; set; }
 
         public void Mapping(Profile profile)
         {
@@ -29,7 +26,10 @@ namespace Application.DTOs.Announcement
                         opt.MapFrom(src => src.Department.DepartmentTitle))
                 .ForMember(a => a.Faculty,
                     opt =>
-                        opt.MapFrom(src => src.Department.Faculty.FacultyTitle));
+                        opt.MapFrom(src => src.Department.Faculty.FacultyTitle))
+                .ForMember(a => a.CreatorAvatarId,
+                    opt =>
+                        opt.MapFrom(src => src.BaseUser.AvatarId));
         }
     }
 }

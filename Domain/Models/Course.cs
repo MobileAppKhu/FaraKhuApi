@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Domain.BaseModels;
 using Domain.Enum;
 
 namespace Domain.Models
@@ -16,5 +17,7 @@ namespace Domain.Models
         public DateTime EndDate { get; set; }
         public string CourseTypeId { get; set; }
         public CourseType CourseType { get; set; }
+        public FileEntity Avatar { get; set; }
+        public string AvatarId { get; set; }
     }
 }
