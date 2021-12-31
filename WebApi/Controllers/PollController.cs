@@ -24,19 +24,19 @@ namespace WebApi.Controllers
         [HttpPost]
         [Authorize(Policy = "InstructorPolicy")]
         [ProducesResponseType(typeof(AddQuestionViewModel), 200)]
-        public async Task<IActionResult> CreatePollQuestion(AddQuestionCommand request)
+        public async Task<IActionResult> AddPollQuestion(AddQuestionCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
         [HttpPost]
         [Authorize(Policy = "InstructorPolicy")]
-        public async Task<IActionResult> RemovePollQuestion(RemoveQuestionCommand request)
+        public async Task<IActionResult> DeletePollQuestion(RemoveQuestionCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
         [HttpPost]
         [Authorize(Policy = "InstructorPolicy")]
-        public async Task<IActionResult> UpdatePollQuestion(EditQuestionCommand request)
+        public async Task<IActionResult> EditPollQuestion(EditQuestionCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
