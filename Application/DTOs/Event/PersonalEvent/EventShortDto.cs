@@ -10,7 +10,6 @@ namespace Application.DTOs.Event.PersonalEvent
     {
         public string EventId { get; set; }
         public string EventName { get; set; }
-
         public DateTime EventTime { get; set; }
 
         public void Mapping(Profile profile)

@@ -17,5 +17,6 @@ namespace Domain.Models
         public BaseUser User { get; set; }
 
         public string UserId { get; set; }
+        public bool isDone { get; set; }
     }
 }

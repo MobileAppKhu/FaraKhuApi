@@ -76,6 +76,10 @@ namespace Application.Features.Event.Commands.EditEvent
             {
                 eventObj.EventTime = DateTimeOffset.Parse(request.EventTime).Date;
             }
+            if (request.changingIsDone)
+            {
+                eventObj.isDone = !eventObj.isDone;
+            }
 
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;

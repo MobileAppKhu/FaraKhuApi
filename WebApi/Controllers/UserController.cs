@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Application.Features.Event.Queries.GetIncomingEvent;
 using Application.Features.User.Commands.AddUser;
 using Application.Features.User.Commands.DeleteUser;
 using Application.Features.User.Queries.GetUserId;
@@ -53,6 +54,14 @@ namespace WebApi.Controllers
         [Authorize]
         [ProducesResponseType(typeof(GetUserViewModel),200)]
         public async Task<IActionResult> GetUserId(GetUserIdQuery request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        
+        [HttpPost]
+        [Authorize]
+        [ProducesResponseType(typeof(GetIncomingEventViewModel),200)]
+        public async Task<IActionResult> GetIncomingEvents(GetIncomingEventQuery request)
         {
             return Ok(await _mediator.Send(request));
         }

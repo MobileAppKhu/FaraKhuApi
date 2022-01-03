@@ -51,7 +51,8 @@ namespace Application.Features.Event.Commands.AddEvent
                 EventDescription = request.EventDescription,
                 EventTime = request.EventTime,
                 User =  user,
-                UserId = user.Id
+                UserId = user.Id,
+                isDone = false
             };
             await _context.Events.AddAsync(eventObj, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
