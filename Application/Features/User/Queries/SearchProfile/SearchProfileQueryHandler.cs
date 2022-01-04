@@ -22,7 +22,7 @@ namespace Application.Features.User.Queries.SearchProfile
         public IStringLocalizer<SharedResource> Localizer { get; }
         private IHttpContextAccessor HttpContextAccessor { get; }
         private readonly IDatabaseContext _context;
-        public SearchProfileQueryHandler(IMapper mapper, UserManager<BaseUser> userManager,
+        public SearchProfileQueryHandler(IMapper mapper,
             IStringLocalizer<SharedResource> localizer, IHttpContextAccessor httpContextAccessor
             , IDatabaseContext context)
         {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
@@ -7,7 +6,6 @@ using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.DTOs.User;
-using Application.Features.User.Queries.SearchAllEvents;
 using Application.Resources;
 using AutoMapper;
 using Domain.BaseModels;

@@ -5,6 +5,7 @@ using Application.Features.User.Commands.DeleteUser;
 using Application.Features.User.Queries.GetUserId;
 using Application.Features.User.Queries.SearchAllEvents;
 using Application.Features.User.Queries.SearchProfile;
+using Application.Features.User.Queries.SearchStudent;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -62,6 +63,14 @@ namespace WebApi.Controllers
         [Authorize]
         [ProducesResponseType(typeof(GetIncomingEventViewModel),200)]
         public async Task<IActionResult> GetIncomingEvents(GetIncomingEventQuery request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        
+        [HttpPost]
+        [Authorize(Policy = "InstructorPolicy")]
+        [ProducesResponseType(typeof(SearchStudentQueryValidator),200)]
+        public async Task<IActionResult> SearchStudent(SearchStudentQuery request)
         {
             return Ok(await _mediator.Send(request));
         }
