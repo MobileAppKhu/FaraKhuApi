@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.Features.Notification.SystemCallCommands;
 using Application.Resources;
 using Domain.BaseModels;
 using Domain.Enum;
@@ -103,6 +104,10 @@ namespace Application.Features.Course.Commands.EditCourse
                 foreach (var student in addStudents)
                 {
                     editingCourse.Students.Add(student);
+                    NotificationAdder.AddNotification(_context,
+                        Localizer["YouHaveBeenAddedToACourse"],
+                        editingCourse.CourseId, NotificationObjectType.Course, NotificationOperation.AddStudentToCourse,
+                        student);
                 }
             }
 

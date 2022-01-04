@@ -2,8 +2,8 @@
 {
     public enum TicketPriority
     {
-        Normal,
-        Important,
-        Urgent
+        Normal = 1,
+        Important = 2,
+        Urgent = 3
     }
 }

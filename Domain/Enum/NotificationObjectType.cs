@@ -2,10 +2,10 @@
 {
     public enum NotificationObjectType
     {
-        Course,
-        CourseEvent,
-        Poll,
-        Ticket,
-        InstructorMessage
+        Course = 1,
+        CourseEvent = 2,
+        Poll = 3,
+        Ticket = 4,
+        InstructorMessage = 5
     }
 }

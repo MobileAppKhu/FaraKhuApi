@@ -2,9 +2,9 @@
 {
     public enum NotificationMessage
     {
-        YouHaveBeenAddedToACourse,
-        YouHaveANewCourseEvent,
-        YourTicketIsInProgress,
-        YourTicketHasBeenSolved
+        YouHaveBeenAddedToACourse = 1,
+        YouHaveANewCourseEvent = 2,
+        YourTicketIsInProgress = 3,
+        YourTicketHasBeenSolved = 4
     }
 }

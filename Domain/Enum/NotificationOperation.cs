@@ -2,10 +2,10 @@
 {
     public enum NotificationOperation
     {
-        AddStudentToCourse,
-        NewCourseEvent,
-        NewPoll,
-        InstructorMessage,
-        TicketImprovement
+        AddStudentToCourse = 1,
+        NewCourseEvent = 2,
+        NewPoll = 3,
+        InstructorMessage = 4,
+        TicketImprovement = 5
     }
 }

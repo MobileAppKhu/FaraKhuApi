@@ -2,8 +2,8 @@
 {
     public enum TicketStatus
     {
-        Init,
-        InProgress,
-        Solved
+        Init = 1,
+        InProgress = 2,
+        Solved = 3
     }
 }

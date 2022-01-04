@@ -2,10 +2,10 @@
 {
     public enum CourseEventType
     {
-        Quiz,
-        Exam,
-        Assignment,
-        Presentation,
-        Custom
+        Quiz = 1,
+        Exam = 2,
+        Assignment = 3,
+        Presentation = 4,
+        Custom = 5
     }
 }

@@ -1,0 +1,173 @@
+﻿{
+  "AnnouncementColumn": {
+    "description": "Can be used while ordering result of announcement search",
+    "value": {
+      "AnnouncementId": 1,
+      "Title": 2,
+      "Description": 3,
+      "DepartmentId": 4,
+      "UserId": 5
+    }
+  },
+  "CommentQueryOption": {
+    "description": "Can be used while getting comments",
+    "value": {
+      "All": 1,
+      "ByNews": 2,
+      "ByUser": 3
+    }
+  },
+  "CommentStatus": {
+    "description": "Comments are unapproved at the beginning until admin approve or reject them",
+    "value": {
+      "Unapproved": 1,
+      "Approved": 2,
+      "Rejected": 3
+    }
+  },
+  "CourseColumn": {
+    "description": "Can be used while ordering result of course search",
+    "value": {
+      "CourseId": 1,
+      "CourseTypeId": 2,
+      "EndDate": 3,
+      "InstructorId": 4
+    }
+  },
+  "ErrorType": {
+    "description": "ErrorType that back-end responds when it happens",
+    "value": {
+      "DuplicateUser": 0,
+      "Unexpected": 1,
+      "InvalidInput": 2,
+      "UserNotFound": 3,
+      "Unauthorized": 4,
+      "CourseNotFound": 5,
+      "EmailNotFound": 6,
+      "CourseEventNotFound": 7,
+      "UnauthorizedResetPassword": 8,
+      "UnauthorizedValidation": 9,
+      "EmailServiceException": 10,
+      "DuplicatePassword": 11,
+      "InvalidPassword": 12,
+      "NewsNotFound": 13,
+      "PollIsNotOpen": 14,
+      "FileNotFound": 15,
+      "EventNotFound": 16,
+      "InvalidValidationToken": 17,
+      "AnswerNotFound": 18,
+      "QuestionNotFound": 19,
+      "OfferNotFound": 20,
+      "StudentNotFound": 21,
+      "TimeConflict": 22,
+      "TimeNotFound": 23,
+      "CourseTypeNotFound": 24,
+      "DepartmentNotFound": 25,
+      "AnnouncementNotFound": 26,
+      "FavouriteNotFound": 27,
+      "CommentNotFound": 28,
+      "NotificationNotFound": 29
+    }
+  },
+  "EventColumn": {
+    "description": "Can be used while ordering result of event search",
+    "value": {
+      "EventId" : 1,
+      "EventName" : 2,
+      "EventDescription" : 3,
+      "EventTime" : 4
+    }
+  },
+  "NewsColumn": {
+    "description": "Can be used while ordering result of news search",
+    "value": {
+      "NewsId" : 1,
+      "Title" : 2,
+      "Description" : 3
+    }
+  },
+  "NotificationObjectType": {
+    "description": "Specifies that what kind of object is notification pointing too",
+    "value": {
+      "Course" : 1,
+      "CourseEvent" : 2,
+      "Poll" : 3,
+      "Ticket" : 4,
+      "InstructorMessage" : 5
+    }
+  },
+  "NotificationOperation": {
+    "description": "Specifies that why this notification has fired",
+    "value": {
+      "AddStudentToCourse" : 1,
+      "NewCourseEvent" : 2,
+      "NewPoll" : 3,
+      "InstructorMessage" : 4,
+      "TicketImprovement" : 5
+    }
+  },
+  "OfferColumn": {
+    "description": "Can be used while ordering result of offer search",
+    "value": {
+      "OfferId" : 1,
+      "Title" : 2,
+      "Description" : 3,
+      "OfferType" : 4,
+      "Price" : 5
+    }
+  },
+  "OfferType": {
+    "description": "",
+    "value": {
+      "Buy" : 1,
+      "Sell" : 2
+    }
+  },
+  "TicketColumn": {
+    "description": "Can be used while ordering result of ticket search",
+    "value": {
+      "TicketId" : 1,
+      "Description" : 2,
+      "Priority" : 3,
+      "Status" : 4,
+      "DeadLine" : 5
+    }
+  },
+  "TicketPriority": {
+    "description": "User can specify how important their ticket is",
+    "value": {
+      "Normal" : 1,
+      "Important" : 2,
+      "Urgent" : 3
+    }
+  },
+  "TicketStatus": {
+    "description": "",
+    "value": {
+      "Init" : 1,
+      "InProgress" : 2,
+      "Solved" : 3
+    }
+  },
+  "UserType": {
+    "description": "",
+    "value": {
+      "Instructor" : 1,
+      "Student" : 2,
+      "PROfficer" : 3,
+      "Owner" : 4
+    }
+  },
+  "WeekDay": {
+    "description": "",
+    "value": {
+      "Saturday": 0,
+      "Sunday": 1,
+      "Monday": 2,
+      "Tuesday": 3,
+      "Wednesday": 4,
+      "Thursday": 5,
+      "Friday": 6
+    }
+  }
+}
