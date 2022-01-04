@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
@@ -51,16 +52,15 @@ namespace Application.Features.Event.Queries.GetIncomingEvent
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
+            var serverTime = DateTime.Now;
             BaseUser baseUser = await _context.BaseUsers.Include(bu => bu.Events)
                 .FirstOrDefaultAsync(bu => bu.Id == userId, cancellationToken);
-            baseUser.Events = baseUser.Events.Where(e => e.isDone == false).ToList();
-            var count = baseUser.Events.Count;
-            baseUser.Events = baseUser.Events.Skip(request.Start).Take(request.Step).ToList();
+            baseUser.Events = baseUser.Events.Where(e => e.isDone == false && e.EventTime.CompareTo(serverTime) > 0)
+                .OrderBy(e => e.EventTime).Take(3).ToList();
 
             return new GetIncomingEventViewModel
             {
                 Events = _mapper.Map<IncomingEventDto>(baseUser),
-                Count = count
             };
         }
     }
