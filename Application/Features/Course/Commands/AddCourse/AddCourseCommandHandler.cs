@@ -49,7 +49,7 @@ namespace Application.Features.Course.Commands.AddCourse
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            CourseType courseType = await _context.CourseTypes
+            Domain.Models.CourseType courseType = await _context.CourseTypes
                 .Include(type => type.Department)
                 .ThenInclude(department => department.Faculty)
                 .FirstOrDefaultAsync(type => type.CourseTypeId == request.CourseTypeId,
@@ -66,6 +66,7 @@ namespace Application.Features.Course.Commands.AddCourse
             Domain.Models.Course courseObj = new Domain.Models.Course
             {
                 CourseTypeId = request.CourseTypeId,
+                Address = request.Address,
                 CourseType = courseType,
                 Instructor = user,
                 InstructorId = userId,

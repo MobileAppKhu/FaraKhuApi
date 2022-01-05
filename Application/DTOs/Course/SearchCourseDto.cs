@@ -14,6 +14,7 @@ namespace Application.DTOs.Course
         public string CourseType { get; set; }
         public string Department { get; set; }
         public string Faculty { get; set; }
+        public string Address { get; set; }
 
         public ICollection<SearchCourseTimeDto> Times { get; set; }
 

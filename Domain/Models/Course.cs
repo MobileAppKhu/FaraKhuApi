@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Domain.BaseModels;
-using Domain.Enum;
 
 namespace Domain.Models
 {
@@ -19,5 +18,6 @@ namespace Domain.Models
         public CourseType CourseType { get; set; }
         public FileEntity Avatar { get; set; }
         public string AvatarId { get; set; }
+        public string Address { get; set; }
     }
 }

@@ -23,6 +23,9 @@ namespace Application.Features.Course.Commands.AddCourse
             RuleFor(r => r.AvatarId)
                 .NotEmpty()
                 .WithMessage(localizer["NotEmpty"]);
+            RuleFor(r => r.Address)
+                .NotEmpty()
+                .WithMessage(localizer["NotEmpty"]);
         }
     }
 }

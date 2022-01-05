@@ -85,7 +85,11 @@ namespace Application.Features.Course.Commands.EditCourse
 
                 editingCourse.CourseType = courseType;
                 editingCourse.CourseTypeId = request.CourseTypeId;
+            }
 
+            if (!string.IsNullOrWhiteSpace(request.Address))
+            {
+                editingCourse.Address = request.Address;
             }
 
             if (request.AddStudentDto != null && request.AddStudentDto.StudentIds.Count != 0)

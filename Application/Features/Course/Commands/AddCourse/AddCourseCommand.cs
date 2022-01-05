@@ -11,6 +11,7 @@ namespace Application.Features.Course.Commands.AddCourse
     public class AddCourseCommand : IRequest<AddCourseViewModel>
     {
         public String CourseTypeId{ get; set; }
+        public string Address { get; set; }
         public List<AddTimeDto> AddTimeDtos { get; set; }
         public AddStudentDto AddStudentDto { get; set; }
         public DateTime EndDate { get; set; }

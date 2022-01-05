@@ -8,6 +8,7 @@ namespace Application.DTOs.Course
     {
         public string CourseId { get; set; }
         public string CourseTitle { get; set; }
+        public string Address { get; set; }
         
         public void Mapping(Profile profile)
         {
