@@ -8,7 +8,8 @@ namespace Application.Features.Offer.Queries.SearchOffers
         public OfferType OfferType { get; set; }
         public string Search { get; set; }
         public string User { get; set; }
-        public string Price { get; set; }
+        public string StartPrice { get; set; }
+        public string EndPrice { get; set; }
         public int Start { get; set; }
         public int Step { get; set; }
         public OfferColumn OfferColumn { get; set; }

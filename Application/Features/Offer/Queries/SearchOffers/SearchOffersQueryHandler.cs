@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -40,6 +41,17 @@ namespace Application.Features.Offer.Queries.SearchOffers
             if (!string.IsNullOrWhiteSpace(request.User))
             {
                 offerQueryable = offerQueryable.Where(offer => offer.UserId == request.User);
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.StartPrice))
+            {
+                offerQueryable = offerQueryable.Where(offer => Convert.ToInt64(offer.Price) >= Convert.ToInt64(request.StartPrice));
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.EndPrice))
+            {
+                offerQueryable = offerQueryable.Where(offer =>
+                    Convert.ToInt64(offer.Price) <= Convert.ToInt64(request.EndPrice));
             }
 
             switch (request.OfferColumn)
