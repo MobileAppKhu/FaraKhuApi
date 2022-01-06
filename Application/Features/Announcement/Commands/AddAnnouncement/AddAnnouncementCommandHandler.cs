@@ -53,7 +53,7 @@ namespace Application.Features.Announcement.Commands.AddAnnouncement
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            Department departmentObj = null;
+            Domain.Models.Department departmentObj = null;
             if (!string.IsNullOrWhiteSpace(request.Department))
             {
                 departmentObj =

@@ -3,7 +3,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
+using Application.DTOs.Faculty;
 using Application.Resources;
+using AutoMapper;
 using Domain.Enum;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +16,12 @@ namespace Application.Features.Faculty.Queries
     public class SearchFacultyQueryHandler : IRequestHandler<SearchFacultyQuery, SearchFacultyViewModel>
     {
         public IDatabaseContext _context { get; set; }
+        public IMapper _mapper { get; set; }
 
-        public SearchFacultyQueryHandler(IDatabaseContext context)
+        public SearchFacultyQueryHandler(IDatabaseContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         
         public async Task<SearchFacultyViewModel> Handle(SearchFacultyQuery request, CancellationToken cancellationToken)
@@ -67,7 +71,7 @@ namespace Application.Features.Faculty.Queries
             
             return new SearchFacultyViewModel
             {
-                Faculties = faculties,
+                Faculties = _mapper.Map<List<FacultySearchDto>>(faculties),
                 SearchCount = searchCount
             };
         }
