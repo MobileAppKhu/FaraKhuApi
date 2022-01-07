@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using Application.DTOs.Student;
 using Application.DTOs.Time;
-using Domain.Enum;
-using Domain.Models;
 using MediatR;
 
 namespace Application.Features.Course.Commands.AddCourse
@@ -16,5 +14,6 @@ namespace Application.Features.Course.Commands.AddCourse
         public AddStudentDto AddStudentDto { get; set; }
         public DateTime EndDate { get; set; }
         public string AvatarId { get; set; }
+        public string InstructorId { get; set; }
     }
 }

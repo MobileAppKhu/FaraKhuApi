@@ -42,13 +42,49 @@ namespace Application.Features.Course.Commands.AddCourse
         public async Task<AddCourseViewModel> Handle(AddCourseCommand request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Instructor user = _context.Instructors.FirstOrDefault(u => u.Id == userId);
+            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
             if (user == null)
+            {
                 throw new CustomException(new Error
                 {
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
+            }
+
+            if (user.UserType != UserType.Owner && user.UserType != UserType.Instructor)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.Unauthorized,
+                    Message = Localizer["Unauthorized"]
+                });
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.InstructorId))
+            {
+                if (user.UserType != UserType.Owner)
+                {
+                    throw new CustomException(new Error
+                    {
+                        ErrorType = ErrorType.Unauthorized,
+                        Message = Localizer["Unauthorized"]
+                    });
+                }
+
+                user = await 
+                    _context.Instructors.FirstOrDefaultAsync(
+                        instructor => instructor.InstructorId == request.InstructorId, cancellationToken);
+                if (user == null)
+                {
+                    throw new CustomException(new Error
+                    {
+                        ErrorType = ErrorType.InstructorNotFound,
+                        Message = Localizer["InstructorNotFound"]
+                    });
+                }
+            }
+
             Domain.Models.CourseType courseType = await _context.CourseTypes
                 .Include(type => type.Department)
                 .ThenInclude(department => department.Faculty)
@@ -68,8 +104,8 @@ namespace Application.Features.Course.Commands.AddCourse
                 CourseTypeId = request.CourseTypeId,
                 Address = request.Address,
                 CourseType = courseType,
-                Instructor = user,
-                InstructorId = userId,
+                Instructor = (Instructor)user,
+                InstructorId = user.Id,
                 EndDate = request.EndDate
             };
             await _context.Courses.AddAsync(courseObj, cancellationToken);
@@ -141,6 +177,9 @@ namespace Application.Features.Course.Commands.AddCourse
                     Message = Localizer["FileNotFound"]
                 });
             }
+
+            courseObj.Avatar = avatarObj;
+            courseObj.AvatarId = avatarObj.Id;
 
             await _context.SaveChangesAsync(cancellationToken);
             return new AddCourseViewModel

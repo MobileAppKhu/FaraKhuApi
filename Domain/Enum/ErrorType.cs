@@ -31,6 +31,7 @@
         AnnouncementNotFound,
         FavouriteNotFound,
         CommentNotFound,
-        NotificationNotFound
+        NotificationNotFound,
+        InstructorNotFound
     }
 }
