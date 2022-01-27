@@ -10,6 +10,8 @@ namespace Application.Features.Account.Commands.EditProfile
         public string LastName { get; set; }
         public string AvatarId { get; set; }
         public bool DeleteAvatar { get; set; }
+        public string LinkedIn { get; set; }
+        public string GoogleScholar { get; set; }
         public List<string> AddFavourites { get; set; }
         public List<string> DeleteFavourites { get; set; }
     }

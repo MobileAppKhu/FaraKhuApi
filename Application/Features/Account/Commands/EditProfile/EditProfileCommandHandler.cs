@@ -109,6 +109,16 @@ namespace Application.Features.Account.Commands.EditProfile
                 }
             }
 
+            if (!string.IsNullOrWhiteSpace(request.LinkedIn))
+            {
+                user.LinkedIn = request.LinkedIn;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.GoogleScholar))
+            {
+                user.GoogleScholar = request.GoogleScholar;
+            }
+
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

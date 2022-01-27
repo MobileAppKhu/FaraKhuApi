@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Domain.Enum;
 using Domain.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Domain.BaseModels
 {
@@ -19,6 +20,8 @@ namespace Domain.BaseModels
         public bool ResettingPassword { get; set; }
         public FileEntity Avatar { get; set; }
         public string AvatarId { get; set; }
+        public string LinkedIn { get; set; }
+        public string GoogleScholar { get; set; }
         public ICollection<Event> Events { get; set; }
         public ICollection<Offer> Offers { get; set; }
         public ICollection<Suggestion> Suggestions { get; set; }

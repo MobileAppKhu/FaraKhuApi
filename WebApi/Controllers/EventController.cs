@@ -2,6 +2,7 @@
 using Application.Features.Event.Commands.AddEvent;
 using Application.Features.Event.Commands.DeleteEvent;
 using Application.Features.Event.Commands.EditEvent;
+using Application.Features.Event.Queries.SearchEvent;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,6 +33,13 @@ namespace WebApi.Controllers
         
         [HttpPost]
         public async Task<IActionResult> EditEvent(EditEventCommand request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        
+        [HttpPost]
+        [ProducesResponseType(typeof(SearchEventViewModel),200)]
+        public async Task<IActionResult> SearchEvent(SearchEventQuery request)
         {
             return Ok(await _mediator.Send(request));
         }

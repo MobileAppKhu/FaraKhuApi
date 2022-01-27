@@ -5,7 +5,7 @@ namespace Application.Features.Event.Queries.SearchEvent
 {
     public class SearchEventViewModel
     {
-        public List<EventDto> Event { get; set; }
+        public List<EventShortDto> Event { get; set; }
         public int SearchLength { get; set; }
     }
 }

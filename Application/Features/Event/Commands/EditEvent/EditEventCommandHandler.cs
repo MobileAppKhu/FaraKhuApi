@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Resources;
-using AutoMapper;
 using Domain.BaseModels;
 using Domain.Enum;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
@@ -79,6 +77,16 @@ namespace Application.Features.Event.Commands.EditEvent
             if (request.changingIsDone)
             {
                 eventObj.isDone = !eventObj.isDone;
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.CourseId))
+            {
+                var courseObj =
+                    await _context.Courses.Include(course => course.CourseType).FirstOrDefaultAsync(
+                        course => course.CourseId == request.CourseId,
+                        cancellationToken);
+                eventObj.CourseId = courseObj.CourseId;
+                eventObj.CourseTitle = courseObj.CourseType.CourseTypeTitle;
             }
 
             await _context.SaveChangesAsync(cancellationToken);

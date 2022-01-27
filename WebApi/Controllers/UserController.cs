@@ -37,7 +37,6 @@ namespace WebApi.Controllers
         
         [HttpPost]
         [Authorize(Policy = "OwnerPolicy")]
-
         [ProducesResponseType(typeof(AddUserViewModel),200)]
         public async Task<IActionResult> AddUser(AddUserCommand request)
         {

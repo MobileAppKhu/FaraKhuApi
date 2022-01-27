@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.DTOs.User;
-using Application.Features.Account.SignUp;
 using Application.Resources;
 using Application.Utilities;
 using AutoMapper;
@@ -91,7 +90,9 @@ namespace Application.Features.User.Commands.AddUser
                         LastName = request.LastName,
                         InstructorId = request.Id,
                         AvatarId = smiley.Id,
-                        EmailConfirmed = true
+                        EmailConfirmed = true,
+                        LinkedIn = request.LinkedIn,
+                        GoogleScholar = request.GoogleScholar
                     };
                     break;
                 case UserType.Student:
@@ -102,7 +103,9 @@ namespace Application.Features.User.Commands.AddUser
                         LastName = request.LastName,
                         StudentId = request.Id,
                         AvatarId = smiley.Id,
-                        EmailConfirmed = true
+                        EmailConfirmed = true,
+                        LinkedIn = request.LinkedIn,
+                        GoogleScholar = request.GoogleScholar
                     };
                     break;
                 case UserType.PROfficer:
@@ -112,7 +115,9 @@ namespace Application.Features.User.Commands.AddUser
                         FirstName = request.FirstName,
                         LastName = request.LastName,
                         AvatarId = smiley.Id,
-                        EmailConfirmed = true
+                        EmailConfirmed = true,
+                        LinkedIn = request.LinkedIn,
+                        GoogleScholar = request.GoogleScholar
                     };
                     break;
             }

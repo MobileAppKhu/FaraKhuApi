@@ -9,5 +9,6 @@ namespace Application.Features.Event.Commands.EditEvent
         public string EventDescription { get; set; }
         public string EventTime { get; set; }
         public bool changingIsDone { get; set; }
+        public string CourseId { get; set; }
     }
 }

@@ -34,7 +34,6 @@ namespace UnitTest.Persistence
 
         public async Task Initialize()
         {
-            //await DatabaseContext.Database.MigrateAsync();
             await DatabaseContext.Database.EnsureDeletedAsync();
             await DatabaseContext.Database.EnsureCreatedAsync();
             await RoleInitializer();

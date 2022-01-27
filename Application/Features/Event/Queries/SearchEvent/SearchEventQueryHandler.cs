@@ -46,9 +46,7 @@ namespace Application.Features.Event.Queries.SearchEvent
                 }); 
             }
 
-            IQueryable<Domain.Models.Event> eventsQueryable = _context.Events;
-
-            eventsQueryable = eventsQueryable.Where(e => e.UserId == userId);
+            IQueryable<Domain.Models.Event> eventsQueryable = _context.Events.Where(e => e.UserId == userId);
 
             if (!string.IsNullOrWhiteSpace(request.Description))
             {
@@ -68,6 +66,11 @@ namespace Application.Features.Event.Queries.SearchEvent
             if (request.EventTime != null)
             {
                 eventsQueryable = eventsQueryable.Where(e => e.EventTime == request.EventTime);
+            }
+
+            if (!string.IsNullOrWhiteSpace(request.CourseId))
+            {
+                eventsQueryable = eventsQueryable.Where(e => e.CourseId == request.CourseId);
             }
 
             switch (request.EventColumn)
@@ -106,7 +109,7 @@ namespace Application.Features.Event.Queries.SearchEvent
                 .ToListAsync(cancellationToken);
             return new SearchEventViewModel
             {
-                Event = _mapper.Map<List<EventDto>>(events),
+                Event = _mapper.Map<List<EventShortDto>>(events),
                 SearchLength = searchLength
             };
         }

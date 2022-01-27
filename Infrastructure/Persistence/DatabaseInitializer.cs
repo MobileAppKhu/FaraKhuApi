@@ -64,7 +64,9 @@ namespace Infrastructure.Persistence
                 UserType = UserType.PROfficer,
                 EmailConfirmed = true,
                 Avatar = avatar,
-                AvatarId = "smiley.png"
+                AvatarId = "smiley.png",
+                LinkedIn = "",
+                GoogleScholar = ""
             };
             await UserManager.CreateAsync(officer, "PROfficerPassword");
             await UserManager.AddToRoleAsync(officer, UserType.PROfficer.ToString().Normalize());
@@ -77,7 +79,9 @@ namespace Infrastructure.Persistence
                 UserType = UserType.Owner,
                 EmailConfirmed = true,
                 Avatar = avatar,
-                AvatarId = "smiley.png"
+                AvatarId = "smiley.png",
+                LinkedIn = "",
+                GoogleScholar = ""
             };
             await UserManager.CreateAsync(owner, "OwnerPassword");
             await UserManager.AddToRoleAsync(owner, UserType.Owner.ToString().Normalize());
@@ -91,7 +95,9 @@ namespace Infrastructure.Persistence
                 InstructorId = "12345",
                 EmailConfirmed = true,
                 Avatar = avatar,
-                AvatarId = "smiley.png"
+                AvatarId = "smiley.png",
+                LinkedIn = "",
+                GoogleScholar = ""
             };
 
             await UserManager.CreateAsync(instructor, "InstructorPassword");
@@ -106,7 +112,9 @@ namespace Infrastructure.Persistence
                 StudentId = "12345",
                 EmailConfirmed = true,
                 Avatar = avatar,
-                AvatarId = "smiley.png"
+                AvatarId = "smiley.png",
+                LinkedIn = "",
+                GoogleScholar = ""
             };
 
             await UserManager.CreateAsync(student, "StudentPassword");

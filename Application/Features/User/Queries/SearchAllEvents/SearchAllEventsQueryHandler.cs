@@ -57,12 +57,14 @@ namespace Application.Features.User.Queries.SearchAllEvents
                     Include(s => s.Courses).ThenInclude(c => c.Times).
                     Include(s => s.Courses).ThenInclude(c => c.CourseEvents).
                     Include(s => s.Courses).ThenInclude(c => c.Instructor).
+                    Include(s => s.Courses).ThenInclude(c => c.CourseType).
                     FirstOrDefault(s => s.Id == userId);
             else
                 baseUser = _context.Instructors.Include(s => s.Events).
                     Include(i => i.Courses).ThenInclude(c => c.Times).
                     Include(i => i.Courses).ThenInclude(c => c.CourseEvents).
                     Include(i => i.Courses).ThenInclude(c => c.Instructor).
+                    Include(i => i.Courses).ThenInclude(c => c.CourseType).
                     FirstOrDefault(s => s.Id == userId);
 
             return new SearchAllEventsViewModel
