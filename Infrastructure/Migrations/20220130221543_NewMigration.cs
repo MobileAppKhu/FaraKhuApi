@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Infrastructure.Migrations
 {
-    public partial class InitialMigration : Migration
+    public partial class NewMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -20,6 +20,19 @@ namespace Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Faculties",
+                columns: table => new
+                {
+                    FacultyId = table.Column<string>(type: "text", nullable: false),
+                    FacultyTitle = table.Column<string>(type: "text", nullable: false),
+                    FacultyCode = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Faculties", x => x.FacultyId);
                 });
 
             migrationBuilder.CreateTable(
@@ -62,6 +75,26 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Departments",
+                columns: table => new
+                {
+                    DepartmentId = table.Column<string>(type: "text", nullable: false),
+                    DepartmentTitle = table.Column<string>(type: "text", nullable: false),
+                    DepartmentCode = table.Column<string>(type: "text", nullable: false),
+                    FacultyId = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Departments", x => x.DepartmentId);
+                    table.ForeignKey(
+                        name: "FK_Departments_Faculties_FacultyId",
+                        column: x => x.FacultyId,
+                        principalTable: "Faculties",
+                        principalColumn: "FacultyId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
@@ -76,6 +109,8 @@ namespace Infrastructure.Migrations
                     IsValidating = table.Column<bool>(type: "boolean", nullable: false),
                     ResettingPassword = table.Column<bool>(type: "boolean", nullable: false),
                     AvatarId = table.Column<string>(type: "text", nullable: true),
+                    LinkedIn = table.Column<string>(type: "text", nullable: true),
+                    GoogleScholar = table.Column<string>(type: "text", nullable: true),
                     Discriminator = table.Column<string>(type: "text", nullable: false),
                     InstructorId = table.Column<string>(type: "text", nullable: true),
                     StudentId = table.Column<string>(type: "text", nullable: true),
@@ -129,15 +164,35 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CourseTypes",
+                columns: table => new
+                {
+                    CourseTypeId = table.Column<string>(type: "text", nullable: false),
+                    CourseTypeTitle = table.Column<string>(type: "text", nullable: false),
+                    CourseTypeCode = table.Column<string>(type: "text", nullable: false),
+                    DepartmentId = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CourseTypes", x => x.CourseTypeId);
+                    table.ForeignKey(
+                        name: "FK_CourseTypes_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Departments",
+                        principalColumn: "DepartmentId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Announcements",
                 columns: table => new
                 {
                     AnnouncementId = table.Column<string>(type: "text", nullable: false),
                     AnnouncementTitle = table.Column<string>(type: "text", nullable: true),
                     AnnouncementDescription = table.Column<string>(type: "text", nullable: true),
-                    Department = table.Column<string>(type: "text", nullable: true),
-                    Faculty = table.Column<string>(type: "text", nullable: true),
+                    DepartmentId = table.Column<string>(type: "text", nullable: true),
                     UserId = table.Column<string>(type: "text", nullable: true),
+                    AvatarId = table.Column<string>(type: "text", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     LastModifiedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
@@ -149,6 +204,18 @@ namespace Infrastructure.Migrations
                         name: "FK_Announcements_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Announcements_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Departments",
+                        principalColumn: "DepartmentId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Announcements_Files_AvatarId",
+                        column: x => x.AvatarId,
+                        principalTable: "Files",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -239,29 +306,6 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Courses",
-                columns: table => new
-                {
-                    CourseId = table.Column<string>(type: "text", nullable: false),
-                    CourseTitle = table.Column<string>(type: "text", nullable: true),
-                    InstructorId = table.Column<string>(type: "text", nullable: true),
-                    EndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    LastModifiedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Courses", x => x.CourseId);
-                    table.ForeignKey(
-                        name: "FK_Courses_AspNetUsers_InstructorId",
-                        column: x => x.InstructorId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Events",
                 columns: table => new
                 {
@@ -270,6 +314,9 @@ namespace Infrastructure.Migrations
                     EventDescription = table.Column<string>(type: "text", nullable: true),
                     EventTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     UserId = table.Column<string>(type: "text", nullable: true),
+                    isDone = table.Column<bool>(type: "boolean", nullable: false),
+                    CourseId = table.Column<string>(type: "text", nullable: true),
+                    CourseTitle = table.Column<string>(type: "text", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "now() at time zone 'utc'"),
                     LastModifiedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "now() at time zone 'utc'"),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
@@ -301,6 +348,28 @@ namespace Infrastructure.Migrations
                     table.PrimaryKey("PK_Favourites", x => x.FavouriteId);
                     table.ForeignKey(
                         name: "FK_Favourites_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    NotificationId = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    EntityId = table.Column<string>(type: "text", nullable: true),
+                    NotificationObjectType = table.Column<int>(type: "integer", nullable: false),
+                    NotificationOperation = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.NotificationId);
+                    table.ForeignKey(
+                        name: "FK_Notifications_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -357,6 +426,105 @@ namespace Infrastructure.Migrations
                         name: "FK_Suggestions_AspNetUsers_SenderId",
                         column: x => x.SenderId,
                         principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tickets",
+                columns: table => new
+                {
+                    TicketId = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    Priority = table.Column<int>(type: "integer", nullable: false),
+                    DeadLine = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
+                    CreatorId = table.Column<string>(type: "text", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    LastModifiedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tickets", x => x.TicketId);
+                    table.ForeignKey(
+                        name: "FK_Tickets_AspNetUsers_CreatorId",
+                        column: x => x.CreatorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    CommentId = table.Column<string>(type: "text", nullable: false),
+                    Text = table.Column<string>(type: "text", nullable: true),
+                    Status = table.Column<int>(type: "integer", nullable: false),
+                    ParentId = table.Column<string>(type: "text", nullable: true),
+                    UserId = table.Column<string>(type: "text", nullable: true),
+                    NewsId = table.Column<string>(type: "text", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false, defaultValueSql: "now() at time zone 'utc'"),
+                    LastModifiedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.CommentId);
+                    table.ForeignKey(
+                        name: "FK_Comments_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Comments_Comments_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "Comments",
+                        principalColumn: "CommentId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Comments_News_NewsId",
+                        column: x => x.NewsId,
+                        principalTable: "News",
+                        principalColumn: "NewsId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Courses",
+                columns: table => new
+                {
+                    CourseId = table.Column<string>(type: "text", nullable: false),
+                    InstructorId = table.Column<string>(type: "text", nullable: true),
+                    EndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    CourseTypeId = table.Column<string>(type: "text", nullable: true),
+                    AvatarId = table.Column<string>(type: "text", nullable: true),
+                    Address = table.Column<string>(type: "text", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    LastModifiedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Courses", x => x.CourseId);
+                    table.ForeignKey(
+                        name: "FK_Courses_AspNetUsers_InstructorId",
+                        column: x => x.InstructorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Courses_CourseTypes_CourseTypeId",
+                        column: x => x.CourseTypeId,
+                        principalTable: "CourseTypes",
+                        principalColumn: "CourseTypeId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Courses_Files_AvatarId",
+                        column: x => x.AvatarId,
+                        principalTable: "Files",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -446,7 +614,7 @@ namespace Infrastructure.Migrations
                     CourseId = table.Column<string>(type: "text", nullable: true),
                     StartTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     EndTime = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    WeekDay = table.Column<string>(type: "text", nullable: true),
+                    WeekDay = table.Column<int>(type: "integer", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     LastModifiedDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
@@ -459,7 +627,7 @@ namespace Infrastructure.Migrations
                         column: x => x.CourseId,
                         principalTable: "Courses",
                         principalColumn: "CourseId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -507,6 +675,16 @@ namespace Infrastructure.Migrations
                         principalColumn: "AnswerId",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Announcements_AvatarId",
+                table: "Announcements",
+                column: "AvatarId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Announcements_DepartmentId",
+                table: "Announcements",
+                column: "DepartmentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Announcements_UserId",
@@ -564,9 +742,34 @@ namespace Infrastructure.Migrations
                 filter: "NOT \"UserName\"=''");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Comments_NewsId",
+                table: "Comments",
+                column: "NewsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_ParentId",
+                table: "Comments",
+                column: "ParentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_UserId",
+                table: "Comments",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CourseEvents_CourseId",
                 table: "CourseEvents",
                 column: "CourseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Courses_AvatarId",
+                table: "Courses",
+                column: "AvatarId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Courses_CourseTypeId",
+                table: "Courses",
+                column: "CourseTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Courses_InstructorId",
@@ -577,6 +780,16 @@ namespace Infrastructure.Migrations
                 name: "IX_CourseStudent_StudentsId",
                 table: "CourseStudent",
                 column: "StudentsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CourseTypes_DepartmentId",
+                table: "CourseTypes",
+                column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Departments_FacultyId",
+                table: "Departments",
+                column: "FacultyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Events_UserId",
@@ -592,6 +805,11 @@ namespace Infrastructure.Migrations
                 name: "IX_News_FileId",
                 table: "News",
                 column: "FileId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notifications_UserId",
+                table: "Notifications",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Offers_AvatarId",
@@ -629,6 +847,11 @@ namespace Infrastructure.Migrations
                 column: "SenderId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Tickets_CreatorId",
+                table: "Tickets",
+                column: "CreatorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Times_CourseId",
                 table: "Times",
                 column: "CourseId");
@@ -655,6 +878,9 @@ namespace Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Comments");
+
+            migrationBuilder.DropTable(
                 name: "CourseEvents");
 
             migrationBuilder.DropTable(
@@ -667,7 +893,7 @@ namespace Infrastructure.Migrations
                 name: "Favourites");
 
             migrationBuilder.DropTable(
-                name: "News");
+                name: "Notifications");
 
             migrationBuilder.DropTable(
                 name: "Offers");
@@ -679,10 +905,16 @@ namespace Infrastructure.Migrations
                 name: "Suggestions");
 
             migrationBuilder.DropTable(
+                name: "Tickets");
+
+            migrationBuilder.DropTable(
                 name: "Times");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "News");
 
             migrationBuilder.DropTable(
                 name: "PollAnswers");
@@ -697,7 +929,16 @@ namespace Infrastructure.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
+                name: "CourseTypes");
+
+            migrationBuilder.DropTable(
                 name: "Files");
+
+            migrationBuilder.DropTable(
+                name: "Departments");
+
+            migrationBuilder.DropTable(
+                name: "Faculties");
         }
     }
 }

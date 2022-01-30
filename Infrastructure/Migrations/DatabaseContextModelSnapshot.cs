@@ -70,6 +70,9 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("GoogleScholar")
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
@@ -83,6 +86,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LinkedIn")
                         .HasColumnType("text");
 
                     b.Property<bool>("LockoutEnabled")
@@ -280,6 +286,12 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("text");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AvatarId")
+                        .HasColumnType("text");
+
                     b.Property<string>("CourseTypeId")
                         .HasColumnType("text");
 
@@ -299,6 +311,8 @@ namespace Infrastructure.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.HasKey("CourseId");
+
+                    b.HasIndex("AvatarId");
 
                     b.HasIndex("CourseTypeId");
 
@@ -389,6 +403,12 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("text");
 
+                    b.Property<string>("CourseId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CourseTitle")
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp without time zone")
@@ -414,6 +434,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("UserId")
                         .HasColumnType("text");
+
+                    b.Property<bool>("isDone")
+                        .HasColumnType("boolean");
 
                     b.HasKey("EventId");
 
@@ -979,6 +1002,10 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Models.Course", b =>
                 {
+                    b.HasOne("Domain.BaseModels.FileEntity", "Avatar")
+                        .WithMany()
+                        .HasForeignKey("AvatarId");
+
                     b.HasOne("Domain.Models.CourseType", "CourseType")
                         .WithMany()
                         .HasForeignKey("CourseTypeId");
@@ -986,6 +1013,8 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Models.Instructor", "Instructor")
                         .WithMany("Courses")
                         .HasForeignKey("InstructorId");
+
+                    b.Navigation("Avatar");
 
                     b.Navigation("CourseType");
 
