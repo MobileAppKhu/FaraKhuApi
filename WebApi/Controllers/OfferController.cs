@@ -1,10 +1,10 @@
 ﻿
 using System.Threading.Tasks;
-using Application.Features.Offer.Command.CreateOffer;
-using Application.Features.Offer.Command.RemoveOffer;
-using Application.Features.Offer.Command.UpdateCommand;
-using Application.Features.Offer.Query.ViewOffers;
-using Application.Features.Offer.Query.ViewUserOffers;
+using Application.Features.Offer.Commands.AddOffer;
+using Application.Features.Offer.Commands.DeleteOffer;
+using Application.Features.Offer.Commands.EditOffer;
+using Application.Features.Offer.Queries.SearchOffers;
+using Application.Features.Offer.Queries.SearchUserOffers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,31 +23,31 @@ namespace WebApi.Controllers
         }
         
         [HttpPost]
-        [ProducesResponseType(typeof(CreateOfferViewModel), 200)]
-        public async Task<IActionResult> CreateOffer(CreateOfferCommand request)
+        [ProducesResponseType(typeof(AddOfferViewModel), 200)]
+        public async Task<IActionResult> AddOffer(AddOfferCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
         [HttpPost]
-        public async Task<IActionResult> RemoveOffer(RemoveOfferCommand request)
+        public async Task<IActionResult> DeleteOffer(DeleteOfferCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
         [HttpPost]
-        public async Task<IActionResult> UpdateOffer(UpdateOfferCommand request)
+        public async Task<IActionResult> EditOffer(EditOfferCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
         [HttpPost]
-        [ProducesResponseType(typeof(ViewUserOffersViewModel), 200)]
-        public async Task<IActionResult> ViewUserOffers(ViewUserOffersQuery request)
+        [ProducesResponseType(typeof(SearchUserOffersViewModel), 200)]
+        public async Task<IActionResult> SearchUserOffers(SearchUserOffersQuery request)
         {
             return Ok(await _mediator.Send(request));
         }
         
         [HttpPost]
-        [ProducesResponseType(typeof(ViewOffersViewModel), 200)]
-        public async Task<IActionResult> ViewOffers(ViewOffersQuery request)
+        [ProducesResponseType(typeof(SearchOffersViewModel), 200)]
+        public async Task<IActionResult> SearchOffers(SearchOffersQuery request)
         {
             return Ok(await _mediator.Send(request));
         }

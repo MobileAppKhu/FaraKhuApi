@@ -70,7 +70,7 @@ namespace Infrastructure.Persistence.EmailService
             try
             {
                 using var client = new SmtpClient();
-                client.Connect("mail.markop.ir", 587, SecureSocketOptions.StartTls);
+                client.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
                 client.Authenticate(_emailUserName, _emailPassword);
                 client.Send(message);
                 client.Disconnect(true);

@@ -111,6 +111,16 @@ namespace WebApi
                         "Owner".Normalize()
                     })));
             });
+            services.AddSwaggerGen(option =>
+            {
+                option.CustomSchemaIds(type =>
+                {
+                    var name = string.Empty;
+                    if (type.DeclaringType != null)
+                        name += type.DeclaringType.Name + ".";
+                    return name + type.Name;
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -120,6 +130,9 @@ namespace WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "FaraKhu API"); });
 
             app.UseRouting();
 

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Application.Features.Account.ChangePassword;
+using Application.Features.Account.Commands.EditProfile;
 using Application.Features.Account.EmailVerification;
 using Application.Features.Account.ForgetPassword;
 using Application.Features.Account.ResetPassword;
@@ -18,7 +19,7 @@ namespace WebApi.Controllers
     [Route("api/[controller]/[action]")]
     public class AccountController : ControllerBase
     {
-        private IMediator _mediator;
+        private readonly IMediator _mediator;
         public AccountController(IMediator mediator)
         {
             _mediator = mediator;
@@ -74,6 +75,12 @@ namespace WebApi.Controllers
         }
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordCommand request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditProfile(EditProfileCommand request)
         {
             return Ok(await _mediator.Send(request));
         }

@@ -15,6 +15,9 @@ namespace Infrastructure.Persistence.Configuration
             builder.HasOne(course => course.Instructor)
                 .WithMany(instructor => instructor.Courses)
                 .HasForeignKey(course => course.InstructorId);
+            builder.HasOne(course => course.CourseType).WithMany().HasForeignKey(course => course.CourseTypeId);
+            builder.HasOne(course => course.Avatar)
+                .WithMany().HasForeignKey(course => course.AvatarId);
         }
     }
 }

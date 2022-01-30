@@ -117,4 +117,46 @@
     <data name="QuestionNotFound" xml:space="preserve">
         <value>سوال نظرسنجی یافت نشد</value>
     </data>
+    <data name="StudentNotFound" xml:space="preserve">
+        <value>دانشجو یافت نشد</value>
+    </data>
+    <data name="TimeConflict" xml:space="preserve">
+        <value>زمان ها تداخل دارند</value>
+    </data>
+    <data name="TimeNotFound" xml:space="preserve">
+        <value>زمان یافت نشد</value>
+    </data>
+    <data name="CourseTypeNotFound" xml:space="preserve">
+        <value>عنوان درس موجود نمی باشد</value>
+    </data>
+    <data name="DepartmentNotFound" xml:space="preserve">
+        <value>واحد آموزشی یافت نشد</value>
+    </data>
+    <data name="AnnouncementNotFound" xml:space="preserve">
+        <value>فراخوان پیدا نشد</value>
+    </data>
+    <data name="InstructorNotFound" xml:space="preserve">
+        <value>استاد یافت نشد</value>
+    </data>
+    <data name="FavouriteNotFound" xml:space="preserve">
+        <value>علاقه مندی یافت نشد</value>
+    </data>
+    <data name="NotificationNotFound" xml:space="preserve">
+        <value>اطلاعیه یافت نشد</value>
+    </data>
+    <data name="YouHaveBeenAddedToACourse" xml:space="preserve">
+        <value>شما به یک درس جدید اضافه شده اید</value>
+    </data>
+    <data name="YouHaveANewCourseEvent" xml:space="preserve">
+        <value>شما یک رخداد درسی جدید دارید</value>
+    </data>
+    <data name="YourTicketIsInProgress" xml:space="preserve">
+        <value>تیکت شما درحال بررسی است</value>
+    </data>
+    <data name="YourTicketHasBeenSolved" xml:space="preserve">
+        <value>تیکت شما مورد بررسی قرار گرفت و مشکل رفع گردید</value>
+    </data>
+    <data name="FileNotFound" xml:space="preserve">
+        <value>فایل مورد نظر یافت نشد</value>
+    </data>
 </root>

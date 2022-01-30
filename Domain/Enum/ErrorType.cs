@@ -22,6 +22,16 @@
         InvalidValidationToken,
         AnswerNotFound,
         QuestionNotFound,
-        OfferNotFound
+        OfferNotFound,
+        StudentNotFound,
+        TimeConflict,
+        TimeNotFound,
+        CourseTypeNotFound,
+        DepartmentNotFound,
+        AnnouncementNotFound,
+        FavouriteNotFound,
+        CommentNotFound,
+        NotificationNotFound,
+        InstructorNotFound
     }
 }

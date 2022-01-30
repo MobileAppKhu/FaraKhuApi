@@ -10,6 +10,6 @@ namespace Domain.Models
         public string CourseId { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public string WeekDay { get; set; }
+        public WeekDay WeekDay { get; set; }
     }
 }

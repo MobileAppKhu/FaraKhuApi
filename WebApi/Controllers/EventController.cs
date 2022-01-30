@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Application.Features.Event.Command.CreateEvent;
-using Application.Features.Event.Command.DeleteEvent;
-using Application.Features.Event.Command.UpdateEvent;
-using Application.Features.Event.Queries.ViewPersonalEvent;
+using Application.Features.Event.Commands.AddEvent;
+using Application.Features.Event.Commands.DeleteEvent;
+using Application.Features.Event.Commands.EditEvent;
+using Application.Features.Event.Queries.SearchEvent;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,8 +19,8 @@ namespace WebApi.Controllers
             _mediator = mediator;
         }
         [HttpPost]
-        [ProducesResponseType(typeof(CreateEventViewModel),200)]
-        public async Task<IActionResult> CreateEvent(CreateEventCommand request)
+        [ProducesResponseType(typeof(AddEventViewModel),200)]
+        public async Task<IActionResult> AddEvent(AddEventCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
@@ -32,18 +32,16 @@ namespace WebApi.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> UpdateEvent(UpdateEventCommand request)
+        public async Task<IActionResult> EditEvent(EditEventCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
         
         [HttpPost]
-        [ProducesResponseType(typeof(ViewPersonalEventViewModel),200)]
-        public async Task<IActionResult> ViewPersonalEvent(ViewPersonalEventQuery request)
+        [ProducesResponseType(typeof(SearchEventViewModel),200)]
+        public async Task<IActionResult> SearchEvent(SearchEventQuery request)
         {
             return Ok(await _mediator.Send(request));
         }
-        
     }
-    
 }

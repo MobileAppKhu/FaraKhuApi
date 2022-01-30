@@ -75,12 +75,12 @@ namespace UnitTest.Utilities
             }
         }
 
-        public static async Task AuthToUser(this HttpClient client)
+        public static async Task AuthToStudent(this HttpClient client)
         {
             var userObj = new SignInCommand
             {
-                Logon = "TestUser@Test.com",
-                Password = "TestPassword"
+                Logon = "Student@Farakhu.app",
+                Password = "StudentPassword"
             };
             var user = JsonConvert.SerializeObject(userObj);
 
@@ -90,12 +90,12 @@ namespace UnitTest.Utilities
             client.DefaultRequestHeaders.Add("Cookie", response.Headers.GetValues("Set-Cookie").ToArray()[0]);
         }
 
-        public static async Task AuthToOwner(this HttpClient client)
+        public static async Task AuthToInstructor(this HttpClient client)
         {
             var userObj = new SignInCommand
             {
-                Logon = "TestOwner@Test.com",
-                Password = "OwnerPassword"
+                Logon = "Instructor@Farakhu.app",
+                Password = "InstructorPassword"
             };
             var user = JsonConvert.SerializeObject(userObj);
 

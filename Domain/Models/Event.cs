@@ -1,6 +1,5 @@
 ﻿using System;
 using Domain.BaseModels;
-using Domain.Enum;
 
 namespace Domain.Models
 {
@@ -17,5 +16,8 @@ namespace Domain.Models
         public BaseUser User { get; set; }
 
         public string UserId { get; set; }
+        public bool isDone { get; set; }
+        public string CourseId { get; set; }
+        public string CourseTitle { get; set; }
     }
 }

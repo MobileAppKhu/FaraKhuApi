@@ -1,4 +1,5 @@
-﻿using Domain.BaseModels;
+﻿using System.Collections.Generic;
+using Domain.BaseModels;
 
 namespace Domain.Models
 {
@@ -9,5 +10,6 @@ namespace Domain.Models
         public string Description { get; set; }
         public FileEntity FileEntity { get; set; }
         public string FileId { get; set; }
+        public ICollection<Comment> Comments { get; set; }
     }
 }

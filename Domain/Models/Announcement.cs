@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Domain.BaseModels;
+﻿using Domain.BaseModels;
 
 namespace Domain.Models
 {
@@ -12,10 +7,13 @@ namespace Domain.Models
         public string AnnouncementId { get; set; }
         public string AnnouncementTitle { get; set; }
         public string AnnouncementDescription { get; set; }
-        public string Department { get; set; }
-        public string Faculty { get; set; }
+        public string DepartmentId { get; set; }
+        #nullable enable
+        public Department? Department { get; set; }
+        #nullable disable
         public BaseUser BaseUser { get; set; }
         public string UserId { get; set; }
-        
+        public FileEntity Avatar { get; set; }
+        public string AvatarId { get; set; }
     }
 }

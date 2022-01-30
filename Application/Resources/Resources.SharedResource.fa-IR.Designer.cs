@@ -61,6 +61,15 @@ namespace Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to فراخوان پیدا نشد.
+        /// </summary>
+        internal static string AnnouncementNotFound {
+            get {
+                return ResourceManager.GetString("AnnouncementNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to جواب نظر سنجی یافت نشد.
         /// </summary>
         internal static string AnswerNotFound {
@@ -84,6 +93,24 @@ namespace Application.Resources {
         internal static string CourseNotFound {
             get {
                 return ResourceManager.GetString("CourseNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to عنوان درس موجود نمی باشد.
+        /// </summary>
+        internal static string CourseTypeNotFound {
+            get {
+                return ResourceManager.GetString("CourseTypeNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to واحد آموزشی یافت نشد.
+        /// </summary>
+        internal static string DepartmentNotFound {
+            get {
+                return ResourceManager.GetString("DepartmentNotFound", resourceCulture);
             }
         }
         
@@ -142,6 +169,24 @@ namespace Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to علاقه مندی یافت نشد.
+        /// </summary>
+        internal static string FavouriteNotFound {
+            get {
+                return ResourceManager.GetString("FavouriteNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to فایل مورد نظر یافت نشد.
+        /// </summary>
+        internal static string FileNotFound {
+            get {
+                return ResourceManager.GetString("FileNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to نام ضروری است.
         /// </summary>
         internal static string FirstnameRequired {
@@ -156,6 +201,15 @@ namespace Application.Resources {
         internal static string Friday {
             get {
                 return ResourceManager.GetString("Friday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to استاد یافت نشد.
+        /// </summary>
+        internal static string InstructorNotFound {
+            get {
+                return ResourceManager.GetString("InstructorNotFound", resourceCulture);
             }
         }
         
@@ -223,6 +277,15 @@ namespace Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to اطلاعیه یافت نشد.
+        /// </summary>
+        internal static string NotificationNotFound {
+            get {
+                return ResourceManager.GetString("NotificationNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to آگهی یافت نشد.
         /// </summary>
         internal static string OfferNotFound {
@@ -277,6 +340,15 @@ namespace Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to دانشجو یافت نشد.
+        /// </summary>
+        internal static string StudentNotFound {
+            get {
+                return ResourceManager.GetString("StudentNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to یکشنبه.
         /// </summary>
         internal static string Sunday {
@@ -291,6 +363,24 @@ namespace Application.Resources {
         internal static string Thursday {
             get {
                 return ResourceManager.GetString("Thursday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to زمان ها تداخل دارند.
+        /// </summary>
+        internal static string TimeConflict {
+            get {
+                return ResourceManager.GetString("TimeConflict", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to زمان یافت نشد.
+        /// </summary>
+        internal static string TimeNotFound {
+            get {
+                return ResourceManager.GetString("TimeNotFound", resourceCulture);
             }
         }
         
@@ -354,6 +444,42 @@ namespace Application.Resources {
         internal static string Wednesday {
             get {
                 return ResourceManager.GetString("Wednesday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to شما یک رخداد درسی جدید دارید.
+        /// </summary>
+        internal static string YouHaveANewCourseEvent {
+            get {
+                return ResourceManager.GetString("YouHaveANewCourseEvent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to شما به یک درس جدید اضافه شده اید.
+        /// </summary>
+        internal static string YouHaveBeenAddedToACourse {
+            get {
+                return ResourceManager.GetString("YouHaveBeenAddedToACourse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to تیکت شما مورد بررسی قرار گرفت و مشکل رفع گردید.
+        /// </summary>
+        internal static string YourTicketHasBeenSolved {
+            get {
+                return ResourceManager.GetString("YourTicketHasBeenSolved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to تیکت شما درحال بررسی است.
+        /// </summary>
+        internal static string YourTicketIsInProgress {
+            get {
+                return ResourceManager.GetString("YourTicketIsInProgress", resourceCulture);
             }
         }
     }

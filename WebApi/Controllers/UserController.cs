@@ -1,14 +1,11 @@
 ﻿using System.Threading.Tasks;
-using Application.Features.User.Command.AddFavourite;
-using Application.Features.User.Command.CreateUser;
-using Application.Features.User.Command.RemoveFavourite;
-using Application.Features.User.Command.RemoveUser;
-using Application.Features.User.Command.UpdateAvatar;
-using Application.Features.User.Command.UpdateFavourite;
-using Application.Features.User.Command.UpdateProfile;
+using Application.Features.Event.Queries.GetIncomingEvent;
+using Application.Features.User.Commands.AddUser;
+using Application.Features.User.Commands.DeleteUser;
 using Application.Features.User.Queries.GetUserId;
-using Application.Features.User.Queries.ViewAllEvents;
-using Application.Features.User.Queries.ViewProfile;
+using Application.Features.User.Queries.SearchAllEvents;
+using Application.Features.User.Queries.SearchProfile;
+using Application.Features.User.Queries.SearchStudent;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,70 +16,40 @@ namespace WebApi.Controllers
     [Route("api/[controller]/[action]")]
     public class UserController : ControllerBase
     {
-        private IMediator _mediator;
+        private readonly IMediator _mediator;
         public UserController(IMediator mediator)
         {
             _mediator = mediator;
         }
         
         [HttpPost]
-        [ProducesResponseType(typeof(ViewAllEventsViewModel),200)]
-        public async Task<IActionResult> GetAllEvents(ViewAllEventsQuery request)
+        [ProducesResponseType(typeof(SearchAllEventsViewModel),200)]
+        public async Task<IActionResult> GetAllEvents(SearchAllEventsQuery request)
         {
             return Ok(await _mediator.Send(request));
         }
         [HttpPost]
-        [ProducesResponseType(typeof(ViewProfileViewModel),200)]
-        public async Task<IActionResult> ViewProfile(ViewProfileQuery request)
+        [ProducesResponseType(typeof(SearchProfileViewModel),200)]
+        public async Task<IActionResult> SearchProfile(SearchProfileQuery request)
         {
             return Ok(await _mediator.Send(request));
         }
         
         [HttpPost]
         [Authorize(Policy = "OwnerPolicy")]
+        [ProducesResponseType(typeof(AddUserViewModel),200)]
+        public async Task<IActionResult> AddUser(AddUserCommand request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+        
+        [HttpPost]
+        [Authorize(Policy = "OwnerPolicy")]
+        public async Task<IActionResult> DeleteUser(DeleteUserCommand request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
 
-        [ProducesResponseType(typeof(CreateUserViewModel),200)]
-        public async Task<IActionResult> CreateUser(CreateUserCommand request)
-        {
-            return Ok(await _mediator.Send(request));
-        }
-        
-        [HttpPost]
-        [Authorize(Policy = "OwnerPolicy")]
-        public async Task<IActionResult> RemoveUser(RemoveUserCommand request)
-        {
-            return Ok(await _mediator.Send(request));
-        }
-        
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> UpdateAvatar(UpdateAvatarCommand request)
-        {
-            return Ok(await _mediator.Send(request));
-        }
-        
-        [HttpPost]
-        [Authorize]
-        [ProducesResponseType(typeof(AddFavouriteViewModel),200)]
-        public async Task<IActionResult> AddFavourite(AddFavouriteCommand request)
-        {
-            return Ok(await _mediator.Send(request));
-        }
-        
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> UpdateFavourite(UpdateFavouriteCommand request)
-        {
-            return Ok(await _mediator.Send(request));
-        }
-        
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> DeleteFavourite(RemoveFavouriteCommand request)
-        {
-            return Ok(await _mediator.Send(request));
-        }
-        
         [HttpPost]
         [Authorize]
         [ProducesResponseType(typeof(GetUserViewModel),200)]
@@ -93,10 +60,18 @@ namespace WebApi.Controllers
         
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> UpdateProfile(UpdateProfileCommand request)
+        [ProducesResponseType(typeof(GetIncomingEventViewModel),200)]
+        public async Task<IActionResult> GetIncomingEvents(GetIncomingEventQuery request)
         {
             return Ok(await _mediator.Send(request));
         }
         
+        [HttpPost]
+        [Authorize(Policy = "InstructorPolicy")]
+        [ProducesResponseType(typeof(SearchStudentQueryValidator),200)]
+        public async Task<IActionResult> SearchStudent(SearchStudentQuery request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
     }
 }

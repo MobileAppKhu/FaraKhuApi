@@ -1,57 +1,51 @@
-﻿using Application.Features.Announcement.Commands.CreateAnnouncement;
-using Application.Features.Announcement.Commands.RemoveAnnouncement;
-using Application.Features.Announcement.Queries.ViewAnnouncements;
+﻿using Application.Features.Announcement.Commands.AddAnnouncement;
+using Application.Features.Announcement.Queries.SearchAnnouncements;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Application.Features.Announcement.Queries.ViewInstructorAnnouncements;
+using Application.Features.Announcement.Commands.DeleteAnnouncement;
+using Application.Features.Announcement.Commands.EditAnnouncement;
 
 namespace WebApi.Controllers
 {
 
     [ApiController]
-    [Authorize(Policy = "InstructorPolicy")]
+    [Authorize]
     [Route("api/[controller]/[action]")]
     public class AnnouncementController : ControllerBase
     {
-        private IMediator _mediator;
+        private readonly IMediator _mediator;
         public AnnouncementController(IMediator mediator)
         {
             _mediator = mediator;
         }
         [HttpPost]
-        [ProducesResponseType(typeof(CreateAnnouncementViewModel), 200)]
-        public async Task<IActionResult> CreateAnnouncement(CreateAnnouncementCommand request)
+        [ProducesResponseType(typeof(AddAnnouncementViewModel), 200)]
+        public async Task<IActionResult> AddAnnouncement(AddAnnouncementCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(RemoveAnnouncementCommand), 200)]
-        public async Task<IActionResult> RemoveAnnouncement(RemoveAnnouncementCommand request)
+        public async Task<IActionResult> DeleteAnnouncement(DeleteAnnouncementCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPost]
         [AllowAnonymous]
-        [ProducesResponseType(typeof(ViewAnnouncementsViewModel), 200)]
-        public async Task<IActionResult> ViewAnnouncements(ViewAnnouncementsQuery request)
-        {
-            return Ok(await _mediator.Send(request));
-        }
-
-        [HttpPost]
-        [ProducesResponseType(typeof(ViewInstructorAnnouncementsViewModel), 200)]
-        public async Task<IActionResult> ViewInstructorAnnouncements(ViewInstructorAnnouncementsQuery request)
+        public async Task<IActionResult> EditAnnouncement(EditAnnouncementCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
         
+        [HttpPost]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(SearchAnnouncementsViewModel), 200)]
+        public async Task<IActionResult> SearchAnnouncements(SearchAnnouncementsQuery request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
     }
 }

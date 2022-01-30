@@ -10,9 +10,10 @@ namespace Application.DTOs.Event.PersonalEvent
     {
         public string EventId { get; set; }
         public string EventName { get; set; }
-
         public DateTime EventTime { get; set; }
-
+        public bool IsDone { get; set; }
+        public string CourseId { get; set; }
+        public string CourseTitle { get; set; }
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Domain.Models.Event, EventShortDto>();
