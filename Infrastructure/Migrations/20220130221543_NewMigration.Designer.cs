@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20210520140533_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20220130221543_NewMigration")]
+    partial class NewMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -72,6 +72,9 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("GoogleScholar")
+                        .HasColumnType("text");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
@@ -85,6 +88,9 @@ namespace Infrastructure.Migrations
 
                     b.Property<string>("LastName")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LinkedIn")
                         .HasColumnType("text");
 
                     b.Property<bool>("LockoutEnabled")
@@ -204,13 +210,13 @@ namespace Infrastructure.Migrations
                     b.Property<string>("AnnouncementTitle")
                         .HasColumnType("text");
 
+                    b.Property<string>("AvatarId")
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("Department")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Faculty")
+                    b.Property<string>("DepartmentId")
                         .HasColumnType("text");
 
                     b.Property<bool>("IsDeleted")
@@ -224,9 +230,56 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("AnnouncementId");
 
+                    b.HasIndex("AvatarId");
+
+                    b.HasIndex("DepartmentId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Announcements");
+                });
+
+            modelBuilder.Entity("Domain.Models.Comment", b =>
+                {
+                    b.Property<string>("CommentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp without time zone")
+                        .HasDefaultValueSql("now() at time zone 'utc'");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("NewsId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ParentId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("CommentId");
+
+                    b.HasIndex("NewsId");
+
+                    b.HasIndex("ParentId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("Domain.Models.Course", b =>
@@ -235,7 +288,13 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("text");
 
-                    b.Property<string>("CourseTitle")
+                    b.Property<string>("Address")
+                        .HasColumnType("text");
+
+                    b.Property<string>("AvatarId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CourseTypeId")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedDate")
@@ -254,6 +313,10 @@ namespace Infrastructure.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.HasKey("CourseId");
+
+                    b.HasIndex("AvatarId");
+
+                    b.HasIndex("CourseTypeId");
 
                     b.HasIndex("InstructorId");
 
@@ -288,10 +351,64 @@ namespace Infrastructure.Migrations
                     b.ToTable("CourseEvents");
                 });
 
+            modelBuilder.Entity("Domain.Models.CourseType", b =>
+                {
+                    b.Property<string>("CourseTypeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CourseTypeCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CourseTypeTitle")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("DepartmentId")
+                        .HasColumnType("text");
+
+                    b.HasKey("CourseTypeId");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.ToTable("CourseTypes");
+                });
+
+            modelBuilder.Entity("Domain.Models.Department", b =>
+                {
+                    b.Property<string>("DepartmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text");
+
+                    b.Property<string>("DepartmentCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("DepartmentTitle")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FacultyId")
+                        .HasColumnType("text");
+
+                    b.HasKey("DepartmentId");
+
+                    b.HasIndex("FacultyId");
+
+                    b.ToTable("Departments");
+                });
+
             modelBuilder.Entity("Domain.Models.Event", b =>
                 {
                     b.Property<string>("EventId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CourseId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CourseTitle")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedDate")
@@ -320,11 +437,33 @@ namespace Infrastructure.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("text");
 
+                    b.Property<bool>("isDone")
+                        .HasColumnType("boolean");
+
                     b.HasKey("EventId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("Domain.Models.Faculty", b =>
+                {
+                    b.Property<string>("FacultyId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FacultyCode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FacultyTitle")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("FacultyId");
+
+                    b.ToTable("Faculties");
                 });
 
             modelBuilder.Entity("Domain.Models.Favourite", b =>
@@ -386,6 +525,35 @@ namespace Infrastructure.Migrations
                     b.HasIndex("FileId");
 
                     b.ToTable("News");
+                });
+
+            modelBuilder.Entity("Domain.Models.Notification", b =>
+                {
+                    b.Property<string>("NotificationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("EntityId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("NotificationObjectType")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("NotificationOperation")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasKey("NotificationId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Domain.Models.Offer", b =>
@@ -529,6 +697,44 @@ namespace Infrastructure.Migrations
                     b.ToTable("Suggestions");
                 });
 
+            modelBuilder.Entity("Domain.Models.Ticket", b =>
+                {
+                    b.Property<string>("TicketId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("CreatorId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DeadLine")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("Priority")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.HasKey("TicketId");
+
+                    b.HasIndex("CreatorId");
+
+                    b.ToTable("Tickets");
+                });
+
             modelBuilder.Entity("Domain.Models.Time", b =>
                 {
                     b.Property<string>("TimeId")
@@ -553,8 +759,8 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("WeekDay")
-                        .HasColumnType("text");
+                    b.Property<int>("WeekDay")
+                        .HasColumnType("integer");
 
                     b.HasKey("TimeId");
 
@@ -756,18 +962,63 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Models.Announcement", b =>
                 {
+                    b.HasOne("Domain.BaseModels.FileEntity", "Avatar")
+                        .WithMany()
+                        .HasForeignKey("AvatarId");
+
+                    b.HasOne("Domain.Models.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId");
+
                     b.HasOne("Domain.BaseModels.BaseUser", "BaseUser")
                         .WithMany("Announcements")
                         .HasForeignKey("UserId");
 
+                    b.Navigation("Avatar");
+
                     b.Navigation("BaseUser");
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("Domain.Models.Comment", b =>
+                {
+                    b.HasOne("Domain.Models.News", "News")
+                        .WithMany("Comments")
+                        .HasForeignKey("NewsId");
+
+                    b.HasOne("Domain.Models.Comment", "Parent")
+                        .WithMany("Replies")
+                        .HasForeignKey("ParentId");
+
+                    b.HasOne("Domain.BaseModels.BaseUser", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("News");
+
+                    b.Navigation("Parent");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Models.Course", b =>
                 {
+                    b.HasOne("Domain.BaseModels.FileEntity", "Avatar")
+                        .WithMany()
+                        .HasForeignKey("AvatarId");
+
+                    b.HasOne("Domain.Models.CourseType", "CourseType")
+                        .WithMany()
+                        .HasForeignKey("CourseTypeId");
+
                     b.HasOne("Domain.Models.Instructor", "Instructor")
                         .WithMany("Courses")
                         .HasForeignKey("InstructorId");
+
+                    b.Navigation("Avatar");
+
+                    b.Navigation("CourseType");
 
                     b.Navigation("Instructor");
                 });
@@ -779,6 +1030,24 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("CourseId");
 
                     b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("Domain.Models.CourseType", b =>
+                {
+                    b.HasOne("Domain.Models.Department", "Department")
+                        .WithMany("CourseTypes")
+                        .HasForeignKey("DepartmentId");
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("Domain.Models.Department", b =>
+                {
+                    b.HasOne("Domain.Models.Faculty", "Faculty")
+                        .WithMany("Departments")
+                        .HasForeignKey("FacultyId");
+
+                    b.Navigation("Faculty");
                 });
 
             modelBuilder.Entity("Domain.Models.Event", b =>
@@ -806,6 +1075,15 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("FileId");
 
                     b.Navigation("FileEntity");
+                });
+
+            modelBuilder.Entity("Domain.Models.Notification", b =>
+                {
+                    b.HasOne("Domain.BaseModels.BaseUser", "User")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Models.Offer", b =>
@@ -854,11 +1132,21 @@ namespace Infrastructure.Migrations
                     b.Navigation("Sender");
                 });
 
+            modelBuilder.Entity("Domain.Models.Ticket", b =>
+                {
+                    b.HasOne("Domain.BaseModels.BaseUser", "Creator")
+                        .WithMany("Tickets")
+                        .HasForeignKey("CreatorId");
+
+                    b.Navigation("Creator");
+                });
+
             modelBuilder.Entity("Domain.Models.Time", b =>
                 {
                     b.HasOne("Domain.Models.Course", "Course")
                         .WithMany("Times")
-                        .HasForeignKey("CourseId");
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Course");
                 });
@@ -933,13 +1221,24 @@ namespace Infrastructure.Migrations
                 {
                     b.Navigation("Announcements");
 
+                    b.Navigation("Comments");
+
                     b.Navigation("Events");
 
                     b.Navigation("Favourites");
 
+                    b.Navigation("Notifications");
+
                     b.Navigation("Offers");
 
                     b.Navigation("Suggestions");
+
+                    b.Navigation("Tickets");
+                });
+
+            modelBuilder.Entity("Domain.Models.Comment", b =>
+                {
+                    b.Navigation("Replies");
                 });
 
             modelBuilder.Entity("Domain.Models.Course", b =>
@@ -949,6 +1248,21 @@ namespace Infrastructure.Migrations
                     b.Navigation("Polls");
 
                     b.Navigation("Times");
+                });
+
+            modelBuilder.Entity("Domain.Models.Department", b =>
+                {
+                    b.Navigation("CourseTypes");
+                });
+
+            modelBuilder.Entity("Domain.Models.Faculty", b =>
+                {
+                    b.Navigation("Departments");
+                });
+
+            modelBuilder.Entity("Domain.Models.News", b =>
+                {
+                    b.Navigation("Comments");
                 });
 
             modelBuilder.Entity("Domain.Models.PollQuestion", b =>
