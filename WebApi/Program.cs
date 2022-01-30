@@ -30,7 +30,7 @@ namespace WebApi
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseUrls("http://0.0.0.0:5000", "https://0.0.0.0:5001").UseStartup<Startup>();
+                    webBuilder.UseUrls("http://0.0.0.0:5000").UseStartup<Startup>();
                 });
     }
 }
