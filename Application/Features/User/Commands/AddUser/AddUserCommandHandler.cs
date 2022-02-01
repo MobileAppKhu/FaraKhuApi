@@ -92,7 +92,8 @@ namespace Application.Features.User.Commands.AddUser
                         AvatarId = smiley.Id,
                         EmailConfirmed = true,
                         LinkedIn = request.LinkedIn,
-                        GoogleScholar = request.GoogleScholar
+                        GoogleScholar = request.GoogleScholar,
+                        UserType = UserType.Instructor
                     };
                     break;
                 case UserType.Student:
@@ -105,7 +106,8 @@ namespace Application.Features.User.Commands.AddUser
                         AvatarId = smiley.Id,
                         EmailConfirmed = true,
                         LinkedIn = request.LinkedIn,
-                        GoogleScholar = request.GoogleScholar
+                        GoogleScholar = request.GoogleScholar,
+                        UserType = UserType.Student
                     };
                     break;
                 case UserType.PROfficer:
@@ -117,7 +119,8 @@ namespace Application.Features.User.Commands.AddUser
                         AvatarId = smiley.Id,
                         EmailConfirmed = true,
                         LinkedIn = request.LinkedIn,
-                        GoogleScholar = request.GoogleScholar
+                        GoogleScholar = request.GoogleScholar,
+                        UserType = UserType.PROfficer
                     };
                     break;
             }
