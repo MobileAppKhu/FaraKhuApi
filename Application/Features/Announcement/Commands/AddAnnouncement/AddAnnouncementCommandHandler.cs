@@ -53,13 +53,13 @@ namespace Application.Features.Announcement.Commands.AddAnnouncement
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
                 });
-            Domain.Models.Department departmentObj = null;
-            if (!string.IsNullOrWhiteSpace(request.Department))
-            {
-                departmentObj =
+            
+            // default value computer department because foreign key is not nullable and
+            // front does not support foreign key should be removed in feature
+            var departmentObj =
                     await _context.Departments.Include(department => department.Faculty)
-                        .FirstOrDefaultAsync(department => department.DepartmentId == request.Department,
-                        cancellationToken);
+                        .FirstOrDefaultAsync(department => department.DepartmentTitle == "کامپیوتر",
+                            cancellationToken);
                 if (departmentObj == null)
                 {
                     throw new CustomException(new Error
@@ -68,6 +68,11 @@ namespace Application.Features.Announcement.Commands.AddAnnouncement
                         Message = Localizer["DepartmentNotFound"]
                     });
                 }
+            
+
+            if (string.IsNullOrWhiteSpace(request.Avatar))
+            {
+                request.Avatar = "smiley.png";
             }
 
             var avatarObj =
@@ -80,6 +85,7 @@ namespace Application.Features.Announcement.Commands.AddAnnouncement
                     Message = Localizer["FileNotFound"]
                 });
             }
+
 
             Domain.Models.Announcement announcementObj = new Domain.Models.Announcement
             {
