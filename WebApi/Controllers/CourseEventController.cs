@@ -2,6 +2,7 @@
 using Application.Features.CourseEvent.Commands.AddCourseEvent;
 using Application.Features.CourseEvent.Commands.DeleteCourseEvent;
 using Application.Features.CourseEvent.Commands.EditCourseEvent;
+using Application.Features.CourseEvent.Queries.SearchCourseEvent;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +35,13 @@ namespace WebApi.Controllers
         
         [HttpPost]
         public async Task<IActionResult> DeleteCourseEvent(DeleteCourseEventCommand request)
+        {
+            return Ok(await _mediator.Send(request));
+        }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(SearchCourseEventQueryHandler), 200)]
+        public async Task<IActionResult> SearchCourseEvent(SearchCourseEventQuery request)
         {
             return Ok(await _mediator.Send(request));
         }

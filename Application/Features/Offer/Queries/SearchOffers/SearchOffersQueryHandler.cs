@@ -84,6 +84,13 @@ namespace Application.Features.Offer.Queries.SearchOffers
                         : offerQueryable.OrderByDescending(offer => offer.Price)
                             .ThenByDescending(offer => offer.OfferId);
                     break;
+                case OfferColumn.CreationDate:
+                    offerQueryable = request.OrderDirection
+                        ? offerQueryable.OrderBy(offer => offer.CreatedDate)
+                            .ThenBy(offer => offer.OfferId)
+                        : offerQueryable.OrderByDescending(offer => offer.CreatedDate)
+                            .ThenByDescending(offer => offer.OfferId);
+                    break;
             }
 
             int searchLength = await offerQueryable.CountAsync(cancellationToken);

@@ -33,17 +33,19 @@ namespace Application.Features.Event.Queries.SearchEvent
             HttpContextAccessor = httpContextAccessor;
             _context = context;
         }
+
         public async Task<SearchEventViewModel> Handle(SearchEventQuery request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == userId, cancellationToken);
+            var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == userId,
+                cancellationToken);
             if (user == null)
             {
                 throw new CustomException(new Error
                 {
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
-                }); 
+                });
             }
 
             IQueryable<Domain.Models.Event> eventsQueryable = _context.Events.Where(e => e.UserId == userId);
@@ -100,6 +102,12 @@ namespace Application.Features.Event.Queries.SearchEvent
                             .ThenBy(e => e.EventId)
                         : eventsQueryable.OrderByDescending(e => e.EventTime)
                             .ThenByDescending(e => e.EventId);
+                    break;
+                case EventColumn.CreationDate:
+                    eventsQueryable = request.OrderDirection
+                        ? eventsQueryable.OrderBy(e => e.CreatedDate)
+                            .ThenBy(e => e.EventId)
+                        : eventsQueryable.OrderByDescending(e => e.CreatedDate).ThenByDescending(e => e.EventId);
                     break;
             }
 

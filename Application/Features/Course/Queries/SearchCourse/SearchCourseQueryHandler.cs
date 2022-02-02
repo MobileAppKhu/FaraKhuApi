@@ -127,6 +127,13 @@ namespace Application.Features.Course.Queries.SearchCourse
                         : coursesQueryable.OrderByDescending(course => course.EndDate)
                             .ThenByDescending(course => course.CourseId);
                     break;
+                case CourseColumn.CreationDate:
+                    coursesQueryable = request.OrderDirection
+                        ? coursesQueryable.OrderBy(course => course.CreatedDate)
+                            .ThenBy(course => course.CourseId)
+                        : coursesQueryable.OrderByDescending(course => course.CreatedDate)
+                            .ThenByDescending(course => course.InstructorId);
+                    break;
             }
 
             int searchLength = await coursesQueryable.CountAsync(cancellationToken);

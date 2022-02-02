@@ -5,6 +5,7 @@
         CourseId = 1,
         CourseTypeId = 2,
         EndDate = 3,
-        InstructorId = 4
+        InstructorId = 4,
+        CreationDate = 5
     }
 }

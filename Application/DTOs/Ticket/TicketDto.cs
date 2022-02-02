@@ -12,6 +12,7 @@ namespace Application.DTOs.Ticket
         public string Priority { get; set; }
         public DateTime DeadLine { get; set; }
         public string Creator { get; set; }
+        public DateTime CreatedDate { get; set; }
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Domain.Models.Ticket, TicketDto>()

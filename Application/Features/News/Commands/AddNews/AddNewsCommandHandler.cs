@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -67,7 +68,8 @@ namespace Application.Features.News.Commands.AddNews
             {
                 Description = request.Description,
                 Title = request.Title,
-                FileId = request.FileId
+                FileId = request.FileId,
+                CreatedDate = DateTime.Now
             };
             await _context.News.AddAsync(news, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);

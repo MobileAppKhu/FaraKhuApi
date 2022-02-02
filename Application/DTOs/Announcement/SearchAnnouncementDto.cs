@@ -1,4 +1,5 @@
-﻿using Application.Common.Mappings;
+﻿using System;
+using Application.Common.Mappings;
 using AutoMapper;
 
 namespace Application.DTOs.Announcement
@@ -14,6 +15,7 @@ namespace Application.DTOs.Announcement
         public string UserFullname { get; set; }
         public string CreatorAvatarId { get; set; }
         public string AvatarId { get; set; }
+        public DateTime CreatedDate { get; set; }
 
         public void Mapping(Profile profile)
         {
