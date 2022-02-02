@@ -96,7 +96,8 @@ namespace Application.Features.Announcement.Commands.AddAnnouncement
                 BaseUser = user,
                 UserId = userId,
                 Avatar = avatarObj,
-                AvatarId = request.Avatar
+                AvatarId = request.Avatar,
+                CreatedDate = DateTime.Now
             };
 
             await _context.Announcements.AddAsync(announcementObj, cancellationToken);
