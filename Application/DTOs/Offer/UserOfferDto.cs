@@ -1,6 +1,7 @@
 ﻿using System;
 using Application.Common.Mappings;
 using AutoMapper;
+using Domain.Enum;
 
 
 namespace Application.DTOs.Offer
@@ -11,7 +12,7 @@ namespace Application.DTOs.Offer
         public string UserFullName { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public string OfferType { get; set; }
+        public OfferType OfferType { get; set; }
         public string Price { get; set; }
         public string AvatarId { get; set; }
         public DateTime CreatedDate { get; set; }
@@ -21,13 +22,7 @@ namespace Application.DTOs.Offer
                 .ForMember(o => o.UserFullName,
                     opt =>
                         opt.MapFrom(src => src.BaseUser.FirstName + " "
-                                                                  + src.BaseUser.LastName))
-                .ForMember(o => o.OfferType,
-                    opt =>
-                        opt.MapFrom(src => src.OfferType.ToString()))
-                .ForMember(o => o.OfferType,
-                    opt =>
-                        opt.MapFrom(src => src.OfferType.ToString()));
+                                                                  + src.BaseUser.LastName));
         }
     }
 }
