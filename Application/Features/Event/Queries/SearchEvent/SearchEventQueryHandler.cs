@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
@@ -67,7 +68,7 @@ namespace Application.Features.Event.Queries.SearchEvent
 
             if (request.EventTime != null)
             {
-                eventsQueryable = eventsQueryable.Where(e => e.EventTime == request.EventTime);
+                eventsQueryable = eventsQueryable.Where(e => e.EventTime.Date.CompareTo(((DateTime) request.EventTime).Date) == 0);
             }
 
             if (!string.IsNullOrWhiteSpace(request.CourseId))
