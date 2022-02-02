@@ -9,6 +9,7 @@ namespace Application.DTOs.Offer
     public class UserOfferDto : IMapFrom<Domain.Models.Offer>
     {
         public string OfferId { get; set; }
+        public string UserId { get; set; }
         public string UserFullName { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
