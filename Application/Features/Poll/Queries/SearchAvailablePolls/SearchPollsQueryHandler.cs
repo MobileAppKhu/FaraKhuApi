@@ -30,9 +30,12 @@ namespace Application.Features.Poll.Queries.SearchAvailablePolls
         public async Task<SearchPollsViewModel> Handle(SearchPollsQuery request, CancellationToken cancellationToken)
         {
             List<PollQuestion> polls = await _context.PollQuestions.Include(question => question.Answers)
-                .Where(question => question.CourseId == request.CourseId).Take(request.Step)
+                .Where(question => question.CourseId == request.CourseId)
+                .OrderByDescending(question => question.CreatedDate)
+                .Take(request.Step)
                 .Skip(request.Start).ToListAsync(cancellationToken);
-            int searchLength = await _context.PollQuestions.CountAsync(question => question.CourseId == request.CourseId, cancellationToken);
+            int searchLength = await _context.PollQuestions.Where(question => question.CourseId == request.CourseId)
+                .CountAsync(question => question.CourseId == request.CourseId, cancellationToken);
             return new SearchPollsViewModel
             {
                 Polls = _mapper.Map<ICollection<PollQuestionShortDto>>(polls),

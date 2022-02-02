@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Application.Common.Mappings;
 using Application.DTOs.CourseEvent;
 using Application.DTOs.Instructor;
@@ -15,6 +16,7 @@ namespace Application.DTOs.Course
         public string Department { get; set; }
         public string Faculty { get; set; }
         public string Address { get; set; }
+        public DateTime CreatedDate { get; set; }
 
         public ICollection<SearchCourseTimeDto> Times { get; set; }
 

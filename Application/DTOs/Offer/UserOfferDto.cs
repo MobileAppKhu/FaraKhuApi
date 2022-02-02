@@ -1,4 +1,5 @@
-﻿using Application.Common.Mappings;
+﻿using System;
+using Application.Common.Mappings;
 using AutoMapper;
 
 
@@ -13,7 +14,7 @@ namespace Application.DTOs.Offer
         public string OfferType { get; set; }
         public string Price { get; set; }
         public string AvatarId { get; set; }
-
+        public DateTime CreatedDate { get; set; }
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Domain.Models.Offer, UserOfferDto>()

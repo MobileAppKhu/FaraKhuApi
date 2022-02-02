@@ -106,7 +106,8 @@ namespace Application.Features.Course.Commands.AddCourse
                 CourseType = courseType,
                 Instructor = (Instructor)user,
                 InstructorId = user.Id,
-                EndDate = request.EndDate
+                EndDate = request.EndDate,
+                CreatedDate = DateTime.Now
             };
             await _context.Courses.AddAsync(courseObj, cancellationToken);
 

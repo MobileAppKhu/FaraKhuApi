@@ -14,6 +14,7 @@ namespace Application.DTOs.Event.PersonalEvent
         public bool IsDone { get; set; }
         public string CourseId { get; set; }
         public string CourseTitle { get; set; }
+        public DateTime CreatedDate { get; set; }
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Domain.Models.Event, EventShortDto>();

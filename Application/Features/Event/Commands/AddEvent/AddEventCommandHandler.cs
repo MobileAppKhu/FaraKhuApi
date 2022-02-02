@@ -55,7 +55,8 @@ namespace Application.Features.Event.Commands.AddEvent
                 CourseTitle = "",
                 User = user,
                 UserId = user.Id,
-                isDone = false
+                isDone = false,
+                CreatedDate = DateTime.Now
             };
             
             if (!string.IsNullOrWhiteSpace(request.CourseId))

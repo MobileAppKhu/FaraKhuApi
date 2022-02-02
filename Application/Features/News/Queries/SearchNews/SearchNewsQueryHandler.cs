@@ -49,6 +49,12 @@ namespace Application.Features.News.Queries.SearchNews
                         : newsQueryable.OrderByDescending(news => news.Description)
                             .ThenByDescending(news => news.NewsId);
                     break;
+                case NewsColumn.CreationDate:
+                    newsQueryable = request.OrderDirection
+                        ? newsQueryable.OrderBy(news => news.CreatedDate).ThenBy(news => news.NewsId)
+                        : newsQueryable.OrderByDescending(news => news.CreatedDate)
+                            .ThenByDescending(news => news.NewsId);
+                    break;
             }
 
             int searchCount = await newsQueryable.CountAsync(cancellationToken);

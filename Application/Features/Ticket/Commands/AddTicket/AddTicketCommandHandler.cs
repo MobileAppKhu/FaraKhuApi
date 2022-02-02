@@ -53,7 +53,8 @@ namespace Application.Features.Ticket.Commands.AddTicket
                 Status = TicketStatus.Init,
                 DeadLine = request.DeadLine,
                 CreatorId = userId,
-                Creator = user
+                Creator = user,
+                CreatedDate = DateTime.Now
             };
             await _context.Tickets.AddAsync(ticket, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);

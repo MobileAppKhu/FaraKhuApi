@@ -4,6 +4,7 @@
     {
         NewsId = 1,
         Title = 2,
-        Description = 3
+        Description = 3,
+        CreationDate = 4
     }
 }

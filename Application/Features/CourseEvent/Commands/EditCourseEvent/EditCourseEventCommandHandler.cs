@@ -79,9 +79,9 @@ namespace Application.Features.CourseEvent.Commands.EditCourseEvent
                 editingCourseEvent.EventType = (CourseEventType)request.CourseEventType;
             }
 
-            if (request.EventTime != null)
+            if (!string.IsNullOrWhiteSpace(request.EventTime))
             {
-                editingCourseEvent.EventTime = (DateTime) request.EventTime;
+                editingCourseEvent.EventTime = DateTime.Parse(request.EventTime);
             }
 
             await _context.SaveChangesAsync(cancellationToken);

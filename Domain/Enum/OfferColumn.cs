@@ -6,6 +6,7 @@
         Title = 2,
         Description = 3,
         OfferType = 4,
-        Price = 5
+        Price = 5,
+        CreationDate = 6
     }
 }

@@ -106,6 +106,13 @@ namespace Application.Features.Ticket.Queries.SearchTicket
                         : ticketsQueryable.OrderByDescending(ticket => ticket.DeadLine)
                             .ThenByDescending(ticket => ticket.TicketId);
                     break;
+                case TicketColumn.CreationDate:
+                    ticketsQueryable = request.OrderDirection
+                        ? ticketsQueryable.OrderBy(ticket => ticket.CreatedDate)
+                            .ThenBy(ticket => ticket.CreatorId)
+                        : ticketsQueryable.OrderByDescending(ticket => ticket.CreatedDate)
+                            .ThenByDescending(ticket => ticket.CreatorId);
+                    break;
             }
 
             int searchLength = await ticketsQueryable.CountAsync(cancellationToken);

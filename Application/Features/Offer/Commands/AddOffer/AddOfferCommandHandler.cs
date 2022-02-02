@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -57,7 +58,8 @@ namespace Application.Features.Offer.Commands.AddOffer
                 BaseUser = user,
                 UserId = user.Id,
                 Avatar = avatarObj,
-                AvatarId = request.AvatarId
+                AvatarId = request.AvatarId,
+                CreatedDate = DateTime.Now
             };
             await _context.Offers.AddAsync(offer, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);

@@ -29,7 +29,7 @@ namespace Application.Features.Poll.Commands.AddQuestion
         private IMapper _mapper { get; }
 
         public AddQuestionCommandHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
+            IHttpContextAccessor httpContextAccessor, IMapper mapper
             , IDatabaseContext context)
         {
             _context = context;
@@ -71,7 +71,8 @@ namespace Application.Features.Poll.Commands.AddQuestion
                 QuestionDescription = request.QuestionDescription,
                 MultiVote = bool.Parse(request.MultiVote),
                 Course = course,
-                CourseId = course.CourseId
+                CourseId = course.CourseId,
+                CreatedDate = DateTime.Now
             };
 
             foreach (var answerDescription in request.Answers)
