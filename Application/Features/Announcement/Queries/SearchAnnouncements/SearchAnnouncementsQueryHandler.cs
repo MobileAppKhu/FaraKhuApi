@@ -68,7 +68,7 @@ namespace Application.Features.Announcement.Queries.SearchAnnouncements
                 announcementsQueryable = announcementsQueryable.Where(announcement =>
                     request.AnnouncementIds.Contains(announcement.AnnouncementId));
             }
-            
+
             if (!string.IsNullOrWhiteSpace(request.Description))
             {
                 announcementsQueryable = announcementsQueryable.Where(announcement =>
@@ -105,7 +105,7 @@ namespace Application.Features.Announcement.Queries.SearchAnnouncements
                         ? announcementsQueryable.OrderBy(announcement => announcement.AnnouncementDescription)
                             .ThenBy(announcement => announcement.AnnouncementId)
                         : announcementsQueryable.OrderByDescending(announcement =>
-                            announcement.AnnouncementDescription)
+                                announcement.AnnouncementDescription)
                             .ThenByDescending(announcement => announcement.AnnouncementId);
                     break;
                 case AnnouncementColumn.Title:
@@ -128,6 +128,13 @@ namespace Application.Features.Announcement.Queries.SearchAnnouncements
                             .ThenBy(announcement => announcement.AnnouncementId)
                         : announcementsQueryable.OrderByDescending(announcement => announcement.UserId)
                             .ThenByDescending(announcement => announcement.AnnouncementId);
+                    break;
+                case AnnouncementColumn.CreationDate:
+                    announcementsQueryable = request.OrderDirection
+                        ? announcementsQueryable.OrderBy(announcement => announcement.CreatedDate)
+                            .ThenBy(announcement => announcement.AnnouncementId)
+                        : announcementsQueryable.OrderByDescending(announcement => announcement.CreatedDate)
+                            .ThenByDescending(announcement => announcement.CreatedDate);
                     break;
             }
 
