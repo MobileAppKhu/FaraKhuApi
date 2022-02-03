@@ -42,7 +42,7 @@ namespace Application.Features.Offer.Commands.DeleteOffer
                 });
             Domain.Models.Offer offer = await _context.Offers.Include(o => o.Avatar).
                 FirstOrDefaultAsync(o => o.OfferId == request.OfferId, cancellationToken);
-            if (!user.Offers.Contains(offer))
+            if (!user.Offers.Contains(offer) && user.UserType != UserType.Owner)
             {
                 throw new CustomException(new Error
                 {
@@ -50,7 +50,6 @@ namespace Application.Features.Offer.Commands.DeleteOffer
                     Message = Localizer["Unauthorized"]
                 }); 
             }
-            //TODO check if this offer blongs to user
             _context.Offers.Remove(offer);
             await _context.SaveChangesAsync(cancellationToken);
             
