@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Domain.BaseModels;
 using Domain.Enum;
@@ -31,9 +32,28 @@ namespace UnitTest.Persistence
             Configuration = scopeServiceProvider.GetService<IConfiguration>();
             UserManager = scopeServiceProvider.GetService<UserManager<BaseUser>>();
         }
-
         public async Task Initialize()
         {
+            try
+            {
+                if (await DatabaseContext.Database.EnsureCreatedAsync())
+                    await Initializer();
+                else
+                    while (!DatabaseContext.InitializeHistories.Any(history => history.Version == "V1"))
+                        Thread.Sleep(500);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+        public async Task Initializer()
+        {
+            const string version = "V1";
+
+            if (DatabaseContext.InitializeHistories.Any(history => history.Version == version))
+                return;
+            
             await DatabaseContext.Database.EnsureDeletedAsync();
             await DatabaseContext.Database.EnsureCreatedAsync();
             await RoleInitializer();
@@ -42,6 +62,13 @@ namespace UnitTest.Persistence
             await FacultyInitializer();
             await DepartmentInitializer();
             await CourseTypeInitializer();
+            await CourseInitializer();
+            await DatabaseContext.InitializeHistories.AddAsync(new InitializeHistory
+            {
+                Version = version
+            });
+
+            await DatabaseContext.SaveChangesAsync();
         }
 
         private async Task RoleInitializer()
@@ -54,7 +81,6 @@ namespace UnitTest.Persistence
 
         private async Task UserInitializer()
         {
-            var avatar = await DatabaseContext.Files.FirstOrDefaultAsync(a => a.Id == "smiley.png");
             var officer = new BaseUser
             {
                 FirstName = "PublicRelation",
@@ -62,8 +88,8 @@ namespace UnitTest.Persistence
                 Email = "PublicRelation@FaraKhu.app",
                 UserType = UserType.PROfficer,
                 EmailConfirmed = true,
-                Avatar = avatar,
-                AvatarId = "smiley.png"
+                AvatarId = "smiley.png",
+                UserName = ""
             };
             await UserManager.CreateAsync(officer, "PROfficerPassword");
             await UserManager.AddToRoleAsync(officer, UserType.PROfficer.ToString().Normalize());
@@ -75,8 +101,8 @@ namespace UnitTest.Persistence
                 Email = "Owner@FaraKhu.app",
                 UserType = UserType.Owner,
                 EmailConfirmed = true,
-                Avatar = avatar,
-                AvatarId = "smiley.png"
+                AvatarId = "smiley.png",
+                UserName = ""
             };
             await UserManager.CreateAsync(owner, "OwnerPassword");
             await UserManager.AddToRoleAsync(owner, UserType.Owner.ToString().Normalize());
@@ -89,8 +115,8 @@ namespace UnitTest.Persistence
                 UserType = UserType.Instructor,
                 InstructorId = "12345",
                 EmailConfirmed = true,
-                Avatar = avatar,
-                AvatarId = "smiley.png"
+                AvatarId = "smiley.png",
+                UserName = ""
             };
 
             await UserManager.CreateAsync(instructor, "InstructorPassword");
@@ -104,8 +130,8 @@ namespace UnitTest.Persistence
                 UserType = UserType.Student,
                 StudentId = "12345",
                 EmailConfirmed = true,
-                Avatar = avatar,
-                AvatarId = "smiley.png"
+                AvatarId = "smiley.png",
+                UserName = ""
             };
 
             await UserManager.CreateAsync(student, "StudentPassword");
@@ -139,10 +165,23 @@ namespace UnitTest.Persistence
                 Name = Path.GetFileName(fileStream.Name)
             };
             await DatabaseContext.Files.AddAsync(avatar);
-            var stream = System.IO.File.Create(Configuration["StorePath"] + avatar.Id);
-            await fileStream.CopyToAsync(stream);
-            fileStream.Close();
-            stream.Close();
+            while (true)
+            {
+                var stream = System.IO.File.Create(Configuration["StorePath"] + avatar.Id);
+                await fileStream.CopyToAsync(stream);
+                fileStream.Close();
+                stream.Close();
+                break;
+            }
+            try
+            {
+                System.Threading.Thread.Sleep(100);
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
             return avatar;
         }
         private async Task FacultyInitializer()
@@ -239,6 +278,22 @@ namespace UnitTest.Persistence
             });
 
             await DatabaseContext.CourseTypes.AddRangeAsync(courseTypes);
+            await DatabaseContext.SaveChangesAsync();
+        }
+
+        private async Task CourseInitializer()
+        {
+            var instructor = await DatabaseContext.Instructors.FirstOrDefaultAsync();
+            var Course = new Course
+            {
+                Address = "Address",
+                Instructor = instructor,
+                AvatarId = "smiley.png",
+                CourseId = "CourseId",
+                CourseTypeId = "1"
+            };
+
+            await DatabaseContext.Courses.AddAsync(Course);
             await DatabaseContext.SaveChangesAsync();
         }
     }

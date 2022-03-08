@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 
-namespace Application.Features.Account.SignOut
+namespace Application.Features.Account.Commands.SignOut
 {
     public class SignOutCommandHandler : IRequestHandler<SignOutCommand>
     {

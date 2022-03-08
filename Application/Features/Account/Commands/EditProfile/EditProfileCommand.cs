@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Domain.Models;
 using MediatR;
 
 namespace Application.Features.Account.Commands.EditProfile

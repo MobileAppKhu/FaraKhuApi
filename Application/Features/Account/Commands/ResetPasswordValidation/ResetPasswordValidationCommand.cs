@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Features.Account.ResetPasswordValidation
+namespace Application.Features.Account.Commands.ResetPasswordValidation
 {
     public class ResetPasswordValidationCommand : IRequest<Unit>
     {

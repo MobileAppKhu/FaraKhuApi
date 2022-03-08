@@ -11,7 +11,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Account.ForgetPassword
+namespace Application.Features.Account.Commands.ForgetPassword
 {
     public class ForgetPasswordCommandHandler : IRequestHandler<ForgetPasswordCommand>
     {

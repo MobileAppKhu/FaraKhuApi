@@ -1,20 +1,16 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.DTOs.User;
 using Application.Resources;
 using Application.Utilities;
-using AutoMapper;
 using Domain.BaseModels;
 using Domain.Enum;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Account.ResetPassword
+namespace Application.Features.Account.Commands.ResetPassword
 {
     public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand>
     {

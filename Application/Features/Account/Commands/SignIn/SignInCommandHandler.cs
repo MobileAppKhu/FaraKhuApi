@@ -1,6 +1,4 @@
-﻿
-using System.Formats.Asn1;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
@@ -15,7 +13,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Account.SignIn
+namespace Application.Features.Account.Commands.SignIn
 {
     public class SignInCommandHandler : IRequestHandler<SignInCommand, SignInViewModel>
     {
@@ -39,6 +37,7 @@ namespace Application.Features.Account.SignIn
         }
         public async Task<SignInViewModel> Handle(SignInCommand request, CancellationToken cancellationToken)
         {
+            // this api doesn't show favourites
             var user = await _userManager.FindByEmailAsync(request.Logon.EmailNormalize());
             if (user == null)
                 throw new CustomException(new Error

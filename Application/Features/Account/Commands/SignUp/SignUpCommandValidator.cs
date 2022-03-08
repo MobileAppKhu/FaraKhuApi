@@ -3,7 +3,7 @@ using Application.Utilities;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Account.SignUp
+namespace Application.Features.Account.Commands.SignUp
 {
     public class SignUpCommandValidator : AbstractValidator<SignUpCommand>
     {

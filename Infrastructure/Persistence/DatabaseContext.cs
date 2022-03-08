@@ -71,6 +71,7 @@ namespace Infrastructure.Persistence
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<InitializeHistory> InitializeHistories { set; get; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {

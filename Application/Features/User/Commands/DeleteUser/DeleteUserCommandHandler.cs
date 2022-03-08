@@ -37,6 +37,7 @@ namespace Application.Features.User.Commands.DeleteUser
         }
         public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
+            // TODO
             var user = await _context.BaseUsers.FirstOrDefaultAsync(u => u.Id == request.UserId,
                                                                     cancellationToken);
             if (user == null)

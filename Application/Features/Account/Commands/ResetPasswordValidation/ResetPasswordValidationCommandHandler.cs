@@ -11,7 +11,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Account.ResetPasswordValidation
+namespace Application.Features.Account.Commands.ResetPasswordValidation
 {
     public class ResetPasswordValidationCommandHandler : IRequestHandler<ResetPasswordValidationCommand>
     {

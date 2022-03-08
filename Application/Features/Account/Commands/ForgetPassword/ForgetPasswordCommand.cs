@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Features.Account.ForgetPassword
+namespace Application.Features.Account.Commands.ForgetPassword
 {
     public class ForgetPasswordCommand : IRequest<Unit>
     {

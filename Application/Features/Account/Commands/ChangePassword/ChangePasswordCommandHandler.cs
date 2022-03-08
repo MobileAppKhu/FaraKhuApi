@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
@@ -7,14 +6,12 @@ using Application.Common.Interfaces;
 using Application.Resources;
 using Domain.BaseModels;
 using Domain.Enum;
-using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Account.ChangePassword
+namespace Application.Features.Account.Commands.ChangePassword
 {
     public class ChangePasswordCommandHandler : IRequestHandler<ChangePasswordCommand>
     {

@@ -3,7 +3,7 @@ using Application.Utilities;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Account.EmailVerification
+namespace Application.Features.Account.Commands.EmailVerification
 {
     public class EmailVerificationCommandValidator : AbstractValidator<EmailVerificationCommand>
     {
