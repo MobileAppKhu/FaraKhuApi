@@ -63,6 +63,7 @@ namespace UnitTest.Persistence
             await DepartmentInitializer();
             await CourseTypeInitializer();
             await CourseInitializer();
+            await CourseEventInitializer();
             await DatabaseContext.InitializeHistories.AddAsync(new InitializeHistory
             {
                 Version = version
@@ -313,6 +314,22 @@ namespace UnitTest.Persistence
             Course.Students.Add(Student);
             
             await DatabaseContext.Courses.AddAsync(Course);
+            await DatabaseContext.SaveChangesAsync();
+        }
+
+        private async Task CourseEventInitializer()
+        {
+            var courseEvent = new CourseEvent()
+            {
+                CourseId = "CourseId",
+                EventDescription = "description",
+                EventName = "EventName",
+                EventTime = DateTime.Now,
+                EventType = CourseEventType.Assignment,
+                CourseEventId = "1"
+            };
+
+            await DatabaseContext.CourseEvents.AddAsync(courseEvent);
             await DatabaseContext.SaveChangesAsync();
         }
     }
