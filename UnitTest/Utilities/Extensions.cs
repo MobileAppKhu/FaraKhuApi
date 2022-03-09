@@ -104,5 +104,20 @@ namespace UnitTest.Utilities
 
             client.DefaultRequestHeaders.Add("Cookie", response.Headers.GetValues("Set-Cookie").ToArray()[0]);
         }
+        
+        public static async Task AuthToSecondInstructor(this HttpClient client)
+        {
+            var userObj = new SignInCommand
+            {
+                Logon = "SecondInstructor@Farakhu.app",
+                Password = "SecondInstructorPassword"
+            };
+            var user = JsonConvert.SerializeObject(userObj);
+
+            var response = await client.PostAsync("api/Account/SignIn",
+                new StringContent(user, Encoding.UTF8, "application/json"));
+
+            client.DefaultRequestHeaders.Add("Cookie", response.Headers.GetValues("Set-Cookie").ToArray()[0]);
+        }
     }
 }

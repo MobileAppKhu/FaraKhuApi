@@ -121,6 +121,21 @@ namespace UnitTest.Persistence
 
             await UserManager.CreateAsync(instructor, "InstructorPassword");
             await UserManager.AddToRoleAsync(instructor, UserType.Instructor.ToString().Normalize());
+            
+            var secondInstructor = new Instructor()
+            {
+                FirstName = "Instructor",
+                LastName = "User",
+                Email = "SecondInstructor@FaraKhu.app",
+                UserType = UserType.Instructor,
+                InstructorId = "12345",
+                EmailConfirmed = true,
+                AvatarId = "smiley.png",
+                UserName = ""
+            };
+
+            await UserManager.CreateAsync(secondInstructor, "SecondInstructorPassword");
+            await UserManager.AddToRoleAsync(secondInstructor, UserType.Instructor.ToString().Normalize());
 
             var student = new Student()
             {
@@ -290,9 +305,13 @@ namespace UnitTest.Persistence
                 Instructor = instructor,
                 AvatarId = "smiley.png",
                 CourseId = "CourseId",
-                CourseTypeId = "1"
+                CourseTypeId = "1",
+                Students = new List<Student>()
             };
 
+            var Student = DatabaseContext.Students.First();
+            Course.Students.Add(Student);
+            
             await DatabaseContext.Courses.AddAsync(Course);
             await DatabaseContext.SaveChangesAsync();
         }
