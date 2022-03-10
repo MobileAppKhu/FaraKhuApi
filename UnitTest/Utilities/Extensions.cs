@@ -119,5 +119,20 @@ namespace UnitTest.Utilities
 
             client.DefaultRequestHeaders.Add("Cookie", response.Headers.GetValues("Set-Cookie").ToArray()[0]);
         }
+        
+        public static async Task AuthToOwner(this HttpClient client)
+        {
+            var userObj = new SignInCommand
+            {
+                Logon = "Owner@FaraKhu.app",
+                Password = "OwnerPassword"
+            };
+            var user = JsonConvert.SerializeObject(userObj);
+
+            var response = await client.PostAsync("api/Account/SignIn",
+                new StringContent(user, Encoding.UTF8, "application/json"));
+
+            client.DefaultRequestHeaders.Add("Cookie", response.Headers.GetValues("Set-Cookie").ToArray()[0]);
+        }
     }
 }
