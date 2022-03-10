@@ -54,7 +54,7 @@ namespace Application.Features.Offer.Commands.EditOffer
                     {ErrorType = ErrorType.OfferNotFound, Message = Localizer["OfferNotFound"]});
             }
 
-            if (offerObj.BaseUser != user && user.UserType == UserType.Owner)
+            if (offerObj.BaseUser != user && user.UserType != UserType.Owner)
             {
                 throw new CustomException(new Error
                 {
