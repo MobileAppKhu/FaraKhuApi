@@ -11,7 +11,6 @@ namespace Application.DTOs.Announcement
         public string AnnouncementDescription { get; set; }
         public string Department { get; set; }
         public string Faculty { get; set; }
-
         public string UserFullname { get; set; }
         public string CreatorAvatarId { get; set; }
         public string AvatarId { get; set; }

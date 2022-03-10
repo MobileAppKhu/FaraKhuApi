@@ -350,6 +350,19 @@ namespace UnitTest.Persistence
             };
 
             await DatabaseContext.CourseEvents.AddAsync(courseEvent);
+
+            var secondCourseEvent = new CourseEvent
+            {
+
+                CourseId = "CourseId",
+                EventDescription = "description",
+                EventName = "EventName",
+                EventTime = DateTime.Now,
+                EventType = CourseEventType.Assignment,
+                CourseEventId = "2"
+            };
+            
+            await DatabaseContext.CourseEvents.AddAsync(secondCourseEvent);
             await DatabaseContext.SaveChangesAsync();
         }
 
@@ -367,6 +380,19 @@ namespace UnitTest.Persistence
             };
 
             await DatabaseContext.Events.AddAsync(Event);
+            
+            var SecondEvent = new Event
+            {
+                EventName = "EventName",
+                EventDescription = "EventDescription",
+                EventTime = DateTime.Now,
+                CourseId = "CourseId",
+                EventId = "2",
+                UserId = "InstructorId",
+                isDone = false
+            };
+
+            await DatabaseContext.Events.AddAsync(SecondEvent);
             await DatabaseContext.SaveChangesAsync();
         }
         
@@ -386,6 +412,21 @@ namespace UnitTest.Persistence
             };
 
             await DatabaseContext.Offers.AddAsync(Offer);
+            
+            var SecondOffer = new Offer()
+            {
+                AvatarId = "smiley.png",
+                Description = "description",
+                Price = "1000",
+                Title = "Title",
+                CreatedDate = DateTime.Now,
+                OfferId = "SecondOfferId",
+                OfferType = OfferType.Buy,
+                UserId = "InstructorId",
+                IsDeleted = false
+            };
+
+            await DatabaseContext.Offers.AddAsync(SecondOffer);
             await DatabaseContext.SaveChangesAsync();
         }
         
@@ -404,6 +445,19 @@ namespace UnitTest.Persistence
             };
 
             await DatabaseContext.Tickets.AddAsync(Ticket);
+            var SecondTicket = new Ticket()
+            {
+                Description = "description",
+                Priority = TicketPriority.Important,
+                Status = TicketStatus.Init,
+                CreatedDate = DateTime.Now,
+                CreatorId = "InstructorId",
+                TicketId = "SecondTicketId",
+                IsDeleted = false,
+                DeadLine = DateTime.Now
+            };
+
+            await DatabaseContext.Tickets.AddAsync(SecondTicket);
             await DatabaseContext.SaveChangesAsync();
         }
     }

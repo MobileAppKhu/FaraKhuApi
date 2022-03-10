@@ -17,6 +17,9 @@ namespace Application.Features.Offer.Commands.AddOffer
             RuleFor(r => r.Price)
                 .NotEmpty()
                 .WithMessage(localizer["EmptyInput"]);
+            RuleFor(r => r.OfferType)
+                .NotEmpty()
+                .WithMessage(localizer["EmptyInput"]);
         }
     }
 }

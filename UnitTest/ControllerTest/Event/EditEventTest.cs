@@ -28,7 +28,7 @@ namespace UnitTest.ControllerTest.Event
 
             var data = new EditEventCommand()
             {
-                EventId = "1",
+                EventId = "2",
                 EventName = "EditedEventName"
             };
             //Act
@@ -51,7 +51,7 @@ namespace UnitTest.ControllerTest.Event
 
             var data = new EditEventCommand()
             {
-                EventId = "1",
+                EventId = "2",
                 EventDescription = "EditedEventDescription"
             };
             //Act
@@ -74,7 +74,7 @@ namespace UnitTest.ControllerTest.Event
 
             var data = new EditEventCommand()
             {
-                EventId = "1",
+                EventId = "2",
                 EventTime = DateTime.Today.ToString()
             };
             //Act
@@ -97,7 +97,7 @@ namespace UnitTest.ControllerTest.Event
 
             var data = new EditEventCommand()
             {
-                EventId = "1",
+                EventId = "2",
                 changingIsDone = true
             };
             //Act
@@ -120,7 +120,7 @@ namespace UnitTest.ControllerTest.Event
 
             var data = new EditEventCommand()
             {
-                EventId = "1",
+                EventId = "2",
                 CourseId = "EditedCourseId"
             };
             //Act
@@ -143,7 +143,7 @@ namespace UnitTest.ControllerTest.Event
 
             var data = new EditEventCommand()
             {
-                EventId = "1",
+                EventId = "2",
                 CourseId = "EditedCourseId"
             };
             //Act
@@ -166,7 +166,7 @@ namespace UnitTest.ControllerTest.Event
 
             var data = new EditEventCommand()
             {
-                EventId = "1",
+                EventId = "2",
                 CourseId = "EditedCourseId"
             };
             //Act
@@ -189,7 +189,7 @@ namespace UnitTest.ControllerTest.Event
 
             var data = new EditEventCommand()
             {
-                EventId = "2",
+                EventId = "3",
                 CourseId = "EditedCourseId"
             };
             //Act

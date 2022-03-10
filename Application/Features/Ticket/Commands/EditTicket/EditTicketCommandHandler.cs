@@ -70,8 +70,16 @@ namespace Application.Features.Ticket.Commands.EditTicket
                 editingTicket.DeadLine = request.DeadLine;
             }
 
-            if (request.TicketStatus != null && user.UserType == UserType.Owner)
+            if (request.TicketStatus != null)
             {
+                if (user.UserType != UserType.Owner)
+                {
+                    throw new CustomException(new Error
+                    {
+                        ErrorType = ErrorType.Unauthorized,
+                        Message = Localizer["Unauthorized"]
+                    });
+                }
                 editingTicket.Status = (TicketStatus)request.TicketStatus;
                 if (request.TicketStatus == TicketStatus.InProgress)
                 {

@@ -34,15 +34,29 @@ namespace Application.Features.Offer.Commands.DeleteOffer
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             BaseUser user = _context.BaseUsers.Include(u => u.Offers).FirstOrDefault(u => u.Id == userId);
-            if(user == null)
+            if (user == null)
+            {
                 throw new CustomException(new Error
                 {
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
+                }); 
+            }
+                
+            Domain.Models.Offer offer = await _context.Offers
+                .Include(o => o.Avatar)
+                .Include(o => o.BaseUser)
+                .FirstOrDefaultAsync(o => o.OfferId == request.OfferId, cancellationToken);
+            if (offer == null)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.OfferNotFound,
+                    Message = Localizer["OfferNotFound"]
                 });
-            Domain.Models.Offer offer = await _context.Offers.Include(o => o.Avatar).
-                FirstOrDefaultAsync(o => o.OfferId == request.OfferId, cancellationToken);
-            if (!user.Offers.Contains(offer) && user.UserType != UserType.Owner)
+            }
+            
+            if (offer.BaseUser != user && user.UserType != UserType.Owner)
             {
                 throw new CustomException(new Error
                 {

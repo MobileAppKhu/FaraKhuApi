@@ -30,7 +30,7 @@ namespace UnitTest.ControllerTest.Ticket
             var data = new EditTicketCommand()
             {
                 Description = "EditedDescription",
-                TicketId = "TicketId"
+                TicketId = "SecondTicketId"
             };
             //Act
             var response = await client.PostAsync(_path, data);
@@ -53,7 +53,7 @@ namespace UnitTest.ControllerTest.Ticket
             var data = new EditTicketCommand()
             {
                 Priority = TicketPriority.Normal,
-                TicketId = "TicketId"
+                TicketId = "SecondTicketId"
             };
             //Act
             var response = await client.PostAsync(_path, data);
@@ -76,7 +76,7 @@ namespace UnitTest.ControllerTest.Ticket
             var data = new EditTicketCommand()
             {
                 DeadLine = DateTime.Today,
-                TicketId = "TicketId"
+                TicketId = "SecondTicketId"
             };
             //Act
             var response = await client.PostAsync(_path, data);
@@ -99,7 +99,7 @@ namespace UnitTest.ControllerTest.Ticket
             var data = new EditTicketCommand()
             {
                 TicketStatus = TicketStatus.Solved,
-                TicketId = "TicketId"
+                TicketId = "SecondTicketId"
             };
             //Act
             var response = await client.PostAsync(_path, data);
@@ -122,7 +122,7 @@ namespace UnitTest.ControllerTest.Ticket
             var data = new EditTicketCommand()
             {
                 TicketStatus = TicketStatus.InProgress,
-                TicketId = "TicketId"
+                TicketId = "SecondTicketId"
             };
             //Act
             var response = await client.PostAsync(_path, data);
@@ -145,7 +145,7 @@ namespace UnitTest.ControllerTest.Ticket
             var data = new EditTicketCommand()
             {
                 TicketStatus = TicketStatus.Solved,
-                TicketId = "TicketId"
+                TicketId = "SecondTicketId"
             };
             //Act
             var response = await client.PostAsync(_path, data);
@@ -168,7 +168,7 @@ namespace UnitTest.ControllerTest.Ticket
             var data = new EditTicketCommand()
             {
                 Description = "EditedDiscription",
-                TicketId = "TicketId"
+                TicketId = "SecondTicketId"
             };
             //Act
             var response = await client.PostAsync(_path, data);
@@ -191,7 +191,7 @@ namespace UnitTest.ControllerTest.Ticket
             var data = new EditTicketCommand()
             {
                 Description = "EditedDiscription",
-                TicketId = "TicketId"
+                TicketId = "SecondTicketId"
             };
             //Act
             var response = await client.PostAsync(_path, data);
@@ -213,7 +213,7 @@ namespace UnitTest.ControllerTest.Ticket
 
             var data = new EditTicketCommand()
             {
-                Description = "EditedDiscription",
+                Description = "EditedDescription",
                 TicketId = "NotTicketId"
             };
             //Act

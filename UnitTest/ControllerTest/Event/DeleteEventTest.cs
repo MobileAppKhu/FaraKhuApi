@@ -92,7 +92,7 @@ namespace UnitTest.ControllerTest.Event
 
             var data = new DeleteEventCommand()
             {
-                EventId = "2"
+                EventId = "3"
             };
             //Act
             var response = await client.PostAsync(_path, data);

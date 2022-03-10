@@ -47,7 +47,9 @@ namespace Application.Features.Offer.Commands.EditOffer
             }
 
             var offerObj =
-                await _context.Offers.Include(offer => offer.BaseUser).FirstOrDefaultAsync(a => a.OfferId == request.OfferId, cancellationToken);
+                await _context.Offers
+                    .Include(offer => offer.BaseUser)
+                    .FirstOrDefaultAsync(a => a.OfferId == request.OfferId, cancellationToken);
             if (offerObj == null)
             {
                 throw new CustomException(new Error

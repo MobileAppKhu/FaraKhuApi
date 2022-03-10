@@ -28,7 +28,7 @@ namespace UnitTest.ControllerTest.Offer
 
             var data = new EditOfferCommand()
             {
-                OfferId = "OfferId",
+                OfferId = "SecondOfferId",
                 Title = "EditedTitle"
             };
             //Act
@@ -51,7 +51,7 @@ namespace UnitTest.ControllerTest.Offer
 
             var data = new EditOfferCommand()
             {
-                OfferId = "OfferId",
+                OfferId = "SecondOfferId",
                 Description = "EditedDescription"
             };
             //Act
@@ -74,7 +74,7 @@ namespace UnitTest.ControllerTest.Offer
 
             var data = new EditOfferCommand()
             {
-                OfferId = "OfferId",
+                OfferId = "SecondOfferId",
                 OfferType = OfferType.Sell 
             };
             //Act
@@ -97,7 +97,7 @@ namespace UnitTest.ControllerTest.Offer
 
             var data = new EditOfferCommand()
             {
-                OfferId = "OfferId",
+                OfferId = "SecondOfferId",
                 Price = "2000"
             };
             //Act
@@ -120,7 +120,7 @@ namespace UnitTest.ControllerTest.Offer
 
             var data = new EditOfferCommand()
             {
-                OfferId = "OfferId",
+                OfferId = "SecondOfferId",
                 AvatarId = "sad.png"
             };
             //Act
@@ -143,7 +143,7 @@ namespace UnitTest.ControllerTest.Offer
 
             var data = new EditOfferCommand()
             {
-                OfferId = "OfferId",
+                OfferId = "SecondOfferId",
                 AvatarId = "Not.png"
             };
             //Act
@@ -166,7 +166,7 @@ namespace UnitTest.ControllerTest.Offer
 
             var data = new EditOfferCommand()
             {
-                OfferId = "OfferId",
+                OfferId = "SecondOfferId",
                 Price = "2000"
             };
             //Act
@@ -189,7 +189,7 @@ namespace UnitTest.ControllerTest.Offer
 
             var data = new EditOfferCommand()
             {
-                OfferId = "OfferId",
+                OfferId = "SecondOfferId",
                 Price = "2000"
             };
             //Act

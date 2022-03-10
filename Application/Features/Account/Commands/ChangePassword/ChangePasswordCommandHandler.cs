@@ -34,20 +34,16 @@ namespace Application.Features.Account.Commands.ChangePassword
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             BaseUser user = await UserManager.FindByIdAsync(userId);
-            if(user == null)
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            if(UserManager.PasswordHasher.VerifyHashedPassword(user, user.PasswordHash,
+            if (UserManager.PasswordHasher.VerifyHashedPassword(user, user.PasswordHash,
                 request.OldPassword) == PasswordVerificationResult.Failed)
+            {
                 throw new CustomException(new Error
                 {
                     ErrorType = ErrorType.InvalidPassword,
                     Message = Localizer["InvalidPassword"]
                 });
-            
+            }
+                
             await UserManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;

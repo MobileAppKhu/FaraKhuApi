@@ -31,7 +31,7 @@ namespace UnitTest.ControllerTest.CourseEvent
 
             var data = new EditCourseEventCommand()
             {
-                CourseEventId = "1",
+                CourseEventId = "2",
                 Description = "EditedDescription",
             };
             //Act
@@ -54,7 +54,7 @@ namespace UnitTest.ControllerTest.CourseEvent
 
             var data = new EditCourseEventCommand()
             {
-                CourseEventId = "1",
+                CourseEventId = "2",
                 EventName = "EditedEventName",
             };
             //Act
@@ -77,7 +77,7 @@ namespace UnitTest.ControllerTest.CourseEvent
 
             var data = new EditCourseEventCommand()
             {
-                CourseEventId = "1",
+                CourseEventId = "2",
                 CourseEventType = CourseEventType.Exam,
                 
             };
@@ -101,7 +101,7 @@ namespace UnitTest.ControllerTest.CourseEvent
 
             var data = new EditCourseEventCommand()
             {
-                CourseEventId = "1",
+                CourseEventId = "2",
                 EventTime = DateTime.Today.ToString()
             };
             //Act
@@ -126,7 +126,7 @@ namespace UnitTest.ControllerTest.CourseEvent
             {
                 Description = "EditedDescription",
                 EventName = "EditedEventName",
-                CourseEventId = "2",
+                CourseEventId = "3",
                 CourseEventType = CourseEventType.Assignment
             };
             //Act
@@ -151,7 +151,7 @@ namespace UnitTest.ControllerTest.CourseEvent
             {
                 Description = "EditedDescription",
                 EventName = "EditedEventName",
-                CourseEventId = "1",
+                CourseEventId = "2",
                 CourseEventType = CourseEventType.Assignment
             };
             //Act
@@ -176,7 +176,7 @@ namespace UnitTest.ControllerTest.CourseEvent
             {
                 Description = "EditedDescription",
                 EventName = "EditedEventName",
-                CourseEventId = "1",
+                CourseEventId = "2",
                 CourseEventType = CourseEventType.Assignment
             };
             //Act

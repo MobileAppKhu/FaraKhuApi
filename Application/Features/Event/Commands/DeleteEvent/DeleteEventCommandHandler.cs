@@ -50,8 +50,8 @@ namespace Application.Features.Event.Commands.DeleteEvent
             {
                 throw new CustomException(new Error
                 {
-                    ErrorType = ErrorType.CourseEventNotFound,
-                    Message = Localizer["CourseEventNotFound"]
+                    ErrorType = ErrorType.EventNotFound,
+                    Message = Localizer["EventNotFound"]
                 });
             }
 

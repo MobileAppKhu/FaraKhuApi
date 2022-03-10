@@ -51,8 +51,7 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> SignOut(SignOutCommand request)
         {
-            await _mediator.Send(request);
-            return Ok();
+            return Ok(await _mediator.Send(request));
         }
         
         [HttpPost]

@@ -42,7 +42,7 @@ namespace UnitTest.ControllerTest.Offer
         }
         
         [Fact]
-        public async Task DeleteOffer_OfeerShouldNotBeFound()
+        public async Task DeleteOffer_OfferShouldNotBeFound()
         {
             // Arrange
             var client = Host.GetTestClient();
