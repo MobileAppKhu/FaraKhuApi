@@ -93,5 +93,53 @@ namespace UnitTest.ControllerTest.Event
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
             Assert.True(await response.HasErrorCode());
         }
+        
+        [Fact]
+        public async Task AddEvent_ShouldNotCreateWithOutName()
+        {
+            // Arrange
+            var client = Host.GetTestClient();
+            await client.AuthToInstructor();
+
+            var data = new AddEventCommand()
+            {
+                CourseId = "CourseId",
+                EventDescription = "Description",
+                EventTime = DateTime.Now
+            };
+            //Act
+            var response = await client.PostAsync(_path, data);
+            
+            //Output
+            _outputHelper.WriteLine(await response.GetContent());
+            
+            //Assert
+            Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
+            Assert.True(await response.HasErrorCode());
+        }
+        
+        [Fact]
+        public async Task AddEvent_ShouldNotCreateWithOuttime()
+        {
+            // Arrange
+            var client = Host.GetTestClient();
+            await client.AuthToInstructor();
+
+            var data = new AddEventCommand()
+            {
+                CourseId = "CourseId",
+                EventName = "EventName",
+                EventDescription = "Description"
+            };
+            //Act
+            var response = await client.PostAsync(_path, data);
+            
+            //Output
+            _outputHelper.WriteLine(await response.GetContent());
+            
+            //Assert
+            Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
+            Assert.True(await response.HasErrorCode());
+        }
     }
 }

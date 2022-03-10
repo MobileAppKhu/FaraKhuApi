@@ -65,6 +65,7 @@ namespace UnitTest.Persistence
             await CourseInitializer();
             await CourseEventInitializer();
             await EventInitializer();
+            await OfferInitializer();
             await DatabaseContext.InitializeHistories.AddAsync(new InitializeHistory
             {
                 Version = version
@@ -363,6 +364,25 @@ namespace UnitTest.Persistence
             };
 
             await DatabaseContext.Events.AddAsync(Event);
+            await DatabaseContext.SaveChangesAsync();
+        }
+        
+        private async Task OfferInitializer()
+        {
+            var Offer = new Offer()
+            {
+                AvatarId = "smiley.png",
+                Description = "description",
+                Price = "1000",
+                Title = "Title",
+                CreatedDate = DateTime.Now,
+                OfferId = "OfferId",
+                OfferType = OfferType.Buy,
+                UserId = "InstructorId",
+                IsDeleted = false
+            };
+
+            await DatabaseContext.Offers.AddAsync(Offer);
             await DatabaseContext.SaveChangesAsync();
         }
     }
