@@ -64,6 +64,7 @@ namespace UnitTest.Persistence
             await CourseTypeInitializer();
             await CourseInitializer();
             await CourseEventInitializer();
+            await EventInitializer();
             await DatabaseContext.InitializeHistories.AddAsync(new InitializeHistory
             {
                 Version = version
@@ -90,7 +91,8 @@ namespace UnitTest.Persistence
                 UserType = UserType.PROfficer,
                 EmailConfirmed = true,
                 AvatarId = "smiley.png",
-                UserName = ""
+                UserName = "",
+                Id = "OfficerId"
             };
             await UserManager.CreateAsync(officer, "PROfficerPassword");
             await UserManager.AddToRoleAsync(officer, UserType.PROfficer.ToString().Normalize());
@@ -103,7 +105,8 @@ namespace UnitTest.Persistence
                 UserType = UserType.Owner,
                 EmailConfirmed = true,
                 AvatarId = "smiley.png",
-                UserName = ""
+                UserName = "",
+                Id = "OwnerId"
             };
             await UserManager.CreateAsync(owner, "OwnerPassword");
             await UserManager.AddToRoleAsync(owner, UserType.Owner.ToString().Normalize());
@@ -117,7 +120,8 @@ namespace UnitTest.Persistence
                 InstructorId = "12345",
                 EmailConfirmed = true,
                 AvatarId = "smiley.png",
-                UserName = ""
+                UserName = "",
+                Id = "InstructorId"
             };
 
             await UserManager.CreateAsync(instructor, "InstructorPassword");
@@ -132,7 +136,8 @@ namespace UnitTest.Persistence
                 InstructorId = "12345",
                 EmailConfirmed = true,
                 AvatarId = "smiley.png",
-                UserName = ""
+                UserName = "",
+                Id = "SecondInstructorId"
             };
 
             await UserManager.CreateAsync(secondInstructor, "SecondInstructorPassword");
@@ -147,7 +152,8 @@ namespace UnitTest.Persistence
                 StudentId = "12345",
                 EmailConfirmed = true,
                 AvatarId = "smiley.png",
-                UserName = ""
+                UserName = "",
+                Id = "StudentId"
             };
 
             await UserManager.CreateAsync(student, "StudentPassword");
@@ -309,10 +315,20 @@ namespace UnitTest.Persistence
                 CourseTypeId = "1",
                 Students = new List<Student>()
             };
+            var EditCourse = new Course
+            {
+                Address = "Address",
+                Instructor = instructor,
+                AvatarId = "smiley.png",
+                CourseId = "EditedCourseId",
+                CourseTypeId = "2",
+                Students = new List<Student>()
+            };
 
             var Student = DatabaseContext.Students.First();
             Course.Students.Add(Student);
             
+            await DatabaseContext.Courses.AddAsync(EditCourse);
             await DatabaseContext.Courses.AddAsync(Course);
             await DatabaseContext.SaveChangesAsync();
         }
@@ -330,6 +346,23 @@ namespace UnitTest.Persistence
             };
 
             await DatabaseContext.CourseEvents.AddAsync(courseEvent);
+            await DatabaseContext.SaveChangesAsync();
+        }
+
+        private async Task EventInitializer()
+        {
+            var Event = new Event()
+            {
+                EventName = "EventName",
+                EventDescription = "EventDescription",
+                EventTime = DateTime.Now,
+                CourseId = "CourseId",
+                EventId = "1",
+                UserId = "InstructorId",
+                isDone = false
+            };
+
+            await DatabaseContext.Events.AddAsync(Event);
             await DatabaseContext.SaveChangesAsync();
         }
     }
