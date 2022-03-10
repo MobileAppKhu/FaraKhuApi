@@ -48,7 +48,7 @@ namespace UnitTest.ControllerTest.Offer
         }
         
         [Fact]
-        public async Task AddOffer_SholudNotCreatOfferWithOutAvatar()
+        public async Task AddOffer_ShouldNotCreatOfferWithOutAvatar()
         {
             // Arrange
             var client = Host.GetTestClient();
@@ -73,7 +73,7 @@ namespace UnitTest.ControllerTest.Offer
         }
         
         [Fact]
-        public async Task AddOffer_SholudNotCreatOfferWithOutPrice()
+        public async Task AddOffer_ShouldNotCreatOfferWithOutPrice()
         {
             // Arrange
             var client = Host.GetTestClient();
@@ -98,7 +98,7 @@ namespace UnitTest.ControllerTest.Offer
         }
         
         [Fact]
-        public async Task AddOffer_SholudNotCreatOfferWithOutTitle()
+        public async Task AddOffer_ShouldNotCreatOfferWithOutTitle()
         {
             // Arrange
             var client = Host.GetTestClient();
@@ -123,7 +123,7 @@ namespace UnitTest.ControllerTest.Offer
         }
         
         [Fact]
-        public async Task AddOffer_SholudNotCreatOfferWithOutDescription()
+        public async Task AddOffer_ShouldNotCreatOfferWithOutDescription()
         {
             // Arrange
             var client = Host.GetTestClient();

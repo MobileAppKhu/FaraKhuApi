@@ -158,7 +158,7 @@ namespace UnitTest.ControllerTest.Offer
         }
         
         [Fact]
-        public async Task EditOfferAvatar_AnotherUserShouldNotEdit()
+        public async Task EditOffer_AnotherUserShouldNotEdit()
         {
             // Arrange
             var client = Host.GetTestClient();
@@ -181,7 +181,7 @@ namespace UnitTest.ControllerTest.Offer
         }
         
         [Fact]
-        public async Task EditOfferAvatar_AnotherUserTypeShouldNotEdit()
+        public async Task EditOffer_AnotherUserTypeShouldNotEdit()
         {
             // Arrange
             var client = Host.GetTestClient();
@@ -204,7 +204,7 @@ namespace UnitTest.ControllerTest.Offer
         }
         
         [Fact]
-        public async Task EditOfferAvatar_OfferShouldNotBeFound()
+        public async Task EditOffer_OfferShouldNotBeFound()
         {
             // Arrange
             var client = Host.GetTestClient();
