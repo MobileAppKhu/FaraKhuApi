@@ -66,6 +66,7 @@ namespace UnitTest.Persistence
             await CourseEventInitializer();
             await EventInitializer();
             await OfferInitializer();
+            await TicketInitializer();
             await DatabaseContext.InitializeHistories.AddAsync(new InitializeHistory
             {
                 Version = version
@@ -159,6 +160,8 @@ namespace UnitTest.Persistence
 
             await UserManager.CreateAsync(student, "StudentPassword");
             await UserManager.AddToRoleAsync(student, UserType.Student.ToString().Normalize());
+            
+            
         }
 
         private async Task AvatarInitializer()
@@ -383,6 +386,24 @@ namespace UnitTest.Persistence
             };
 
             await DatabaseContext.Offers.AddAsync(Offer);
+            await DatabaseContext.SaveChangesAsync();
+        }
+        
+        private async Task TicketInitializer()
+        {
+            var Ticket = new Ticket()
+            {
+                Description = "description",
+                Priority = TicketPriority.Important,
+                Status = TicketStatus.Init,
+                CreatedDate = DateTime.Now,
+                CreatorId = "InstructorId",
+                TicketId = "TicketId",
+                IsDeleted = false,
+                DeadLine = DateTime.Now
+            };
+
+            await DatabaseContext.Tickets.AddAsync(Ticket);
             await DatabaseContext.SaveChangesAsync();
         }
     }
