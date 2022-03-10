@@ -135,6 +135,29 @@ namespace UnitTest.ControllerTest.Offer
         }
         
         [Fact]
+        public async Task EditOfferAvatar_ShouldNotWorkCorrectly()
+        {
+            // Arrange
+            var client = Host.GetTestClient();
+            await client.AuthToInstructor();
+
+            var data = new EditOfferCommand()
+            {
+                OfferId = "OfferId",
+                AvatarId = "Not.png"
+            };
+            //Act
+            var response = await client.PostAsync(_path, data);
+            
+            //Output
+            _outputHelper.WriteLine(await response.GetContent());
+            
+            //Assert
+            Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
+            Assert.True(await response.HasErrorCode());
+        }
+        
+        [Fact]
         public async Task EditOfferAvatar_AnotherUserShouldNotEdit()
         {
             // Arrange
