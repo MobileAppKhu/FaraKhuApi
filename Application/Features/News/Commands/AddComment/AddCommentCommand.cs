@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Domain.Enum;
+using MediatR;
 
 namespace Application.Features.News.Commands.AddComment
 

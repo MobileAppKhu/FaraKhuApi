@@ -460,5 +460,31 @@ namespace UnitTest.Persistence
             await DatabaseContext.Tickets.AddAsync(SecondTicket);
             await DatabaseContext.SaveChangesAsync();
         }
+
+        private async Task NewsInitializer()
+        {
+            var news = new News
+            {
+                Description = "خوش آمدید.",
+                Title = "خبر تستی",
+                NewsId = "NewsId",
+                CreatedDate = DateTime.Now,
+                FileId = "smiley.png",
+                LastModifiedDate = DateTime.Now,
+            };
+
+            var comment = new Comment()
+            {
+                CommentId = "CommentId",
+                CreatedDate = DateTime.Now,
+                LastModifiedDate = DateTime.Now,
+                News = news,
+                Status = CommentStatus.Approved,
+            };
+            await DatabaseContext.News.AddAsync(news);
+            await DatabaseContext.Comments.AddAsync(comment);
+            await DatabaseContext.SaveChangesAsync();
+
+        } 
     }
 }

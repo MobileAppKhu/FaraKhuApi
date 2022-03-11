@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
-    [Authorize(Policy = "PROfficerPolicy")]
+    // [Authorize(Policy = "PROfficerPolicy")]
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class NewsController : ControllerBase
@@ -26,6 +26,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "PROfficerPolicy")]
         [ProducesResponseType(typeof(AddNewsViewModel), 200)]
         public async Task<IActionResult> AddNews(AddNewsCommand request)
         {
@@ -33,6 +34,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "PROfficerPolicy")]
         public async Task<IActionResult> DeleteNews(DeleteNewsCommand request)
         {
             return Ok(await _mediator.Send(request));
@@ -47,31 +49,35 @@ namespace WebApi.Controllers
         }
         
         [HttpPost]
+        [Authorize(Policy = "PROfficerPolicy")]
         public async Task<IActionResult> EditNews(EditNewsCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> AddComment(AddCommentCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> GetComments(CommentsQuery request)
         {
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPost]
-        [Authorize(Policy = "OwnerPolicy")]
+        [Authorize(Policy = "PROfficerPolicy")]
         public async Task<IActionResult> CommentApproval(CommentApprovalCommand request)
         {
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPost]
+        [Authorize(Policy = "PROfficerPolicy")]
         public async Task<IActionResult> RemoveComment(RemoveCommentCommand request)
         {
             return Ok(await _mediator.Send(request));
