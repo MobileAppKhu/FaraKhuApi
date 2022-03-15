@@ -135,7 +135,7 @@ namespace UnitTest.Persistence
                 LastName = "User",
                 Email = "SecondInstructor@FaraKhu.app",
                 UserType = UserType.Instructor,
-                InstructorId = "12345",
+                InstructorId = "1234512345",
                 EmailConfirmed = true,
                 AvatarId = "smiley.png",
                 UserName = "",
@@ -160,7 +160,22 @@ namespace UnitTest.Persistence
 
             await UserManager.CreateAsync(student, "StudentPassword");
             await UserManager.AddToRoleAsync(student, UserType.Student.ToString().Normalize());
-            
+
+            var secondStudent = new Student()
+            {
+                FirstName = "Student",
+                LastName = "User",
+                Email = "SecondStudent@FaraKhu.app",
+                UserType = UserType.Student,
+                StudentId = "1234512345",
+                EmailConfirmed = true,
+                AvatarId = "smiley.png",
+                UserName = "",
+                Id = "SecondStudentId"
+            };
+
+            await UserManager.CreateAsync(secondStudent, "SecondStudentPassword");
+            await UserManager.AddToRoleAsync(secondStudent, UserType.Student.ToString().Normalize());
             
         }
 
@@ -310,7 +325,7 @@ namespace UnitTest.Persistence
         private async Task CourseInitializer()
         {
             var instructor = await DatabaseContext.Instructors.FirstOrDefaultAsync();
-            var Course = new Course
+            var course = new Course
             {
                 Address = "Address",
                 Instructor = instructor,
@@ -319,7 +334,7 @@ namespace UnitTest.Persistence
                 CourseTypeId = "1",
                 Students = new List<Student>()
             };
-            var EditCourse = new Course
+            var editCourse = new Course
             {
                 Address = "Address",
                 Instructor = instructor,
@@ -329,11 +344,11 @@ namespace UnitTest.Persistence
                 Students = new List<Student>()
             };
 
-            var Student = DatabaseContext.Students.First();
-            Course.Students.Add(Student);
+            var student = await DatabaseContext.Students.FirstOrDefaultAsync(student => student.Id == "SecondStudentId");
+            course.Students.Add(student);
             
-            await DatabaseContext.Courses.AddAsync(EditCourse);
-            await DatabaseContext.Courses.AddAsync(Course);
+            await DatabaseContext.Courses.AddAsync(editCourse);
+            await DatabaseContext.Courses.AddAsync(course);
             await DatabaseContext.SaveChangesAsync();
         }
 

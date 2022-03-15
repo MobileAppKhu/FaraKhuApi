@@ -92,10 +92,35 @@ namespace Application.Features.Course.Commands.EditCourse
                 editingCourse.Address = request.Address;
             }
 
+            if (request.EndDate != null)
+            {
+                editingCourse.EndDate = request.EndDate.Value;
+            }
+
+            if (request.AvatarId != null)
+            {
+                var avatar =
+                    await _context.Files.FirstOrDefaultAsync(avatar => avatar.Id == request.AvatarId,
+                        cancellationToken);
+                if (avatar == null)
+                {
+                    throw new CustomException(new Error
+                    {
+                        ErrorType = ErrorType.FileNotFound,
+                        Message = Localizer["FileNotFound"]
+                    });
+                }
+
+                editingCourse.AvatarId = request.AvatarId;
+                editingCourse.Avatar = avatar;
+            }
+
             if (request.AddStudentDto != null && request.AddStudentDto.StudentIds.Count != 0)
             {
                 List<Student> addStudents = _context.Students
-                    .Where(student => request.AddStudentDto.StudentIds.Contains(student.StudentId)).ToList();
+                    .Include(student => student.Courses)
+                    .Where(student => request.AddStudentDto.StudentIds.Contains(student.StudentId) &&
+                                      !student.Courses.Contains(editingCourse)).ToList();
                 if (addStudents.Count != request.AddStudentDto.StudentIds.Count)
                 {
                     throw new CustomException(new Error
