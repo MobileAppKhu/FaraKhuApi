@@ -11,9 +11,6 @@ namespace Application.Features.Poll.Commands.EditQuestion
             RuleFor(r => r.QuestionId)
                 .NotEmpty()
                 .WithMessage(localizer["EmptyInput"]);
-            RuleFor(r => r.QuestionDescription)
-                .NotEmpty()
-                .WithMessage(localizer["EmptyInput"]);
         }
     }
 }
