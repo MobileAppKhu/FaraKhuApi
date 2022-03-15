@@ -20,6 +20,7 @@ namespace UnitTest.ControllerTest.Account
         
         [Theory]
         [InlineData("Student@Farakhu.app", "StudentPassword")]
+        [InlineData("SecondStudent@Farakhu.app", "SecondStudentPassword")]
         [InlineData("Instructor@Farakhu.app", "InstructorPassword")]
         [InlineData("PublicRelation@FaraKhu.app", "PROfficerPassword")]
         [InlineData("Owner@Farakhu.app", "OwnerPassword")]
