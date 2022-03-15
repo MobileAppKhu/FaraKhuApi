@@ -67,7 +67,7 @@ namespace Application.Features.Poll.Commands.EditQuestion
                 });
             }
 
-            if (request.DeleteAnswers.Count != 0)
+            if (request.DeleteAnswers != null && request.DeleteAnswers.Count != 0)
             {
                 var deleteAnswers = await _context.PollAnswers.Where(answer =>
                         answer.QuestionId == questionObj.QuestionId && request.DeleteAnswers.Contains(answer.AnswerId))
@@ -86,7 +86,7 @@ namespace Application.Features.Poll.Commands.EditQuestion
                 }
             }
 
-            if (request.AddAnswers.Count != 0)
+            if (request.AddAnswers != null && request.AddAnswers.Count != 0)
             {
                 foreach (var answerDescription in request.AddAnswers)
                 {
