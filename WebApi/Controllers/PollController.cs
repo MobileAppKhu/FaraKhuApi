@@ -30,7 +30,7 @@ namespace WebApi.Controllers
         }
         [HttpPost]
         [Authorize(Policy = "InstructorPolicy")]
-        public async Task<IActionResult> DeletePollQuestion(RemoveQuestionCommand request)
+        public async Task<IActionResult> DeletePollQuestion(DeleteQuestionCommand request)
         {
             return Ok(await _mediator.Send(request));
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
@@ -72,7 +73,8 @@ namespace Application.Features.Poll.Commands.AddQuestion
                 MultiVote = bool.Parse(request.MultiVote),
                 Course = course,
                 CourseId = course.CourseId,
-                CreatedDate = DateTime.Now
+                CreatedDate = DateTime.Now,
+                Answers = new List<PollAnswer>()
             };
 
             foreach (var answerDescription in request.Answers)

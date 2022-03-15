@@ -67,6 +67,8 @@ namespace UnitTest.Persistence
             await EventInitializer();
             await OfferInitializer();
             await TicketInitializer();
+            await PollInitializer();
+            await NewsInitializer();
             await DatabaseContext.InitializeHistories.AddAsync(new InitializeHistory
             {
                 Version = version
@@ -499,7 +501,64 @@ namespace UnitTest.Persistence
             await DatabaseContext.News.AddAsync(news);
             await DatabaseContext.Comments.AddAsync(comment);
             await DatabaseContext.SaveChangesAsync();
-
-        } 
+        }
+        
+        
+        private async Task PollInitializer()
+        {
+            var PollQ = new PollQuestion()
+            {
+                CourseId = "CourseId",
+                CreatedDate = DateTime.Now,
+                IsOpen = true,
+                MultiVote = true,
+                QuestionDescription = "QuestionDescription",
+                QuestionId = "QuestionId",
+                Answers = new List<PollAnswer>()
+                {
+                    new()
+                    {
+                        AnswerDescription = "Answer1",
+                        AnswerId = "Answer1",
+                        QuestionId = "QuestionId"
+                    },
+                    new()
+                    {
+                        AnswerDescription = "Answer2",
+                        AnswerId = "Answer2",
+                        QuestionId = "QuestionId"
+                    }
+                }
+            };
+            
+            var SecondPollQ = new PollQuestion()
+            {
+                CourseId = "CourseId",
+                CreatedDate = DateTime.Now,
+                IsOpen = true,
+                MultiVote = true,
+                QuestionDescription = "QuestionDescription",
+                QuestionId = "SecondQuestionId",
+                Answers = new List<PollAnswer>()
+                {
+                    new()
+                    {
+                        AnswerDescription = "Answer1",
+                        AnswerId = "Answer3",
+                        QuestionId = "SecondQuestionId"
+                    },
+                    new()
+                    {
+                        AnswerDescription = "Answer2",
+                        AnswerId = "Answer4",
+                        QuestionId = "SecondQuestionId"
+                    }
+                }
+            };
+            
+            await DatabaseContext.PollQuestions.AddAsync(PollQ);
+            await DatabaseContext.PollQuestions.AddAsync(SecondPollQ);
+            await DatabaseContext.SaveChangesAsync();
+        }
     }
 }
