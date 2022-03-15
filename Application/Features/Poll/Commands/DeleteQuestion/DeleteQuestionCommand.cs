@@ -2,7 +2,7 @@
 
 namespace Application.Features.Poll.Commands.DeleteQuestion
 {
-    public class RemoveQuestionCommand : IRequest<Unit>
+    public class DeleteQuestionCommand : IRequest<Unit>
     {
         public string QuestionId { get; set; }
     }

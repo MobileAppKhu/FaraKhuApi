@@ -14,20 +14,20 @@ using Microsoft.Extensions.Localization;
 
 namespace Application.Features.Poll.Commands.DeleteQuestion
 {
-    public class RemoveQuestionCommandHandler : IRequestHandler<RemoveQuestionCommand>
+    public class DeleteQuestionCommandHandler : IRequestHandler<DeleteQuestionCommand>
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
         private IHttpContextAccessor HttpContextAccessor { get; }
 
-        public RemoveQuestionCommandHandler(IStringLocalizer<SharedResource> localizer,
+        public DeleteQuestionCommandHandler(IStringLocalizer<SharedResource> localizer,
             IHttpContextAccessor httpContextAccessor, IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
             HttpContextAccessor = httpContextAccessor;
         }
-        public async Task<Unit> Handle(RemoveQuestionCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteQuestionCommand request, CancellationToken cancellationToken)
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             Instructor user = await _context.Instructors.FirstOrDefaultAsync(i => i.Id == userId, cancellationToken);
