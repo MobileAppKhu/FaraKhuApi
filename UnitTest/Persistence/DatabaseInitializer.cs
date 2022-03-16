@@ -514,21 +514,6 @@ namespace UnitTest.Persistence
                 MultiVote = true,
                 QuestionDescription = "QuestionDescription",
                 QuestionId = "QuestionId",
-                Answers = new List<PollAnswer>()
-                {
-                    new()
-                    {
-                        AnswerDescription = "Answer1",
-                        AnswerId = "Answer1",
-                        QuestionId = "QuestionId"
-                    },
-                    new()
-                    {
-                        AnswerDescription = "Answer2",
-                        AnswerId = "Answer2",
-                        QuestionId = "QuestionId"
-                    }
-                }
             };
             
             var SecondPollQ = new PollQuestion()
@@ -543,20 +528,67 @@ namespace UnitTest.Persistence
                 {
                     new()
                     {
-                        AnswerDescription = "Answer1",
+                        AnswerDescription = "Answer3",
                         AnswerId = "Answer3",
                         QuestionId = "SecondQuestionId"
-                    },
+                    }
+                  
+                }
+            };
+            
+            var VotePollQ = new PollQuestion()
+            {
+                CourseId = "CourseId",
+                CreatedDate = DateTime.Now,
+                IsOpen = false,
+                MultiVote = true,
+                QuestionDescription = "QuestionDescription",
+                QuestionId = "voteQuestionId",
+                Answers = new List<PollAnswer>()
+                {
                     new()
                     {
-                        AnswerDescription = "Answer2",
-                        AnswerId = "Answer4",
-                        QuestionId = "SecondQuestionId"
+                        AnswerDescription = "Answer5",
+                        AnswerId = "Answer5",
+                        QuestionId = "voteQuestionId"
                     }
                 }
             };
             
+            var SecondVotePollQ = new PollQuestion()
+            {
+                CourseId = "CourseId",
+                CreatedDate = DateTime.Now,
+                IsOpen = true,
+                MultiVote = false,
+                QuestionDescription = "QuestionDescription",
+                QuestionId = "SecondVoteQuestionId",
+                Answers = new List<PollAnswer>()
+                {
+                    new ()
+                    {
+                        AnswerDescription = "Answer7",
+                        AnswerId = "Answer7",
+                        QuestionId = "SecondVoteQuestionId",
+                        Voters = new List<Student>()
+                        {
+                            DatabaseContext.Students.FirstOrDefault(student1 => student1.StudentId == "1234512345")
+                        }
+                    },
+                    new()
+                    {
+                        AnswerDescription = "Answer8",
+                        AnswerId = "Answer8",
+                        QuestionId = "SecondVoteQuestionId",
+                    }
+                }
+            };
+
+            
+            
             await DatabaseContext.PollQuestions.AddAsync(PollQ);
+            await DatabaseContext.PollQuestions.AddAsync(VotePollQ);
+            await DatabaseContext.PollQuestions.AddAsync(SecondVotePollQ);
             await DatabaseContext.PollQuestions.AddAsync(SecondPollQ);
             await DatabaseContext.SaveChangesAsync();
         }
