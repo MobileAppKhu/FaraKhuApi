@@ -53,6 +53,16 @@ namespace Application.Features.Poll.Commands.Vote
                 .ThenInclude(a => a.Course)
                 .ThenInclude(course => course.Students)
                 .FirstOrDefaultAsync(a => a.AnswerId == request.AnswerId, cancellationToken);
+
+            if (answer == null)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.AnswerNotFound,
+                    Message = Localizer["AnswerNotFound"]
+                });
+            }
+            
             if (!answer.Question.Course.Students.Contains(user))
             {
                 throw new CustomException(new Error
