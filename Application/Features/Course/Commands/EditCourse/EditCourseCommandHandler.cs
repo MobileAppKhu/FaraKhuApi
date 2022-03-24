@@ -36,12 +36,7 @@ namespace Application.Features.Course.Commands.EditCourse
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             Instructor user = _context.Instructors.FirstOrDefault(u => u.Id == userId);
-            if (user == null)
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
+
             var editingCourse =
                 await _context.Courses.Include(course => course.Students)
                     .Include(course => course.Times)
@@ -144,7 +139,14 @@ namespace Application.Features.Course.Commands.EditCourse
             {
                 List<Student> deleteStudents = await _context.Students
                     .Where(student => request.DeleteStudentDto.StudentIds.Contains(student.StudentId)).ToListAsync(cancellationToken);
-
+                if (deleteStudents.Count != request.DeleteStudentDto.StudentIds.Count)
+                {
+                    throw new CustomException(new Error
+                    {
+                        ErrorType = ErrorType.StudentNotFound,
+                        Message = Localizer["StudentNotFound"]
+                    });
+                }
                 foreach (var student in deleteStudents)
                 {
                     if (!editingCourse.Students.Contains(student))
@@ -163,13 +165,19 @@ namespace Application.Features.Course.Commands.EditCourse
             // delete time
             if (request.DeleteTimeDto != null && request.DeleteTimeDto.TimeIds.Count != 0)
             {
-                foreach (var time in editingCourse.Times)
+                var times = await _context.Times.Where(time => request.DeleteTimeDto.TimeIds.Contains(time.TimeId))
+                    .ToListAsync(cancellationToken);
+                if (times.Count != request.DeleteTimeDto.TimeIds.Count)
                 {
-                    if (request.DeleteTimeDto.TimeIds.Contains(time.TimeId))
+                    throw new CustomException(new Error
                     {
-                        editingCourse.Times.Remove(time);
-                    }
-                    else
+                        ErrorType = ErrorType.TimeNotFound,
+                        Message = Localizer["TimeNotFound"]
+                    });
+                }
+                foreach (var time in times)
+                {
+                    if (!editingCourse.Times.Contains(time))
                     {
                         throw new CustomException(new Error
                         {
@@ -177,6 +185,8 @@ namespace Application.Features.Course.Commands.EditCourse
                             Message = Localizer["TimeNotFound"]
                         });
                     }
+                    
+                    editingCourse.Times.Remove(time);
                 }
             }
 

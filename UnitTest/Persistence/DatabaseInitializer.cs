@@ -32,6 +32,7 @@ namespace UnitTest.Persistence
             Configuration = scopeServiceProvider.GetService<IConfiguration>();
             UserManager = scopeServiceProvider.GetService<UserManager<BaseUser>>();
         }
+
         public async Task Initialize()
         {
             try
@@ -47,13 +48,14 @@ namespace UnitTest.Persistence
                 Console.WriteLine(e.Message);
             }
         }
+
         public async Task Initializer()
         {
             const string version = "V1";
 
             if (DatabaseContext.InitializeHistories.Any(history => history.Version == version))
                 return;
-            
+
             await DatabaseContext.Database.EnsureDeletedAsync();
             await DatabaseContext.Database.EnsureCreatedAsync();
             await RoleInitializer();
@@ -79,10 +81,10 @@ namespace UnitTest.Persistence
 
         private async Task RoleInitializer()
         {
-            await RoleManager.CreateAsync(new IdentityRole {Name = "Student".Normalize()});
-            await RoleManager.CreateAsync(new IdentityRole {Name = "Instructor".Normalize()});
-            await RoleManager.CreateAsync(new IdentityRole {Name = "PROfficer".Normalize()});
-            await RoleManager.CreateAsync(new IdentityRole {Name = "Owner".Normalize()});
+            await RoleManager.CreateAsync(new IdentityRole { Name = "Student".Normalize() });
+            await RoleManager.CreateAsync(new IdentityRole { Name = "Instructor".Normalize() });
+            await RoleManager.CreateAsync(new IdentityRole { Name = "PROfficer".Normalize() });
+            await RoleManager.CreateAsync(new IdentityRole { Name = "Owner".Normalize() });
         }
 
         private async Task UserInitializer()
@@ -130,7 +132,7 @@ namespace UnitTest.Persistence
 
             await UserManager.CreateAsync(instructor, "InstructorPassword");
             await UserManager.AddToRoleAsync(instructor, UserType.Instructor.ToString().Normalize());
-            
+
             var secondInstructor = new Instructor()
             {
                 FirstName = "Instructor",
@@ -178,7 +180,6 @@ namespace UnitTest.Persistence
 
             await UserManager.CreateAsync(secondStudent, "SecondStudentPassword");
             await UserManager.AddToRoleAsync(secondStudent, UserType.Student.ToString().Normalize());
-            
         }
 
         private async Task AvatarInitializer()
@@ -216,6 +217,7 @@ namespace UnitTest.Persistence
                 stream.Close();
                 break;
             }
+
             try
             {
                 System.Threading.Thread.Sleep(100);
@@ -225,8 +227,10 @@ namespace UnitTest.Persistence
                 Console.WriteLine(e);
                 throw;
             }
+
             return avatar;
         }
+
         private async Task FacultyInitializer()
         {
             List<Faculty> faculties = new List<Faculty>();
@@ -244,8 +248,8 @@ namespace UnitTest.Persistence
             await DatabaseContext.Faculties.AddRangeAsync(faculties);
             await DatabaseContext.SaveChangesAsync();
         }
-        
-        
+
+
         private async Task DepartmentInitializer()
         {
             List<Faculty> faculties = DatabaseContext.Faculties.ToList();
@@ -282,7 +286,7 @@ namespace UnitTest.Persistence
             await DatabaseContext.Departments.AddRangeAsync(departments);
             await DatabaseContext.SaveChangesAsync();
         }
-        
+
         private async Task CourseTypeInitializer()
         {
             List<Department> departments = DatabaseContext.Departments.ToList();
@@ -334,8 +338,16 @@ namespace UnitTest.Persistence
                 AvatarId = "smiley.png",
                 CourseId = "CourseId",
                 CourseTypeId = "1",
-                Students = new List<Student>()
+                Students = new List<Student>(),
+                Times = new List<Time>
+                {
+                    new()
+                    {
+                        TimeId = "TimeId"
+                    }
+                }
             };
+            
             var editCourse = new Course
             {
                 Address = "Address",
@@ -343,12 +355,36 @@ namespace UnitTest.Persistence
                 AvatarId = "smiley.png",
                 CourseId = "EditedCourseId",
                 CourseTypeId = "2",
+                Students = new List<Student>(),
+                Times = new List<Time>
+                {
+                    new()
+                    {
+                        TimeId = "SecondTimeId",
+                        StartTime = DateTime.MinValue,
+                        EndTime = DateTime.MaxValue,
+                        WeekDay = WeekDay.Saturday
+                    }
+                }
+            };
+
+            var student =
+                await DatabaseContext.Students.FirstOrDefaultAsync(student => student.Id == "SecondStudentId");
+            editCourse.Students.Add(student);
+            course.Students.Add(student);
+            
+            
+            var deleteCourse = new Course
+            {
+                Address = "Address",
+                Instructor = instructor,
+                AvatarId = "smiley.png",
+                CourseId = "DeleteCourseId",
+                CourseTypeId = "2",
                 Students = new List<Student>()
             };
 
-            var student = await DatabaseContext.Students.FirstOrDefaultAsync(student => student.Id == "SecondStudentId");
-            course.Students.Add(student);
-            
+            await DatabaseContext.Courses.AddAsync(deleteCourse);
             await DatabaseContext.Courses.AddAsync(editCourse);
             await DatabaseContext.Courses.AddAsync(course);
             await DatabaseContext.SaveChangesAsync();
@@ -370,7 +406,6 @@ namespace UnitTest.Persistence
 
             var secondCourseEvent = new CourseEvent
             {
-
                 CourseId = "CourseId",
                 EventDescription = "description",
                 EventName = "EventName",
@@ -378,7 +413,7 @@ namespace UnitTest.Persistence
                 EventType = CourseEventType.Assignment,
                 CourseEventId = "2"
             };
-            
+
             await DatabaseContext.CourseEvents.AddAsync(secondCourseEvent);
             await DatabaseContext.SaveChangesAsync();
         }
@@ -397,7 +432,7 @@ namespace UnitTest.Persistence
             };
 
             await DatabaseContext.Events.AddAsync(Event);
-            
+
             var SecondEvent = new Event
             {
                 EventName = "EventName",
@@ -412,7 +447,7 @@ namespace UnitTest.Persistence
             await DatabaseContext.Events.AddAsync(SecondEvent);
             await DatabaseContext.SaveChangesAsync();
         }
-        
+
         private async Task OfferInitializer()
         {
             var Offer = new Offer()
@@ -429,7 +464,7 @@ namespace UnitTest.Persistence
             };
 
             await DatabaseContext.Offers.AddAsync(Offer);
-            
+
             var SecondOffer = new Offer()
             {
                 AvatarId = "smiley.png",
@@ -446,7 +481,7 @@ namespace UnitTest.Persistence
             await DatabaseContext.Offers.AddAsync(SecondOffer);
             await DatabaseContext.SaveChangesAsync();
         }
-        
+
         private async Task TicketInitializer()
         {
             var Ticket = new Ticket()
@@ -502,8 +537,8 @@ namespace UnitTest.Persistence
             await DatabaseContext.Comments.AddAsync(comment);
             await DatabaseContext.SaveChangesAsync();
         }
-        
-        
+
+
         private async Task PollInitializer()
         {
             var PollQ = new PollQuestion()
@@ -515,7 +550,7 @@ namespace UnitTest.Persistence
                 QuestionDescription = "QuestionDescription",
                 QuestionId = "QuestionId",
             };
-            
+
             var SecondPollQ = new PollQuestion()
             {
                 CourseId = "CourseId",
@@ -532,10 +567,9 @@ namespace UnitTest.Persistence
                         AnswerId = "Answer3",
                         QuestionId = "SecondQuestionId"
                     }
-                  
                 }
             };
-            
+
             var VotePollQ = new PollQuestion()
             {
                 CourseId = "CourseId",
@@ -554,7 +588,7 @@ namespace UnitTest.Persistence
                     }
                 }
             };
-            
+
             var SecondVotePollQ = new PollQuestion()
             {
                 CourseId = "CourseId",
@@ -565,7 +599,7 @@ namespace UnitTest.Persistence
                 QuestionId = "SecondVoteQuestionId",
                 Answers = new List<PollAnswer>()
                 {
-                    new ()
+                    new()
                     {
                         AnswerDescription = "Answer7",
                         AnswerId = "Answer7",
@@ -584,8 +618,7 @@ namespace UnitTest.Persistence
                 }
             };
 
-            
-            
+
             await DatabaseContext.PollQuestions.AddAsync(PollQ);
             await DatabaseContext.PollQuestions.AddAsync(VotePollQ);
             await DatabaseContext.PollQuestions.AddAsync(SecondVotePollQ);

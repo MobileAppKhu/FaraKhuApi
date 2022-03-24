@@ -35,12 +35,6 @@ namespace Application.Features.Course.Commands.DeleteCourse
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             Instructor user = _context.Instructors.FirstOrDefault(u => u.Id == userId);
-            if (user == null)
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
             var courseObj = _context.Courses.Include(c => c.Students)
                 .FirstOrDefault(c => c.CourseId == request.CourseId);
             if (courseObj == null)
