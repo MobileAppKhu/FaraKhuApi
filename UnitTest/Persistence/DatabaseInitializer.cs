@@ -593,6 +593,12 @@ namespace UnitTest.Persistence
                         AnswerDescription = "Answer3",
                         AnswerId = "Answer3",
                         QuestionId = "SecondQuestionId"
+                    }, 
+                    new()
+                    {
+                        AnswerDescription = "Answer4",
+                        AnswerId = "Answer4",
+                        QuestionId = "SecondQuestionId"
                     }
                 }
             };
