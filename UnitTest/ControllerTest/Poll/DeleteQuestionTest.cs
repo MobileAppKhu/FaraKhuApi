@@ -27,7 +27,7 @@ namespace UnitTest.ControllerTest.Poll
 
             var data = new DeleteQuestionCommand()
             {
-                QuestionId = "QuestionId"
+                QuestionId = "DeleteQuestionId"
             };
             
             //Act
@@ -73,7 +73,7 @@ namespace UnitTest.ControllerTest.Poll
 
             var data = new DeleteQuestionCommand()
             {
-                QuestionId = "QuestionId"
+                QuestionId = "DeleteQuestionId"
             };
             
             //Act
@@ -96,7 +96,7 @@ namespace UnitTest.ControllerTest.Poll
 
             var data = new DeleteQuestionCommand()
             {
-                QuestionId = "QuestionId"
+                QuestionId = "DeleteQuestionId"
             };
             
             //Act

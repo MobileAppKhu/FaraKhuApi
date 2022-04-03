@@ -44,6 +44,14 @@ namespace Application.Features.Poll.Commands.DeleteQuestion
                 .Include(q => q.Course)
                 .ThenInclude(q => q.Instructor)
                 .FirstOrDefaultAsync(q => q.QuestionId == request.QuestionId, cancellationToken);
+            if (question == null)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.QuestionNotFound,
+                    Message = Localizer["QuestionNotFound"]
+                });
+            }
             if (question.Course.Instructor != user && user.UserType != UserType.Owner)
             {
                 throw new CustomException(new Error
@@ -52,6 +60,8 @@ namespace Application.Features.Poll.Commands.DeleteQuestion
                     Message = Localizer["Unauthorized"]
                 });
             }
+
+            _context.PollAnswers.RemoveRange(question.Answers);
             _context.PollQuestions.Remove(question);
             await _context.SaveChangesAsync(cancellationToken);
             

@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using Application.Features.Ticket.Commands.DeleteTicket;
+using Domain.Enum;
 using Microsoft.AspNetCore.TestHost;
 using UnitTest.Utilities;
 using Xunit;
@@ -27,7 +28,7 @@ namespace UnitTest.ControllerTest.Ticket
 
             var data = new DeleteTicketCommand()
             {
-                TicketId = "TicketId"
+                TicketId = "DeleteTicketId"
             };
             //Act
             var response = await client.PostAsync(_path, data);
@@ -81,7 +82,7 @@ namespace UnitTest.ControllerTest.Ticket
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.Unauthorized));
         }
         
         [Fact]

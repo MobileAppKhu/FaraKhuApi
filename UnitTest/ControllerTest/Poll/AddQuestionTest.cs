@@ -49,7 +49,7 @@ namespace UnitTest.ControllerTest.Poll
         }
         
         [Fact]
-        public async Task AddQuestion_ShouldNotCreatOfferWithOutCourseId()
+        public async Task AddQuestion_ShouldNotCreatePollWithOutCourseId()
         {
             // Arrange
             var client = Host.GetTestClient();
@@ -77,7 +77,7 @@ namespace UnitTest.ControllerTest.Poll
         }
         
         [Fact]
-        public async Task AddQuestion_ShouldNotCreatOfferWithOutAnswer()
+        public async Task AddQuestion_ShouldNotCreatePollWithOutAnswer()
         {
             // Arrange
             var client = Host.GetTestClient();
@@ -89,6 +89,7 @@ namespace UnitTest.ControllerTest.Poll
                 QuestionDescription = "Description",
                 CourseId = "CourseId"
             };
+            
             //Act
             var response = await client.PostAsync(_path, data);
             

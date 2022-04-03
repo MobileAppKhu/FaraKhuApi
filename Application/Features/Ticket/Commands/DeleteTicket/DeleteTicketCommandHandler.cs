@@ -32,17 +32,18 @@ namespace Application.Features.Ticket.Commands.DeleteTicket
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == userId, cancellationToken);
-            if (user == null)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            }
 
             var deletingTicket =
                 await _context.Tickets.FirstOrDefaultAsync(ticket => ticket.TicketId == request.TicketId, cancellationToken);
+
+            if (deletingTicket == null)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.TicketNotFound,
+                    Message = Localizer["TicketNotFound"]
+                });
+            }
 
             if (deletingTicket.CreatorId != userId && user.UserType != UserType.Owner)
             {

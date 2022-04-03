@@ -33,18 +33,19 @@ namespace Application.Features.Ticket.Commands.EditTicket
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == userId, cancellationToken);
-            if (user == null)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            }
 
             var editingTicket =
                 await _context.Tickets.Include(ticket => ticket.Creator)
                     .FirstOrDefaultAsync(ticket => ticket.TicketId == request.TicketId, cancellationToken);
+
+            if (editingTicket == null)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.TicketNotFound,
+                    Message = Localizer["TicketNotFound"]
+                });
+            }
             
             if (userId != editingTicket.CreatorId && user.UserType != UserType.Owner)
             {

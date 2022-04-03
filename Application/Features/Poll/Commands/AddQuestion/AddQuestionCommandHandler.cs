@@ -43,14 +43,6 @@ namespace Application.Features.Poll.Commands.AddQuestion
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             Instructor user = await _context.Instructors.FirstOrDefaultAsync(i => i.Id == userId, cancellationToken);
-            if (user == null)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            }
 
             var course = await _context.Courses
                 .Include(c => c.Instructor)

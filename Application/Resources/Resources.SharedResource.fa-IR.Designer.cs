@@ -367,6 +367,15 @@ namespace Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to تیکت یافت نشد.
+        /// </summary>
+        internal static string TicketNotFound {
+            get {
+                return ResourceManager.GetString("TicketNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to زمان ها تداخل دارند.
         /// </summary>
         internal static string TimeConflict {

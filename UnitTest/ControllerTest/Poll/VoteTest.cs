@@ -28,7 +28,7 @@ namespace UnitTest.ControllerTest.Poll
 
             var data = new VoteCommand()
             {
-                AnswerId = "Answer4"
+                AnswerId = "Answer1"
             };
             
             //Act

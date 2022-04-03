@@ -46,7 +46,7 @@ namespace UnitTest.ControllerTest.Course
                 EndDate = DateTime.Now,
                 AddStudentDto = addStudentDto,
                 AddTimeDtos = addTimeDtos,
-                CourseTypeId = "1",
+                CourseTypeId = "2",
                 Address = "Test Address",
                 AvatarId = "smiley.png"
             };
@@ -107,10 +107,10 @@ namespace UnitTest.ControllerTest.Course
                     StudentIds = new List<string>()
                 },
                 AddTimeDtos = new List<AddTimeDto>(),
-                CourseTypeId = "1",
+                CourseTypeId = "2",
                 Address = "Address",
                 AvatarId = "smiley.png",
-                InstructorId = "1234512345",
+                InstructorId = "12345",
             };
             //Act
             var response = await client.PostAsync(_path, data);
@@ -211,6 +211,139 @@ namespace UnitTest.ControllerTest.Course
                 },
                 CourseTypeId = "1",
                 Address = "Address",
+                AvatarId = "smiley.png"
+            };
+            //Act
+            var response = await client.PostAsync(_path, data);
+            
+            //Output
+            _outputHelper.WriteLine(await response.GetContent());
+            
+            //Assert
+            Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
+            Assert.True(await response.HasErrorCode());
+        }
+        
+        [Fact]
+        public async Task AddCourse_PublicRelationOfficerCannotCreateCourse()
+        {
+            // Arrange
+            var client = Host.GetTestClient();
+            await client.AuthToPublicRelation();
+            var data = new AddCourseCommand
+            {
+                EndDate = DateTime.Now,
+                AddStudentDto = new AddStudentDto
+                {
+                    StudentIds = new List<string>()
+                },
+                AddTimeDtos = new List<AddTimeDto>
+                {
+                    new()
+                    {
+                        StartTime = "15-30",
+                        EndTime = "17-30",
+                        WeekDay = WeekDay.Monday
+                    },
+                    new()
+                    {
+                        StartTime = "16-30",
+                        EndTime = "18-30",
+                        WeekDay = WeekDay.Monday
+                    }
+                },
+                CourseTypeId = "1",
+                Address = "Address",
+                AvatarId = "smiley.png"
+            };
+            //Act
+            var response = await client.PostAsync(_path, data);
+            
+            //Output
+            _outputHelper.WriteLine(await response.GetContent());
+            
+            //Assert
+            Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
+            Assert.True(await response.HasErrorCode());
+        }
+        
+        [Fact]
+        public async Task AddCourse_CourseTypeShouldNotBeFound()
+        {
+            // Arrange
+            var client = Host.GetTestClient();
+            await client.AuthToInstructor();
+            var data = new AddCourseCommand
+            {
+                EndDate = DateTime.Now,
+                AddStudentDto = new AddStudentDto
+                {
+                    StudentIds = new List<string>()
+                },
+                AddTimeDtos = new List<AddTimeDto>
+                {
+                    new()
+                    {
+                        StartTime = "15-30",
+                        EndTime = "17-30",
+                        WeekDay = WeekDay.Monday
+                    },
+                    new()
+                    {
+                        StartTime = "16-30",
+                        EndTime = "18-30",
+                        WeekDay = WeekDay.Monday
+                    }
+                },
+                CourseTypeId = "WrongCourseType",
+                Address = "Address",
+                AvatarId = "smiley.png"
+            };
+            //Act
+            var response = await client.PostAsync(_path, data);
+            
+            //Output
+            _outputHelper.WriteLine(await response.GetContent());
+            
+            //Assert
+            Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
+            Assert.True(await response.HasErrorCode());
+        }
+        
+        [Fact]
+        public async Task AddCourse_StudentShouldNotBeFound()
+        {
+            // Arrange
+            var client = Host.GetTestClient();
+            await client.AuthToInstructor();
+            var data = new AddCourseCommand
+            {
+                EndDate = DateTime.Now,
+                AddStudentDto = new AddStudentDto
+                {
+                    StudentIds = new List<string>
+                    {
+                        "WrongStudentId"
+                    }
+                },
+                AddTimeDtos = new List<AddTimeDto>
+                {
+                    new()
+                    {
+                        StartTime = "15-30",
+                        EndTime = "17-30",
+                        WeekDay = WeekDay.Monday
+                    },
+                    new()
+                    {
+                        StartTime = "16-30",
+                        EndTime = "18-30",
+                        WeekDay = WeekDay.Monday
+                    }
+                },
+                CourseTypeId = "1",
+                Address = "Address",
+                AvatarId = "smiley.png"
             };
             //Act
             var response = await client.PostAsync(_path, data);

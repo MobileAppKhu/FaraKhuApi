@@ -159,4 +159,7 @@
     <data name="FileNotFound" xml:space="preserve">
         <value>فایل مورد نظر یافت نشد</value>
     </data>
+    <data name="TicketNotFound" xml:space="preserve">
+        <value>تیکت یافت نشد</value>
+    </data>
 </root>

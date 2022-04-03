@@ -22,7 +22,7 @@ namespace UnitTest.Utilities
             var errors = (await response.GetJson())["errors"];
             if (errorCode == null)
                 return errors != null && errors.ToArray().Any();
-            return errors != null && errors.ToArray().Any(error => (ErrorType) error["code"].Value<int>() == errorCode);
+            return errors != null && errors.ToArray().Any(error => (ErrorType) error["errorType"].Value<int>() == errorCode);
         }
 
         private static async Task<JObject> GetJson(this HttpResponseMessage response)
@@ -141,6 +141,21 @@ namespace UnitTest.Utilities
             {
                 Logon = "Owner@FaraKhu.app",
                 Password = "OwnerPassword"
+            };
+            var user = JsonConvert.SerializeObject(userObj);
+
+            var response = await client.PostAsync("api/Account/SignIn",
+                new StringContent(user, Encoding.UTF8, "application/json"));
+
+            client.DefaultRequestHeaders.Add("Cookie", response.Headers.GetValues("Set-Cookie").ToArray()[0]);
+        }
+        
+        public static async Task AuthToPublicRelation(this HttpClient client)
+        {
+            var userObj = new SignInCommand
+            {
+                Logon = "PublicRelation@FaraKhu.app",
+                Password = "PROfficerPassword"
             };
             var user = JsonConvert.SerializeObject(userObj);
 

@@ -180,6 +180,22 @@ namespace UnitTest.Persistence
 
             await UserManager.CreateAsync(secondStudent, "SecondStudentPassword");
             await UserManager.AddToRoleAsync(secondStudent, UserType.Student.ToString().Normalize());
+            
+            var searchStudent = new Student()
+            {
+                FirstName = "Student",
+                LastName = "User",
+                Email = "SearchStudent@FaraKhu.app",
+                UserType = UserType.Student,
+                StudentId = "123451234512345",
+                EmailConfirmed = true,
+                AvatarId = "smiley.png",
+                UserName = "",
+                Id = "SearchStudentId"
+            };
+
+            await UserManager.CreateAsync(searchStudent, "SearchStudentPassword");
+            await UserManager.AddToRoleAsync(searchStudent, UserType.Student.ToString().Normalize());
         }
 
         private async Task AvatarInitializer()
@@ -409,7 +425,11 @@ namespace UnitTest.Persistence
                 },
                 EndDate = DateTime.Now
             };
-
+            
+            var searchStudent =
+                await DatabaseContext.Students.FirstOrDefaultAsync(student => student.Id == "SearchStudentId");
+            searchCourse.Students.Add(searchStudent);
+            
             await DatabaseContext.Courses.AddAsync(deleteCourse);
             await DatabaseContext.Courses.AddAsync(editCourse);
             await DatabaseContext.Courses.AddAsync(course);
@@ -511,7 +531,7 @@ namespace UnitTest.Persistence
 
         private async Task TicketInitializer()
         {
-            var Ticket = new Ticket()
+            var ticket = new Ticket()
             {
                 Description = "description",
                 Priority = TicketPriority.Important,
@@ -522,9 +542,9 @@ namespace UnitTest.Persistence
                 IsDeleted = false,
                 DeadLine = DateTime.Now
             };
-
-            await DatabaseContext.Tickets.AddAsync(Ticket);
-            var SecondTicket = new Ticket()
+            await DatabaseContext.Tickets.AddAsync(ticket);
+            
+            var secondTicket = new Ticket()
             {
                 Description = "description",
                 Priority = TicketPriority.Important,
@@ -535,8 +555,21 @@ namespace UnitTest.Persistence
                 IsDeleted = false,
                 DeadLine = DateTime.Now
             };
-
-            await DatabaseContext.Tickets.AddAsync(SecondTicket);
+            await DatabaseContext.Tickets.AddAsync(secondTicket);
+            
+            var deletingTicket = new Ticket()
+            {
+                Description = "description",
+                Priority = TicketPriority.Important,
+                Status = TicketStatus.Init,
+                CreatedDate = DateTime.Now,
+                CreatorId = "InstructorId",
+                TicketId = "DeleteTicketId",
+                IsDeleted = false,
+                DeadLine = DateTime.Now
+            };
+            await DatabaseContext.Tickets.AddAsync(deletingTicket);
+            
             await DatabaseContext.SaveChangesAsync();
         }
 
@@ -568,7 +601,7 @@ namespace UnitTest.Persistence
 
         private async Task PollInitializer()
         {
-            var PollQ = new PollQuestion()
+            var pollQuestion = new PollQuestion()
             {
                 CourseId = "CourseId",
                 CreatedDate = DateTime.Now,
@@ -576,9 +609,24 @@ namespace UnitTest.Persistence
                 MultiVote = true,
                 QuestionDescription = "QuestionDescription",
                 QuestionId = "QuestionId",
+                Answers = new List<PollAnswer>()
+                {
+                    new()
+                    {
+                        AnswerDescription = "Answer1",
+                        AnswerId = "Answer1",
+                        QuestionId = "QuestionId"
+                    }, 
+                    new()
+                    {
+                        AnswerDescription = "Answer2",
+                        AnswerId = "Answer2",
+                        QuestionId = "QuestionId"
+                    }
+                }
             };
 
-            var SecondPollQ = new PollQuestion()
+            var secondPollQuestion = new PollQuestion()
             {
                 CourseId = "CourseId",
                 CreatedDate = DateTime.Now,
@@ -603,7 +651,7 @@ namespace UnitTest.Persistence
                 }
             };
 
-            var VotePollQ = new PollQuestion()
+            var votePollQuestion = new PollQuestion()
             {
                 CourseId = "CourseId",
                 CreatedDate = DateTime.Now,
@@ -622,7 +670,7 @@ namespace UnitTest.Persistence
                 }
             };
 
-            var SecondVotePollQ = new PollQuestion()
+            var secondVotePollQuestion = new PollQuestion()
             {
                 CourseId = "CourseId",
                 CreatedDate = DateTime.Now,
@@ -650,12 +698,24 @@ namespace UnitTest.Persistence
                     }
                 }
             };
+            
+            var deletePollQuestion = new PollQuestion()
+            {
+                CourseId = "CourseId",
+                CreatedDate = DateTime.Now,
+                IsOpen = true,
+                MultiVote = true,
+                QuestionDescription = "QuestionDescription",
+                QuestionId = "DeleteQuestionId",
+                Answers = new List<PollAnswer>()
+            };
 
 
-            await DatabaseContext.PollQuestions.AddAsync(PollQ);
-            await DatabaseContext.PollQuestions.AddAsync(VotePollQ);
-            await DatabaseContext.PollQuestions.AddAsync(SecondVotePollQ);
-            await DatabaseContext.PollQuestions.AddAsync(SecondPollQ);
+            await DatabaseContext.PollQuestions.AddAsync(pollQuestion);
+            await DatabaseContext.PollQuestions.AddAsync(votePollQuestion);
+            await DatabaseContext.PollQuestions.AddAsync(secondVotePollQuestion);
+            await DatabaseContext.PollQuestions.AddAsync(secondPollQuestion);
+            await DatabaseContext.PollQuestions.AddAsync(deletePollQuestion);
             await DatabaseContext.SaveChangesAsync();
         }
     }
