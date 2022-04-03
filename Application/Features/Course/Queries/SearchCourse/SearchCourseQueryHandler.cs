@@ -40,14 +40,6 @@ namespace Application.Features.Course.Queries.SearchCourse
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             BaseUser user = await _context.BaseUsers.FirstOrDefaultAsync(u => u.Id == userId
             ,cancellationToken);
-            if (user == null)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            }
 
             IQueryable<Domain.Models.Course> coursesQueryable = _context.Courses
                 .Include(course => course.Instructor)
@@ -92,11 +84,6 @@ namespace Application.Features.Course.Queries.SearchCourse
             if (!string.IsNullOrWhiteSpace(request.CourseType))
             {
                 coursesQueryable = coursesQueryable.Where(course => course.CourseTypeId == request.CourseType);
-            }
-
-            if (request.EndDate != null)
-            {
-                coursesQueryable = coursesQueryable.Where(course => course.EndDate == request.EndDate);
             }
 
             switch (request.CourseColumn)

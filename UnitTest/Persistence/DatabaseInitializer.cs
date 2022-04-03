@@ -330,7 +330,8 @@ namespace UnitTest.Persistence
 
         private async Task CourseInitializer()
         {
-            var instructor = await DatabaseContext.Instructors.FirstOrDefaultAsync();
+            var instructor = await DatabaseContext.Instructors.FirstOrDefaultAsync(instructor1 => instructor1.InstructorId == "12345");
+            var secondInstructor = await DatabaseContext.Instructors.FirstOrDefaultAsync(instructor1 => instructor1.InstructorId == "1234512345");
             var course = new Course
             {
                 Address = "Address",
@@ -343,9 +344,13 @@ namespace UnitTest.Persistence
                 {
                     new()
                     {
-                        TimeId = "TimeId"
+                        TimeId = "TimeId",
+                        StartTime = DateTime.MinValue,
+                        EndTime = DateTime.MaxValue,
+                        WeekDay = WeekDay.Monday
                     }
-                }
+                },
+                EndDate = DateTime.Now
             };
             
             var editCourse = new Course
@@ -383,10 +388,32 @@ namespace UnitTest.Persistence
                 CourseTypeId = "2",
                 Students = new List<Student>()
             };
+            
+            var searchCourse = new Course
+            {
+                Address = "Address",
+                Instructor = secondInstructor,
+                AvatarId = "smiley.png",
+                CourseId = "SearchCourseId",
+                CourseTypeId = "2",
+                Students = new List<Student>(),
+                Times = new List<Time>
+                {
+                    new()
+                    {
+                        TimeId = "ThirdTimeId",
+                        StartTime = DateTime.MinValue,
+                        EndTime = DateTime.MaxValue,
+                        WeekDay = WeekDay.Monday
+                    }
+                },
+                EndDate = DateTime.Now
+            };
 
             await DatabaseContext.Courses.AddAsync(deleteCourse);
             await DatabaseContext.Courses.AddAsync(editCourse);
             await DatabaseContext.Courses.AddAsync(course);
+            await DatabaseContext.Courses.AddAsync(searchCourse);
             await DatabaseContext.SaveChangesAsync();
         }
 

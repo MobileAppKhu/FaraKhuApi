@@ -43,14 +43,6 @@ namespace Application.Features.Course.Commands.AddCourse
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
-            if (user == null)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            }
 
             if (user.UserType != UserType.Owner && user.UserType != UserType.Instructor)
             {
@@ -99,6 +91,7 @@ namespace Application.Features.Course.Commands.AddCourse
                 });
             }
 
+            var times = new List<Time>();
             Domain.Models.Course courseObj = new Domain.Models.Course
             {
                 CourseTypeId = request.CourseTypeId,
@@ -107,7 +100,9 @@ namespace Application.Features.Course.Commands.AddCourse
                 Instructor = (Instructor)user,
                 InstructorId = user.Id,
                 EndDate = request.EndDate,
-                CreatedDate = DateTime.Now
+                CreatedDate = DateTime.Now,
+                Students = new List<Student>(),
+                Times = times
             };
             await _context.Courses.AddAsync(courseObj, cancellationToken);
 
