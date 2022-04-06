@@ -26,7 +26,6 @@ namespace Application.Features.Course.Commands.AddCourse
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
         private IMapper Mapper { get; }
 
         public AddCourseCommandHandler(IStringLocalizer<SharedResource> localizer,
@@ -35,14 +34,12 @@ namespace Application.Features.Course.Commands.AddCourse
         {
             _context = context;
             Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
             Mapper = mapper;
         }
 
         public async Task<AddCourseViewModel> Handle(AddCourseCommand request, CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
+            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == request.UserId);
 
             if (user.UserType != UserType.Owner && user.UserType != UserType.Instructor)
             {

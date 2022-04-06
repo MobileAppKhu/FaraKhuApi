@@ -20,6 +20,7 @@ namespace WebApi.Controllers
         {
             _mediator = mediator;
         }
+        
         [HttpPost]
         [ProducesResponseType(typeof(AddAnnouncementViewModel), 200)]
         public async Task<IActionResult> AddAnnouncement(AddAnnouncementCommand request)

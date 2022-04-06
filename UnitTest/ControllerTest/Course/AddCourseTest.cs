@@ -90,7 +90,7 @@ namespace UnitTest.ControllerTest.Course
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.Unauthorized));
         }
 
         [Fact]
@@ -150,7 +150,7 @@ namespace UnitTest.ControllerTest.Course
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.InstructorNotFound));
         }
         [Fact]
         public async Task AddCourse_FileShouldNotBeFound()
@@ -178,7 +178,7 @@ namespace UnitTest.ControllerTest.Course
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.FileNotFound));
         }
         
         [Fact]
@@ -221,7 +221,7 @@ namespace UnitTest.ControllerTest.Course
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.TimeConflict));
         }
         
         [Fact]
@@ -264,7 +264,7 @@ namespace UnitTest.ControllerTest.Course
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.Unauthorized));
         }
         
         [Fact]
@@ -307,7 +307,7 @@ namespace UnitTest.ControllerTest.Course
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.CourseTypeNotFound));
         }
         
         [Fact]
@@ -353,7 +353,7 @@ namespace UnitTest.ControllerTest.Course
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.StudentNotFound));
         }
     }
 }

@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
@@ -130,6 +131,14 @@ namespace WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+            
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(env.ContentRootPath, Configuration["StorePath"])),
+                RequestPath = "/myfiles"
+            });
+
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "FaraKhu API"); });
@@ -143,8 +152,7 @@ namespace WebApi
             app.UseAuthorization();
 
             app.UseMiddleware<CustomExceptionMiddleWare>();
-
-
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

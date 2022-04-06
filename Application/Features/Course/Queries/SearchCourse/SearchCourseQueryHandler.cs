@@ -95,9 +95,9 @@ namespace Application.Features.Course.Queries.SearchCourse
                     break;
                 case CourseColumn.CourseTypeId:
                     coursesQueryable = request.OrderDirection
-                        ? coursesQueryable.OrderBy(course => course.CourseType)
+                        ? coursesQueryable.OrderBy(course => course.CourseTypeId)
                             .ThenBy(course => course.CourseId)
-                        : coursesQueryable.OrderByDescending(course => course.CourseType)
+                        : coursesQueryable.OrderByDescending(course => course.CourseTypeId)
                             .ThenByDescending(course => course.CourseId);
                     break;
                 case CourseColumn.InstructorId:

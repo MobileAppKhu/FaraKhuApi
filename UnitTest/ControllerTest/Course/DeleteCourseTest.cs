@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using Application.Features.Course.Commands.DeleteCourse;
+using Domain.Enum;
 using Microsoft.AspNetCore.TestHost;
 using UnitTest.Utilities;
 using Xunit;
@@ -61,7 +62,7 @@ namespace UnitTest.ControllerTest.Course
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.Unauthorized));
         }
         
         [Fact]
@@ -84,7 +85,7 @@ namespace UnitTest.ControllerTest.Course
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.CourseNotFound));
         }
     }
 }

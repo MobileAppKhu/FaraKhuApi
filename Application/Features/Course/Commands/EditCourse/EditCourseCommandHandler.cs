@@ -22,20 +22,16 @@ namespace Application.Features.Course.Commands.EditCourse
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
 
-        public EditCourseCommandHandler(IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, IDatabaseContext context)
+        public EditCourseCommandHandler(IStringLocalizer<SharedResource> localizer, IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Unit> Handle(EditCourseCommand request, CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Instructor user = _context.Instructors.FirstOrDefault(u => u.Id == userId);
+            Instructor user = _context.Instructors.FirstOrDefault(u => u.Id == request.UserId);
 
             var editingCourse =
                 await _context.Courses.Include(course => course.Students)

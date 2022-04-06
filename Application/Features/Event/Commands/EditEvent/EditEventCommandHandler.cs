@@ -32,14 +32,6 @@ namespace Application.Features.Event.Commands.EditEvent
         {
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             BaseUser user = await _context.BaseUsers.FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
-            if (user == null)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                }); 
-            }
                 
             var eventObj = _context.Events
                 .Include(e => e.User)

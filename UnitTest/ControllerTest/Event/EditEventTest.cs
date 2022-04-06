@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using Application.Features.Event.Commands.EditEvent;
+using Domain.Enum;
 using Microsoft.AspNetCore.TestHost;
 using UnitTest.Utilities;
 using Xunit;
@@ -146,6 +147,7 @@ namespace UnitTest.ControllerTest.Event
                 EventId = "2",
                 CourseId = "EditedCourseId"
             };
+            
             //Act
             var response = await client.PostAsync(_path, data);
             
@@ -154,7 +156,7 @@ namespace UnitTest.ControllerTest.Event
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.Unauthorized));
         }
         
         [Fact]
@@ -177,7 +179,7 @@ namespace UnitTest.ControllerTest.Event
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.Unauthorized));
         }
         
         [Fact]
@@ -200,8 +202,7 @@ namespace UnitTest.ControllerTest.Event
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.EventNotFound));
         }
-        
     }
 }
