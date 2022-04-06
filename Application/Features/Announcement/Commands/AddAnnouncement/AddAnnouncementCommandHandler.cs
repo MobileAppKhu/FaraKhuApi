@@ -24,29 +24,21 @@ namespace Application.Features.Announcement.Commands.AddAnnouncement
     public class AddAnnouncementCommandHandler : IRequestHandler<AddAnnouncementCommand, AddAnnouncementViewModel>
     {
         private readonly IDatabaseContext _context;
-
         private IStringLocalizer<SharedResource> Localizer { get; }
-
-        private IHttpContextAccessor HttpContextAccessor { get; }
-
-
         private IMapper Mapper { get; }
 
         public AddAnnouncementCommandHandler(IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, IMapper mapper
-            , IDatabaseContext context)
+            IMapper mapper, IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
             Mapper = mapper;
         }
 
         public async Task<AddAnnouncementViewModel> Handle(AddAnnouncementCommand request,
             CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
+            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == request.UserId);
             if (user == null)
                 throw new CustomException(new Error
                 {
@@ -94,7 +86,7 @@ namespace Application.Features.Announcement.Commands.AddAnnouncement
                 Department = departmentObj,
                 DepartmentId = request.Department,
                 BaseUser = user,
-                UserId = userId,
+                UserId = request.UserId,
                 Avatar = avatarObj,
                 AvatarId = request.Avatar,
                 CreatedDate = DateTime.Now

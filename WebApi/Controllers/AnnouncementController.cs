@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Application.Features.Announcement.Commands.DeleteAnnouncement;
 using Application.Features.Announcement.Commands.EditAnnouncement;
+using WebApi.Utilities;
 
 namespace WebApi.Controllers
 {
@@ -25,27 +26,29 @@ namespace WebApi.Controllers
         [ProducesResponseType(typeof(AddAnnouncementViewModel), 200)]
         public async Task<IActionResult> AddAnnouncement(AddAnnouncementCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPost]
         public async Task<IActionResult> DeleteAnnouncement(DeleteAnnouncementCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPost]
-        [AllowAnonymous]
         public async Task<IActionResult> EditAnnouncement(EditAnnouncementCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
         
         [HttpPost]
-        [AllowAnonymous]
         [ProducesResponseType(typeof(SearchAnnouncementsViewModel), 200)]
         public async Task<IActionResult> SearchAnnouncements(SearchAnnouncementsQuery request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
     }

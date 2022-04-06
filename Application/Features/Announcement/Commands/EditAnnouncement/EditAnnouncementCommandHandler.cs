@@ -17,12 +17,8 @@ namespace Application.Features.Announcement.Commands.EditAnnouncement
     public class EditAnnouncementCommandHandler : IRequestHandler<EditAnnouncementCommand>
     {
         private readonly IDatabaseContext _context;
-
         private IStringLocalizer<SharedResource> Localizer { get; }
-
         private IHttpContextAccessor HttpContextAccessor { get; }
-
-
         private IMapper Mapper { get; }
 
         public EditAnnouncementCommandHandler(IStringLocalizer<SharedResource> localizer,
@@ -37,8 +33,7 @@ namespace Application.Features.Announcement.Commands.EditAnnouncement
 
         public async Task<Unit> Handle(EditAnnouncementCommand request, CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == userId,
+            var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == request.UserId,
                 cancellationToken);
             if (user == null)
             {
@@ -60,7 +55,7 @@ namespace Application.Features.Announcement.Commands.EditAnnouncement
                 });
             }
 
-            if (user.UserType != UserType.Owner || editingAnnouncement.UserId != userId)
+            if (user.UserType != UserType.Owner || editingAnnouncement.UserId != user.Id)
             {
                 throw new CustomException(new Error
                 {

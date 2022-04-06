@@ -46,8 +46,7 @@ namespace Application.Features.Announcement.Queries.SearchAnnouncements
         public async Task<SearchAnnouncementsViewModel> Handle(SearchAnnouncementsQuery request,
             CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == userId,
+            var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == request.UserId,
                 cancellationToken);
             if (user == null)
             {
@@ -63,10 +62,10 @@ namespace Application.Features.Announcement.Queries.SearchAnnouncements
                 .Include(announcement => announcement.Department)
                 .ThenInclude(department => department.Faculty);
 
-            if (request.AnnouncementIds.Count != 0)
+            if (!string.IsNullOrWhiteSpace(request.AnnouncementId))
             {
                 announcementsQueryable = announcementsQueryable.Where(announcement =>
-                    request.AnnouncementIds.Contains(announcement.AnnouncementId));
+                    request.AnnouncementId == announcement.AnnouncementId);
             }
 
             if (!string.IsNullOrWhiteSpace(request.Description))

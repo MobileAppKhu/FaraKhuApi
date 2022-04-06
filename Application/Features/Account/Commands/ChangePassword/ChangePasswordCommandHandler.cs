@@ -18,22 +18,18 @@ namespace Application.Features.Account.Commands.ChangePassword
         private IStringLocalizer<SharedResource> Localizer { get; }
         private UserManager<BaseUser> UserManager { get; }
         private readonly IDatabaseContext _context;
-        private IHttpContextAccessor HttpContextAccessor { get; }
 
         public ChangePasswordCommandHandler(UserManager<BaseUser> userManager,
-            IStringLocalizer<SharedResource> localizer, IDatabaseContext context,
-            IHttpContextAccessor httpContextAccessor)
+            IStringLocalizer<SharedResource> localizer, IDatabaseContext context)
         {
             Localizer = localizer;
             UserManager = userManager;
             _context = context;
-            HttpContextAccessor = httpContextAccessor;
 
         }
         public async Task<Unit> Handle(ChangePasswordCommand request, CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            BaseUser user = await UserManager.FindByIdAsync(userId);
+            BaseUser user = await UserManager.FindByIdAsync(request.UserId);
             if (UserManager.PasswordHasher.VerifyHashedPassword(user, user.PasswordHash,
                 request.OldPassword) == PasswordVerificationResult.Failed)
             {

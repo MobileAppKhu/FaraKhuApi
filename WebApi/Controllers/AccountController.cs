@@ -11,6 +11,7 @@ using Application.Features.Account.Commands.SignUp;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Utilities;
 
 namespace WebApi.Controllers
 {
@@ -75,12 +76,14 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPost]
         public async Task<IActionResult> EditProfile(EditProfileCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
     }

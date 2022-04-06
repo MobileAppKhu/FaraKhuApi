@@ -18,13 +18,9 @@ namespace Application.Features.Account.Commands.EmailVerification
     {
         private IStringLocalizer<SharedResource> Localizer { get; }
         private UserManager<BaseUser> UserManager { get; }
-
         private readonly IDatabaseContext _context;
-
         private readonly IMapper _mapper;
-        
         private SignInManager<BaseUser> _signInManager { get; }
-
 
         public EmailVerificationCommandHandler(UserManager<BaseUser> userManager,
             IStringLocalizer<SharedResource> localizer, IDatabaseContext context
