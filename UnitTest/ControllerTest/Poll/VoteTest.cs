@@ -113,6 +113,29 @@ namespace UnitTest.ControllerTest.Poll
         }
         
         [Fact]
+        public async Task Vote_AnswerNotFound()
+        {
+            // Arrange
+            var client = Host.GetTestClient();
+            await client.AuthToSecondStudent();
+
+            var data = new VoteCommand()
+            {
+                AnswerId = "NotAnsewr"
+            };
+            
+            //Act
+            var response = await client.PostAsync(_path, data);
+            
+            //Output
+            _outputHelper.WriteLine(await response.GetContent());
+            
+            //Assert
+            Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
+            Assert.True(await response.HasErrorCode(ErrorType.AnswerNotFound));
+        }
+        
+        [Fact]
         public async Task MultiVote_ShouldWorkCorrectly()
         {
             // Arrange
