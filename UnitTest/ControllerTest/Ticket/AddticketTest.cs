@@ -61,7 +61,7 @@ namespace UnitTest.ControllerTest.Ticket
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.InvalidInput));
         }
         
         [Fact]
@@ -83,7 +83,7 @@ namespace UnitTest.ControllerTest.Ticket
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.InvalidInput));
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Application.Features.Poll.Commands.EditQuestion;
 using Application.Features.Poll.Commands.Vote;
+using Domain.Enum;
 using Microsoft.AspNetCore.TestHost;
 using UnitTest.Utilities;
 using Xunit;
@@ -28,7 +29,7 @@ namespace UnitTest.ControllerTest.Poll
 
             var data = new VoteCommand()
             {
-                AnswerId = "Answer1"
+                AnswerId = "Answer3"
             };
             
             //Act
@@ -51,7 +52,7 @@ namespace UnitTest.ControllerTest.Poll
 
             var data = new VoteCommand()
             {
-                AnswerId = "Answer4"
+                AnswerId = "Answer1"
             };
             
             //Act
@@ -62,7 +63,7 @@ namespace UnitTest.ControllerTest.Poll
             
             //Assert
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-            Assert.True(!await response.HasErrorCode());
+            Assert.True(!await response.HasErrorCode(ErrorType.Unauthorized));
         }
         
         [Fact]
@@ -74,7 +75,7 @@ namespace UnitTest.ControllerTest.Poll
 
             var data = new VoteCommand()
             {
-                AnswerId = "Answer4"
+                AnswerId = "Answer3"
             };
             
             //Act
@@ -85,7 +86,7 @@ namespace UnitTest.ControllerTest.Poll
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.Unauthorized));
         }
         
         [Fact]
@@ -97,7 +98,7 @@ namespace UnitTest.ControllerTest.Poll
 
             var data = new VoteCommand()
             {
-                AnswerId = "Answer5"
+                AnswerId = "Answer2"
             };
             
             //Act
@@ -108,7 +109,7 @@ namespace UnitTest.ControllerTest.Poll
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.PollIsNotOpen));
         }
         
         [Fact]
@@ -120,7 +121,7 @@ namespace UnitTest.ControllerTest.Poll
 
             var data = new VoteCommand()
             {
-                AnswerId = "Answer8"
+                AnswerId = "Answer4"
             };
             
             //Act

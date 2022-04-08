@@ -439,19 +439,19 @@ namespace UnitTest.Persistence
 
         private async Task CourseEventInitializer()
         {
-            var courseEvent = new CourseEvent()
+            var deleteCourseEvent = new CourseEvent()
             {
                 CourseId = "CourseId",
-                EventDescription = "description",
-                EventName = "EventName",
+                EventDescription = "DeleteDescription",
+                EventName = "DeleteEventName",
                 EventTime = DateTime.Now,
                 EventType = CourseEventType.Assignment,
                 CourseEventId = "1"
             };
 
-            await DatabaseContext.CourseEvents.AddAsync(courseEvent);
+            await DatabaseContext.CourseEvents.AddAsync(deleteCourseEvent);
 
-            var secondCourseEvent = new CourseEvent
+            var editCourseEvent = new CourseEvent
             {
                 CourseId = "CourseId",
                 EventDescription = "description",
@@ -461,13 +461,13 @@ namespace UnitTest.Persistence
                 CourseEventId = "2"
             };
 
-            await DatabaseContext.CourseEvents.AddAsync(secondCourseEvent);
+            await DatabaseContext.CourseEvents.AddAsync(editCourseEvent);
             await DatabaseContext.SaveChangesAsync();
         }
 
         private async Task EventInitializer()
         {
-            var Event = new Event()
+            var deleteEvent = new Event()
             {
                 EventName = "EventName",
                 EventDescription = "EventDescription",
@@ -478,9 +478,9 @@ namespace UnitTest.Persistence
                 isDone = false
             };
 
-            await DatabaseContext.Events.AddAsync(Event);
+            await DatabaseContext.Events.AddAsync(deleteEvent);
 
-            var SecondEvent = new Event
+            var editEvent = new Event
             {
                 EventName = "EventName",
                 EventDescription = "EventDescription",
@@ -491,13 +491,13 @@ namespace UnitTest.Persistence
                 isDone = false
             };
 
-            await DatabaseContext.Events.AddAsync(SecondEvent);
+            await DatabaseContext.Events.AddAsync(editEvent);
             await DatabaseContext.SaveChangesAsync();
         }
 
         private async Task OfferInitializer()
         {
-            var Offer = new Offer()
+            var deleteOffer = new Offer()
             {
                 AvatarId = "smiley.png",
                 Description = "description",
@@ -510,9 +510,9 @@ namespace UnitTest.Persistence
                 IsDeleted = false
             };
 
-            await DatabaseContext.Offers.AddAsync(Offer);
+            await DatabaseContext.Offers.AddAsync(deleteOffer);
 
-            var SecondOffer = new Offer()
+            var editOffer = new Offer()
             {
                 AvatarId = "smiley.png",
                 Description = "description",
@@ -525,25 +525,12 @@ namespace UnitTest.Persistence
                 IsDeleted = false
             };
 
-            await DatabaseContext.Offers.AddAsync(SecondOffer);
+            await DatabaseContext.Offers.AddAsync(editOffer);
             await DatabaseContext.SaveChangesAsync();
         }
 
         private async Task TicketInitializer()
         {
-            var ticket = new Ticket()
-            {
-                Description = "description",
-                Priority = TicketPriority.Important,
-                Status = TicketStatus.Init,
-                CreatedDate = DateTime.Now,
-                CreatorId = "InstructorId",
-                TicketId = "TicketId",
-                IsDeleted = false,
-                DeadLine = DateTime.Now
-            };
-            await DatabaseContext.Tickets.AddAsync(ticket);
-            
             var secondTicket = new Ticket()
             {
                 Description = "description",
@@ -557,7 +544,7 @@ namespace UnitTest.Persistence
             };
             await DatabaseContext.Tickets.AddAsync(secondTicket);
             
-            var deletingTicket = new Ticket()
+            var deleteTicket = new Ticket()
             {
                 Description = "description",
                 Priority = TicketPriority.Important,
@@ -568,7 +555,7 @@ namespace UnitTest.Persistence
                 IsDeleted = false,
                 DeadLine = DateTime.Now
             };
-            await DatabaseContext.Tickets.AddAsync(deletingTicket);
+            await DatabaseContext.Tickets.AddAsync(deleteTicket);
             
             await DatabaseContext.SaveChangesAsync();
         }
@@ -601,32 +588,8 @@ namespace UnitTest.Persistence
 
         private async Task PollInitializer()
         {
-            var pollQuestion = new PollQuestion()
-            {
-                CourseId = "CourseId",
-                CreatedDate = DateTime.Now,
-                IsOpen = true,
-                MultiVote = true,
-                QuestionDescription = "QuestionDescription",
-                QuestionId = "QuestionId",
-                Answers = new List<PollAnswer>()
-                {
-                    new()
-                    {
-                        AnswerDescription = "Answer1",
-                        AnswerId = "Answer1",
-                        QuestionId = "QuestionId"
-                    }, 
-                    new()
-                    {
-                        AnswerDescription = "Answer2",
-                        AnswerId = "Answer2",
-                        QuestionId = "QuestionId"
-                    }
-                }
-            };
 
-            var secondPollQuestion = new PollQuestion()
+            var editPollQuestion = new PollQuestion()
             {
                 CourseId = "CourseId",
                 CreatedDate = DateTime.Now,
@@ -638,20 +601,15 @@ namespace UnitTest.Persistence
                 {
                     new()
                     {
-                        AnswerDescription = "Answer3",
-                        AnswerId = "Answer3",
-                        QuestionId = "SecondQuestionId"
-                    }, 
-                    new()
-                    {
-                        AnswerDescription = "Answer4",
-                        AnswerId = "Answer4",
+                        AnswerDescription = "Answer1",
+                        AnswerId = "Answer1",
                         QuestionId = "SecondQuestionId"
                     }
                 }
             };
+            await DatabaseContext.PollQuestions.AddAsync(editPollQuestion);
 
-            var votePollQuestion = new PollQuestion()
+            var notOpenPollQuestion = new PollQuestion()
             {
                 CourseId = "CourseId",
                 CreatedDate = DateTime.Now,
@@ -663,14 +621,15 @@ namespace UnitTest.Persistence
                 {
                     new()
                     {
-                        AnswerDescription = "Answer5",
-                        AnswerId = "Answer5",
+                        AnswerDescription = "Answer2",
+                        AnswerId = "Answer2",
                         QuestionId = "voteQuestionId"
                     }
                 }
             };
+            await DatabaseContext.PollQuestions.AddAsync(notOpenPollQuestion);
 
-            var secondVotePollQuestion = new PollQuestion()
+            var multiVotePollQuestion = new PollQuestion()
             {
                 CourseId = "CourseId",
                 CreatedDate = DateTime.Now,
@@ -682,8 +641,8 @@ namespace UnitTest.Persistence
                 {
                     new()
                     {
-                        AnswerDescription = "Answer7",
-                        AnswerId = "Answer7",
+                        AnswerDescription = "Answer3",
+                        AnswerId = "Answer3",
                         QuestionId = "SecondVoteQuestionId",
                         Voters = new List<Student>()
                         {
@@ -692,12 +651,13 @@ namespace UnitTest.Persistence
                     },
                     new()
                     {
-                        AnswerDescription = "Answer8",
-                        AnswerId = "Answer8",
+                        AnswerDescription = "Answer4",
+                        AnswerId = "Answer4",
                         QuestionId = "SecondVoteQuestionId",
                     }
                 }
             };
+            await DatabaseContext.PollQuestions.AddAsync(multiVotePollQuestion);
             
             var deletePollQuestion = new PollQuestion()
             {
@@ -709,13 +669,8 @@ namespace UnitTest.Persistence
                 QuestionId = "DeleteQuestionId",
                 Answers = new List<PollAnswer>()
             };
-
-
-            await DatabaseContext.PollQuestions.AddAsync(pollQuestion);
-            await DatabaseContext.PollQuestions.AddAsync(votePollQuestion);
-            await DatabaseContext.PollQuestions.AddAsync(secondVotePollQuestion);
-            await DatabaseContext.PollQuestions.AddAsync(secondPollQuestion);
             await DatabaseContext.PollQuestions.AddAsync(deletePollQuestion);
+          
             await DatabaseContext.SaveChangesAsync();
         }
     }

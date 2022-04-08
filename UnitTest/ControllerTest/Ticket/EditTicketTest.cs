@@ -136,7 +136,7 @@ namespace UnitTest.ControllerTest.Ticket
         }
         
        [Fact]
-        public async Task EditTicketStatus_ShouldNotWorkCorrectly()
+        public async Task EditTicketStatus_ShouldNotWorkCorrectly() //only Owner
         {
             // Arrange
             var client = Host.GetTestClient();
@@ -155,7 +155,7 @@ namespace UnitTest.ControllerTest.Ticket
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.Unauthorized));
         }
         
         [Fact]
@@ -178,7 +178,7 @@ namespace UnitTest.ControllerTest.Ticket
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.Unauthorized));
         }
         
         [Fact]
@@ -201,7 +201,7 @@ namespace UnitTest.ControllerTest.Ticket
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.Unauthorized));
         }
         
         [Fact]
@@ -224,7 +224,7 @@ namespace UnitTest.ControllerTest.Ticket
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.TicketNotFound));
         }
     }
 }

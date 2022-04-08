@@ -60,7 +60,7 @@ namespace UnitTest.ControllerTest.Ticket
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.TicketNotFound));
         }
         
         [Fact]
@@ -72,7 +72,7 @@ namespace UnitTest.ControllerTest.Ticket
 
             var data = new DeleteTicketCommand()
             {
-                TicketId = "TicketId"
+                TicketId = "SecondTicketId"
             };
             //Act
             var response = await client.PostAsync(_path, data);
@@ -94,7 +94,7 @@ namespace UnitTest.ControllerTest.Ticket
 
             var data = new DeleteTicketCommand()
             {
-                TicketId = "TicketId"
+                TicketId = "SecondTicketId"
             };
             //Act
             var response = await client.PostAsync(_path, data);
@@ -104,7 +104,7 @@ namespace UnitTest.ControllerTest.Ticket
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.Unauthorized));
         }
     }
 }

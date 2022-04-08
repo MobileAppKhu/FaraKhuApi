@@ -63,11 +63,11 @@ namespace UnitTest.ControllerTest.CourseEvent
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.CourseEventNotFound));
         } 
         
         [Fact]
-        public async Task DeleteCourseEvent_AnotherInstructorCantDeleteCourseEvent()
+        public async Task DeleteCourseEvent_AnotherUserCantDeleteCourseEvent()
         {
             // Arrange
             var client = Host.GetTestClient();
@@ -75,7 +75,7 @@ namespace UnitTest.ControllerTest.CourseEvent
 
             var data = new DeleteCourseEventCommand()
             {
-                CourseEventId = "1"
+                CourseEventId = "2"
             };
             //Act
             var response = await client.PostAsync(_path, data);
@@ -85,11 +85,11 @@ namespace UnitTest.ControllerTest.CourseEvent
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.Unauthorized));
         } 
         
         [Fact]
-        public async Task DeleteCourseEvent_ShouldBeUnauthorized()
+        public async Task DeleteCourseEvent_AnotherUserTypeCantDeleteCourseEvent()
         {
             // Arrange
             var client = Host.GetTestClient();
@@ -97,7 +97,7 @@ namespace UnitTest.ControllerTest.CourseEvent
 
             var data = new DeleteCourseEventCommand()
             {
-                CourseEventId = "1"
+                CourseEventId = "2"
             };
             //Act
             var response = await client.PostAsync(_path, data);
@@ -107,7 +107,7 @@ namespace UnitTest.ControllerTest.CourseEvent
             
             //Assert
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-            Assert.True(!await response.HasErrorCode());
+            Assert.True(!await response.HasErrorCode(ErrorType.Unauthorized));
         }
     }
 }

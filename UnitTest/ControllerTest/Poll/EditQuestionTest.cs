@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using Application.Features.Poll.Commands.EditQuestion;
+using Domain.Enum;
 using Microsoft.AspNetCore.TestHost;
 using UnitTest.Utilities;
 using Xunit;
@@ -130,7 +131,7 @@ namespace UnitTest.ControllerTest.Poll
                 QuestionId = "SecondQuestionId",
                 DeleteAnswers = new List<string>()
                 {
-                    "Answer3"
+                    "Answer1"
                 }
             };
             
@@ -169,7 +170,7 @@ namespace UnitTest.ControllerTest.Poll
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.AnswerNotFound));
         }
         
         [Fact]
@@ -193,7 +194,7 @@ namespace UnitTest.ControllerTest.Poll
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.Unauthorized));
         }
         
         [Fact]
@@ -217,7 +218,7 @@ namespace UnitTest.ControllerTest.Poll
             
             //Assert
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-            Assert.True(!await response.HasErrorCode());
+            Assert.True(!await response.HasErrorCode(ErrorType.Unauthorized));
         }
         
         [Fact]
@@ -241,7 +242,7 @@ namespace UnitTest.ControllerTest.Poll
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.QuestionNotFound));
         }
     }
 }
