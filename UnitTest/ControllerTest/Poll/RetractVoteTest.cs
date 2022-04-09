@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Application.Features.Poll.Commands.RetractVote;
 using Application.Features.Poll.Commands.Vote;
+using Domain.Enum;
 using Microsoft.AspNetCore.TestHost;
 using UnitTest.Utilities;
 using Xunit;
@@ -28,7 +29,7 @@ namespace UnitTest.ControllerTest.Poll
 
             var data = new RetractVoteCommand()
             {
-                AnswerId = "Answer7"
+                AnswerId = "Answer3"
             };
             
             //Act
@@ -51,7 +52,7 @@ namespace UnitTest.ControllerTest.Poll
 
             var data = new RetractVoteCommand()
             {
-                AnswerId = "Answer5"
+                AnswerId = "Answer2"
             };
             
             //Act
@@ -62,7 +63,7 @@ namespace UnitTest.ControllerTest.Poll
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.PollIsNotOpen));
         }
     }
 }

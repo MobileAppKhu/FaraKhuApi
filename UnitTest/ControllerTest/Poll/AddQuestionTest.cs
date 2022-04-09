@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using Application.Features.Poll.Commands.AddQuestion;
+using Domain.Enum;
 using Microsoft.AspNetCore.TestHost;
 using UnitTest.Utilities;
 using Xunit;
@@ -73,7 +74,7 @@ namespace UnitTest.ControllerTest.Poll
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.InvalidInput));
         }
         
         [Fact]
@@ -98,7 +99,7 @@ namespace UnitTest.ControllerTest.Poll
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.InvalidInput));
         }
         
         [Fact]
@@ -126,11 +127,11 @@ namespace UnitTest.ControllerTest.Poll
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.InvalidInput));
         }
         
         [Fact]
-        public async Task AddQuestion_ShouldBeUnauthorized()
+        public async Task AddQuestion_AntoherUserTypeShouldNotAdd()
         {
             // Arrange
             var client = Host.GetTestClient();
@@ -155,7 +156,7 @@ namespace UnitTest.ControllerTest.Poll
             
             //Assert
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-            Assert.True(!await response.HasErrorCode());
+            Assert.True(!await response.HasErrorCode(ErrorType.Unauthorized));
         }
         
         [Fact]
@@ -184,7 +185,7 @@ namespace UnitTest.ControllerTest.Poll
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.Unauthorized));
         }
         
     }

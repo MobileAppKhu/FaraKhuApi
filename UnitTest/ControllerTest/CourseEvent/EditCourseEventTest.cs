@@ -137,11 +137,11 @@ namespace UnitTest.ControllerTest.CourseEvent
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.CourseEventNotFound));
         }
         
         [Fact]
-        public async Task EditCourseEvent_AnotherInstructorCantEditCourseEvent()
+        public async Task EditCourseEvent_AnotherUserCantEditCourseEvent()
         {
             // Arrange
             var client = Host.GetTestClient();
@@ -162,11 +162,11 @@ namespace UnitTest.ControllerTest.CourseEvent
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.Unauthorized));
         }
         
         [Fact]
-        public async Task EditCourseEvent_ShouldBeUnauthorized()
+        public async Task EditCourseEvent_AnotherUserTypeCantEditCourseEvent()
         {
             // Arrange
             var client = Host.GetTestClient();
@@ -187,7 +187,7 @@ namespace UnitTest.ControllerTest.CourseEvent
             
             //Assert
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-            Assert.True(!await response.HasErrorCode());
+            Assert.True(!await response.HasErrorCode(ErrorType.Unauthorized));
         }
         
     }

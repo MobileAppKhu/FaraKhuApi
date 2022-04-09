@@ -60,7 +60,7 @@ namespace UnitTest.ControllerTest.Offer
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.OfferNotFound));
         }
         
         [Fact]
@@ -72,7 +72,7 @@ namespace UnitTest.ControllerTest.Offer
 
             var data = new DeleteOfferCommand()
             {
-                OfferId = "OfferId"
+                OfferId = "SecondOfferId"
             };
             //Act
             var response = await client.PostAsync(_path, data);
@@ -82,7 +82,7 @@ namespace UnitTest.ControllerTest.Offer
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.Unauthorized));
         }
         
         [Fact]
@@ -94,7 +94,7 @@ namespace UnitTest.ControllerTest.Offer
 
             var data = new DeleteOfferCommand()
             {
-                OfferId = "OfferId"
+                OfferId = "SecondOfferId"
             };
             //Act
             var response = await client.PostAsync(_path, data);
@@ -104,7 +104,7 @@ namespace UnitTest.ControllerTest.Offer
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.Unauthorized));
         }
     }
 }

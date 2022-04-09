@@ -154,7 +154,7 @@ namespace UnitTest.ControllerTest.Offer
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.FileNotFound));
         }
         
         [Fact]
@@ -177,7 +177,7 @@ namespace UnitTest.ControllerTest.Offer
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.Unauthorized));
         }
         
         [Fact]
@@ -200,7 +200,7 @@ namespace UnitTest.ControllerTest.Offer
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.Unauthorized));
         }
         
         [Fact]
@@ -223,7 +223,7 @@ namespace UnitTest.ControllerTest.Offer
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.OfferNotFound));
         }
     }
 }

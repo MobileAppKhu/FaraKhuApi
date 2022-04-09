@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using Application.Features.Event.Commands.AddEvent;
+using Domain.Enum;
 using Microsoft.AspNetCore.TestHost;
 using UnitTest.Utilities;
 using Xunit;
@@ -45,7 +46,7 @@ namespace UnitTest.ControllerTest.Event
         }
         
         [Fact]
-        public async Task AddEvent_ShouldWorkCorrectlyForStudent()
+        public async Task AddEvent_AnotherUserTypeCantAddEvent()
         {
             // Arrange
             var client = Host.GetTestClient();
@@ -66,11 +67,11 @@ namespace UnitTest.ControllerTest.Event
             
             //Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.True(!await response.HasErrorCode());
+            Assert.True(!await response.HasErrorCode(ErrorType.Unauthorized));
         }
         
         [Fact]
-        public async Task AddEvent_ShouldNotWorkCorrectly()
+        public async Task AddEvent_ShouldNotFoundCourseId()
         {
             // Arrange
             var client = Host.GetTestClient();
@@ -91,7 +92,7 @@ namespace UnitTest.ControllerTest.Event
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.CourseNotFound));
         }
         
         [Fact]
@@ -115,7 +116,7 @@ namespace UnitTest.ControllerTest.Event
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.InvalidInput));
         }
         
         [Fact]
@@ -139,7 +140,7 @@ namespace UnitTest.ControllerTest.Event
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.InvalidInput));
         }
     }
 }

@@ -48,7 +48,7 @@ namespace UnitTest.ControllerTest.CourseEvent
         } 
         
         [Fact]
-        public async Task AddCourseEvent_ShouldBeUnauthorized()
+        public async Task AddCourseEvent_AnotherUserTypeCantAddCourseEvent()
         {
             // Arrange
             var client = Host.GetTestClient();
@@ -71,11 +71,11 @@ namespace UnitTest.ControllerTest.CourseEvent
             
             //Assert
             Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-            Assert.True(!await response.HasErrorCode());
+            Assert.True(!await response.HasErrorCode(ErrorType.Unauthorized));
         } 
         
         [Fact]
-        public async Task AddCourseEvent_AnotherInstructorCantAddCourseEvent()
+        public async Task AddCourseEvent_AnotherUserCantAddCourseEvent()
         {
             // Arrange
             var client = Host.GetTestClient();
@@ -98,7 +98,7 @@ namespace UnitTest.ControllerTest.CourseEvent
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.Unauthorized));
         }
         
         [Fact]
@@ -125,9 +125,85 @@ namespace UnitTest.ControllerTest.CourseEvent
             
             //Assert
             Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
-            Assert.True(await response.HasErrorCode());
+            Assert.True(await response.HasErrorCode(ErrorType.CourseNotFound));
         }   
         
+        [Fact]
+        public async Task AddCourseEvent_ShouldNotWorkWithOutDescription()
+        {
+            // Arrange
+            var client = Host.GetTestClient();
+            await client.AuthToInstructor();
+
+            var data = new AddCourseEventCommand
+            {
+                CourseId = "CourseId",
+                EventName = "EventName",
+                EventTime = DateTime.Now,
+                EventType = CourseEventType.Assignment
+            };
+            
+            //Act
+            var response = await client.PostAsync(_path, data);
+            
+            //Output
+            _outputHelper.WriteLine(await response.GetContent());
+            
+            //Assert
+            Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
+            Assert.True(await response.HasErrorCode(ErrorType.InvalidInput));
+        }   
         
+        [Fact]
+        public async Task AddCourseEvent_ShouldNotWorkWithOutEventName()
+        {
+            // Arrange
+            var client = Host.GetTestClient();
+            await client.AuthToInstructor();
+
+            var data = new AddCourseEventCommand
+            {
+                CourseId = "CourseId",
+                EventDescription = "Description",
+                EventTime = DateTime.Now,
+                EventType = CourseEventType.Assignment
+            };
+            
+            //Act
+            var response = await client.PostAsync(_path, data);
+            
+            //Output
+            _outputHelper.WriteLine(await response.GetContent());
+            
+            //Assert
+            Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
+            Assert.True(await response.HasErrorCode(ErrorType.InvalidInput));
+        }
+        
+        [Fact]
+        public async Task AddCourseEvent_ShouldNotWorkWithOutEventTime()
+        {
+            // Arrange
+            var client = Host.GetTestClient();
+            await client.AuthToInstructor();
+
+            var data = new AddCourseEventCommand
+            {
+                CourseId = "CourseId",
+                EventDescription = "Description",
+                EventName = "EventName",
+                EventType = CourseEventType.Assignment
+            };
+            
+            //Act
+            var response = await client.PostAsync(_path, data);
+            
+            //Output
+            _outputHelper.WriteLine(await response.GetContent());
+            
+            //Assert
+            Assert.Equal(HttpStatusCode.NotAcceptable, response.StatusCode);
+            Assert.True(await response.HasErrorCode(ErrorType.InvalidInput));
+        }
     }
 }
