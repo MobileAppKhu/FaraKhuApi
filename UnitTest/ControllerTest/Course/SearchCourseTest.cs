@@ -148,7 +148,7 @@ namespace UnitTest.ControllerTest.Course
             
             //Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            //Assert.True(searchResult.Course.Equals(searchResult.Course.OrderBy(c => c.CourseId).ToList()));
+            Assert.True(searchResult.Course.SequenceEqual(searchResult.Course.OrderBy(c => c.CourseId).ToList()));
         }
         
         [Fact]
@@ -174,7 +174,7 @@ namespace UnitTest.ControllerTest.Course
 
             //Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            //Assert.True(searchResult.Course.Equals(searchResult.Course.OrderBy(c => c.CreatedDate).ToList()));
+            Assert.True(searchResult.Course.SequenceEqual(searchResult.Course.OrderBy(c => c.CreatedDate).ToList()));
         }
         
         [Fact]
@@ -200,7 +200,7 @@ namespace UnitTest.ControllerTest.Course
 
             //Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            //Assert.True(searchResult.Course.Equals(searchResult.Course.OrderBy(c => c.EndDate).ToList()));
+            Assert.True(searchResult.Course.SequenceEqual(searchResult.Course.OrderBy(c => c.EndDate).ToList()));
         }
         
         [Fact]
@@ -223,10 +223,10 @@ namespace UnitTest.ControllerTest.Course
             //Output
             _outputHelper.WriteLine(await response.GetContent());
             SearchCourseViewModel searchResult = (SearchCourseViewModel)JObject.Parse(response.GetContent().Result).ToObject(typeof(SearchCourseViewModel));
-
+            var orderedResult = searchResult.Course.OrderBy(c => c.InstructorId).ToList();
             //Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            //Assert.True(searchResult.Course.Equals(searchResult.Course.OrderBy(c => c.InstructorId).ToList()));
+            Assert.True(searchResult.Course.SequenceEqual(searchResult.Course.OrderBy(c => c.InstructorId).ToList()));
         }
         [Fact]
         public async Task SearchCourse_OrderingByCourseTypeId()
@@ -251,6 +251,7 @@ namespace UnitTest.ControllerTest.Course
 
             //Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            Assert.True(searchResult.Course.SequenceEqual(searchResult.Course.OrderBy(c => c.CourseTypeId).ToList()));
         }
         
         [Fact]

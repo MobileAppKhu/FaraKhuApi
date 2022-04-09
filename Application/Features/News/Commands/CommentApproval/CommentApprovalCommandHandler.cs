@@ -1,6 +1,4 @@
-﻿using System;
-using System.Security.Claims;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
@@ -8,9 +6,7 @@ using Application.Resources;
 using AutoMapper;
 using Domain.BaseModels;
 using Domain.Enum;
-using Domain.Models;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
@@ -20,16 +16,13 @@ namespace Application.Features.News.Commands.CommentApproval
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
         private IMapper _mapper { get; }
 
         public CommentApprovalCommandHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, IDatabaseContext context, 
-            IMapper mapper)
+            IDatabaseContext context, IMapper mapper)
         {
             _context = context;
             Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
             _mapper = mapper;
         }
 

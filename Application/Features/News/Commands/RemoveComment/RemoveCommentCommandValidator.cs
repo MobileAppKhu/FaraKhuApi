@@ -2,7 +2,7 @@
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.News.Commands.RemoveNews
+namespace Application.Features.News.Commands.RemoveComment
 {
     public class RemoveCommentCommandValidator : AbstractValidator<RemoveCommentCommand>
     {

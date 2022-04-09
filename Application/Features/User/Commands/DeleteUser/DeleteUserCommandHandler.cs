@@ -17,22 +17,14 @@ namespace Application.Features.User.Commands.DeleteUser
     public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand>
     {
         private readonly IDatabaseContext _context;
-        
         private IStringLocalizer<SharedResource> _localizer { get; }
-        
-        private IHttpContextAccessor HttpContextAccessor { get; }
-        
-        private UserManager<BaseUser> _userManager { get; }
         private IMapper _mapper { get; }
 
-        public DeleteUserCommandHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
+        public DeleteUserCommandHandler( IStringLocalizer<SharedResource> localizer, IMapper mapper
             , IDatabaseContext context)
         {
             _context = context;
             _localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
-            _userManager = userManager;
             _mapper = mapper;
         }
         public async Task<Unit> Handle(DeleteUserCommand request, CancellationToken cancellationToken)

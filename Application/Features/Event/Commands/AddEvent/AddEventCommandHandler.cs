@@ -22,23 +22,19 @@ namespace Application.Features.Event.Commands.AddEvent
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
         private IMapper _mapper { get; }
 
-        public AddEventCommandHandler(IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, IMapper mapper
+        public AddEventCommandHandler(IStringLocalizer<SharedResource> localizer, IMapper mapper
             , IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
             _mapper = mapper;
         }
 
         public async Task<AddEventViewModel> Handle(AddEventCommand request, CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
+            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == request.UserId);
             if (user == null)
                 throw new CustomException(new Error
                 {

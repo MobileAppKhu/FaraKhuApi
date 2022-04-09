@@ -8,6 +8,7 @@ using Application.Features.Offer.Queries.SearchUserOffers;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Utilities;
 
 namespace WebApi.Controllers
 {
@@ -26,16 +27,19 @@ namespace WebApi.Controllers
         [ProducesResponseType(typeof(AddOfferViewModel), 200)]
         public async Task<IActionResult> AddOffer(AddOfferCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
         [HttpPost]
         public async Task<IActionResult> DeleteOffer(DeleteOfferCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
         [HttpPost]
         public async Task<IActionResult> EditOffer(EditOfferCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
         [HttpPost]

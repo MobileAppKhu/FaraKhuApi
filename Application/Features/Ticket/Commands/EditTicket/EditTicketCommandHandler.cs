@@ -19,20 +19,16 @@ namespace Application.Features.Ticket.Commands.EditTicket
     public class EditTicketCommandHandler : IRequestHandler<EditTicketCommand>
     {
         private readonly IDatabaseContext _context;
-        private IHttpContextAccessor HttpContextAccessor { get; }
         private IStringLocalizer<SharedResource> Localizer { get; }
 
-        public EditTicketCommandHandler(IHttpContextAccessor httpContextAccessor,
-            IDatabaseContext context, IStringLocalizer<SharedResource> localizer)
+        public EditTicketCommandHandler(IDatabaseContext context, IStringLocalizer<SharedResource> localizer)
         {
             _context = context;
-            HttpContextAccessor = httpContextAccessor;
             Localizer = localizer;
         }
         public async Task<Unit> Handle(EditTicketCommand request, CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == userId, cancellationToken);
+            var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == request.UserId, cancellationToken);
 
             var editingTicket =
                 await _context.Tickets.Include(ticket => ticket.Creator)
@@ -47,7 +43,7 @@ namespace Application.Features.Ticket.Commands.EditTicket
                 });
             }
             
-            if (userId != editingTicket.CreatorId && user.UserType != UserType.Owner)
+            if (user.Id != editingTicket.CreatorId && user.UserType != UserType.Owner)
             {
                 throw new CustomException(new Error
                 {

@@ -22,27 +22,18 @@ namespace Application.Features.Offer.Commands.AddOffer
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
         private IMapper _mapper { get; }
 
         public AddOfferCommandHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, IMapper mapper, IDatabaseContext context)
+            IMapper mapper, IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
             _mapper = mapper;
         }
         public async Task<AddOfferViewModel> Handle(AddOfferCommand request, CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
-            if(user == null)
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
+            BaseUser user = await _context.BaseUsers.FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken);
             var avatarObj = await _context.Files.FirstOrDefaultAsync(a => a.Id == request.AvatarId,
                 cancellationToken);
             if (avatarObj == null)

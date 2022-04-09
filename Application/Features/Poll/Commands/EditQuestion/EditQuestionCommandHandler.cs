@@ -11,7 +11,6 @@ using Domain.Enum;
 using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
@@ -21,23 +20,19 @@ namespace Application.Features.Poll.Commands.EditQuestion
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
         private IMapper Mapper { get; }
 
-        public EditQuestionCommandHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, IMapper mapper
+        public EditQuestionCommandHandler( IStringLocalizer<SharedResource> localizer, IMapper mapper
             , IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
             Mapper = mapper;
         }
         public async Task<Unit> Handle(EditQuestionCommand request, CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Instructor user = await _context.Instructors.
-                FirstOrDefaultAsync(i => i.Id == userId, cancellationToken);
+            var user = await _context.Instructors.
+                FirstOrDefaultAsync(i => i.Id == request.UserId, cancellationToken);
             if(user == null)
                 throw new CustomException(new Error
                 {

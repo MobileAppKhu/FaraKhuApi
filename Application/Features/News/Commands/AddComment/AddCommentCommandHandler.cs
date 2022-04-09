@@ -22,25 +22,21 @@ namespace Application.Features.News.Commands.AddComment
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
         private IMapper _mapper { get; }
 
         public AddCommentCommandHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, IDatabaseContext context, 
-            IMapper mapper)
+            IDatabaseContext context, IMapper mapper)
         {
             _context = context;
             Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
             _mapper = mapper;
         }
 
         public async Task<Unit> Handle(AddCommentCommand request, CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var comment = new Comment
             {
-                UserId = userId,
+                UserId = request.UserId,
                 Text = request.Text,
                 ParentId = request.ParentId,
                 Status = CommentStatus.Unapproved,

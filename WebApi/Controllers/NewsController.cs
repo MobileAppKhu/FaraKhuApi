@@ -4,12 +4,13 @@ using Application.Features.News.Commands.AddNews;
 using Application.Features.News.Commands.CommentApproval;
 using Application.Features.News.Commands.DeleteNews;
 using Application.Features.News.Commands.EditNews;
-using Application.Features.News.Commands.RemoveNews;
+using Application.Features.News.Commands.RemoveComment;
 using Application.Features.News.Queries.GetComments;
 using Application.Features.News.Queries.SearchNews;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Utilities;
 
 namespace WebApi.Controllers
 {
@@ -59,6 +60,7 @@ namespace WebApi.Controllers
         [Authorize]
         public async Task<IActionResult> AddComment(AddCommentCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
 
@@ -80,6 +82,7 @@ namespace WebApi.Controllers
         [Authorize(Policy = "PROfficerPolicy")]
         public async Task<IActionResult> RemoveComment(RemoveCommentCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
     }

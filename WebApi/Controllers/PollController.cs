@@ -9,6 +9,8 @@ using Application.Features.Poll.Queries.SearchPoll;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Crypto.Parameters;
+using WebApi.Utilities;
 
 namespace WebApi.Controllers
 {
@@ -26,18 +28,21 @@ namespace WebApi.Controllers
         [ProducesResponseType(typeof(AddQuestionViewModel), 200)]
         public async Task<IActionResult> AddPollQuestion(AddQuestionCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
         [HttpPost]
         [Authorize(Policy = "InstructorPolicy")]
         public async Task<IActionResult> DeletePollQuestion(DeleteQuestionCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
         [HttpPost]
         [Authorize(Policy = "InstructorPolicy")]
         public async Task<IActionResult> EditPollQuestion(EditQuestionCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
         [HttpPost]
@@ -45,6 +50,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(typeof(RetractVoteViewModel), 200)]
         public async Task<IActionResult> RetractVote(RetractVoteCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
         [HttpPost]
@@ -52,6 +58,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(typeof(VoteViewModel), 200)]
         public async Task<IActionResult> Vote(VoteCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
         [HttpPost]

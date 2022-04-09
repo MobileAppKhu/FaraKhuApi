@@ -22,7 +22,6 @@ namespace Application.Features.Poll.Commands.RetractVote
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
         private IMapper _mapper { get; }
 
         public RetractVoteCommandHandler( IStringLocalizer<SharedResource> localizer,
@@ -31,23 +30,14 @@ namespace Application.Features.Poll.Commands.RetractVote
         {
             _context = context;
             Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
             _mapper = mapper;
         }
 
         public async Task<RetractVoteViewModel> Handle(RetractVoteCommand request, CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Student user = await _context.Students.Include(s => s.PollAnswers).
-                FirstOrDefaultAsync(s => s.Id == userId, cancellationToken);
-            if (user == null)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            }
+            var user = await _context.Students.Include(s => s.PollAnswers).
+                FirstOrDefaultAsync(s => s.Id == request.UserId, cancellationToken);
+            
             var answer = await _context.PollAnswers.Include(a => a.Voters)
                 .Include(a => a.Question).FirstOrDefaultAsync(a => a.AnswerId == request.AnswerId, cancellationToken);
             if (!answer.Question.IsOpen)
