@@ -24,11 +24,8 @@ namespace Application.Features.Announcement.Queries.SearchAnnouncements
         SearchAnnouncementsQueryHandler : IRequestHandler<SearchAnnouncementsQuery, SearchAnnouncementsViewModel>
     {
         private readonly IDatabaseContext _context;
-
         private IStringLocalizer<SharedResource> Localizer { get; }
-
         private IHttpContextAccessor HttpContextAccessor { get; }
-
         private UserManager<BaseUser> UserManager { get; }
         private IMapper _mapper { get; }
 
@@ -46,21 +43,9 @@ namespace Application.Features.Announcement.Queries.SearchAnnouncements
         public async Task<SearchAnnouncementsViewModel> Handle(SearchAnnouncementsQuery request,
             CancellationToken cancellationToken)
         {
-            var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == request.UserId,
-                cancellationToken);
-            if (user == null)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            }
 
             IQueryable<Domain.Models.Announcement> announcementsQueryable = _context.Announcements
-                .Include(announcement => announcement.BaseUser)
-                .Include(announcement => announcement.Department)
-                .ThenInclude(department => department.Faculty);
+                .Include(announcement => announcement.BaseUser);
 
             if (!string.IsNullOrWhiteSpace(request.AnnouncementId))
             {
@@ -78,12 +63,6 @@ namespace Application.Features.Announcement.Queries.SearchAnnouncements
             {
                 announcementsQueryable = announcementsQueryable.Where(announcement =>
                     announcement.AnnouncementTitle.Contains(request.Title));
-            }
-
-            if (!string.IsNullOrWhiteSpace(request.Department))
-            {
-                announcementsQueryable =
-                    announcementsQueryable.Where(announcement => announcement.DepartmentId.Equals(request.Department));
             }
 
             if (!string.IsNullOrWhiteSpace(request.User))
@@ -113,13 +92,6 @@ namespace Application.Features.Announcement.Queries.SearchAnnouncements
                             .ThenBy(announcement => announcement.AnnouncementId)
                         : announcementsQueryable.OrderByDescending(announcement => announcement.AnnouncementTitle)
                             .ThenBy(announcement => announcement.AnnouncementId);
-                    break;
-                case AnnouncementColumn.DepartmentId:
-                    announcementsQueryable = request.OrderDirection
-                        ? announcementsQueryable.OrderBy(announcement => announcement.DepartmentId)
-                            .ThenBy(announcement => announcement.AnnouncementId)
-                        : announcementsQueryable.OrderByDescending(announcement => announcement.DepartmentId)
-                            .ThenByDescending(announcement => announcement.AnnouncementId);
                     break;
                 case AnnouncementColumn.UserId:
                     announcementsQueryable = request.OrderDirection

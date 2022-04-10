@@ -9,8 +9,6 @@ namespace Application.DTOs.Announcement
         public string AnnouncementId { get; set; }
         public string AnnouncementTitle { get; set; }
         public string AnnouncementDescription { get; set; }
-        public string Department { get; set; }
-        public string Faculty { get; set; }
         public string UserFullname { get; set; }
         public string CreatorAvatarId { get; set; }
         public string AvatarId { get; set; }
@@ -22,12 +20,6 @@ namespace Application.DTOs.Announcement
                 .ForMember(a => a.UserFullname,
                     opt =>
                         opt.MapFrom(src => src.BaseUser.FirstName + " " + src.BaseUser.LastName))
-                .ForMember(a => a.Department,
-                    opt =>
-                        opt.MapFrom(src => src.Department.DepartmentTitle))
-                .ForMember(a => a.Faculty,
-                    opt =>
-                        opt.MapFrom(src => src.Department.Faculty.FacultyTitle))
                 .ForMember(a => a.CreatorAvatarId,
                     opt =>
                         opt.MapFrom(src => src.BaseUser.AvatarId));

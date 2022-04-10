@@ -18,16 +18,13 @@ namespace Application.Features.Announcement.Commands.EditAnnouncement
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
         private IMapper Mapper { get; }
 
-        public EditAnnouncementCommandHandler(IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, IMapper mapper
+        public EditAnnouncementCommandHandler(IStringLocalizer<SharedResource> localizer, IMapper mapper
             , IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
             Mapper = mapper;
         }
 
@@ -72,24 +69,6 @@ namespace Application.Features.Announcement.Commands.EditAnnouncement
             if (!string.IsNullOrWhiteSpace(request.Title))
             {
                 editingAnnouncement.AnnouncementTitle = request.Title;
-            }
-
-            if (!string.IsNullOrWhiteSpace(request.Department))
-            {
-                var departmentObj =
-                    await _context.Departments.FirstOrDefaultAsync(
-                        department => department.DepartmentId == request.Department, cancellationToken);
-                if (departmentObj == null)
-                {
-                    throw new CustomException(new Error
-                    {
-                        ErrorType = ErrorType.DepartmentNotFound,
-                        Message = Localizer["DepartmentNotFound"]
-                    });
-                }
-
-                editingAnnouncement.DepartmentId = request.Department;
-                editingAnnouncement.Department = departmentObj;
             }
 
             if (!string.IsNullOrWhiteSpace(request.AvatarId))

@@ -14,7 +14,6 @@ namespace Application.Features.Announcement.Queries.SearchAnnouncements
         [JsonIgnore]
         public string UserId { get; set; }
         public string AnnouncementId { get; set; }
-        public string Department { get; set; }
         public string Description { get; set; }
         public string Title { get; set; }
         public string User { get; set; }
