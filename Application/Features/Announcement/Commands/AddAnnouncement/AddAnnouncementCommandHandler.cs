@@ -8,7 +8,6 @@ using Domain.Enum;
 using MediatR;
 using Microsoft.Extensions.Localization;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;

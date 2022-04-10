@@ -71,6 +71,7 @@ namespace UnitTest.Persistence
             await TicketInitializer();
             await PollInitializer();
             await NewsInitializer();
+            await AnnouncementInitializer();
             await DatabaseContext.InitializeHistories.AddAsync(new InitializeHistory
             {
                 Version = version
@@ -671,6 +672,44 @@ namespace UnitTest.Persistence
             };
             await DatabaseContext.PollQuestions.AddAsync(deletePollQuestion);
           
+            await DatabaseContext.SaveChangesAsync();
+        }
+
+        private async Task AnnouncementInitializer()
+        {
+            var editAnnouncement = new Announcement
+            {
+                AnnouncementId = "EditAnnouncement",
+                AnnouncementDescription = "Description",
+                AvatarId = "smiley.png",
+                AnnouncementTitle = "Title",
+                UserId = "StudentId"
+            };
+
+            await DatabaseContext.Announcements.AddAsync(editAnnouncement);
+
+            var deleteAnnouncement = new Announcement
+            {
+                AnnouncementId = "DeleteAnnouncement",
+                AnnouncementDescription = "Description1",
+                AvatarId = "smiley.png",
+                AnnouncementTitle = "Title1",
+                UserId = "StudentId"
+            };
+            
+            await DatabaseContext.Announcements.AddAsync(deleteAnnouncement);
+
+            var searchAnnouncement = new Announcement
+            {
+                AnnouncementId = "SearchAnnouncement",
+                AnnouncementDescription = "Description2",
+                AvatarId = "smiley.png",
+                AnnouncementTitle = "Title3",
+                UserId = "StudentId"
+            };
+            
+            await DatabaseContext.Announcements.AddAsync(searchAnnouncement);
+
             await DatabaseContext.SaveChangesAsync();
         }
     }

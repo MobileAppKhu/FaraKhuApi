@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
@@ -8,7 +7,6 @@ using AutoMapper;
 using Domain.BaseModels;
 using Domain.Enum;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
@@ -18,28 +16,18 @@ namespace Application.Features.Announcement.Commands.EditAnnouncement
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IMapper Mapper { get; }
 
-        public EditAnnouncementCommandHandler(IStringLocalizer<SharedResource> localizer, IMapper mapper
+        public EditAnnouncementCommandHandler(IStringLocalizer<SharedResource> localizer
             , IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
-            Mapper = mapper;
         }
 
         public async Task<Unit> Handle(EditAnnouncementCommand request, CancellationToken cancellationToken)
         {
             var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == request.UserId,
                 cancellationToken);
-            if (user == null)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            }
 
             var editingAnnouncement = await _context.Announcements.FirstOrDefaultAsync(
                 announcement => announcement.AnnouncementId == request.AnnouncementId, cancellationToken);
@@ -52,7 +40,7 @@ namespace Application.Features.Announcement.Commands.EditAnnouncement
                 });
             }
 
-            if (user.UserType != UserType.Owner || editingAnnouncement.UserId != user.Id)
+            if (user.UserType != UserType.Owner && editingAnnouncement.UserId != user.Id)
             {
                 throw new CustomException(new Error
                 {
