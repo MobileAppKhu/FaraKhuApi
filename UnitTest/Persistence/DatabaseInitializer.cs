@@ -699,13 +699,24 @@ namespace UnitTest.Persistence
             
             await DatabaseContext.Announcements.AddAsync(deleteAnnouncement);
 
+            var deleteAnnouncement1 = new Announcement
+            {
+                AnnouncementId = "DeleteAnnouncement1",
+                AnnouncementDescription = "Description1",
+                AvatarId = "smiley.png",
+                AnnouncementTitle = "Title1",
+                UserId = "StudentId"
+            };
+            
+            await DatabaseContext.Announcements.AddAsync(deleteAnnouncement1);
+
             var searchAnnouncement = new Announcement
             {
                 AnnouncementId = "SearchAnnouncement",
                 AnnouncementDescription = "Description2",
                 AvatarId = "smiley.png",
-                AnnouncementTitle = "Title3",
-                UserId = "StudentId"
+                AnnouncementTitle = "Title2",
+                UserId = "SecondStudentId"
             };
             
             await DatabaseContext.Announcements.AddAsync(searchAnnouncement);

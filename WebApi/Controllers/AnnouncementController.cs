@@ -48,7 +48,6 @@ namespace WebApi.Controllers
         [ProducesResponseType(typeof(SearchAnnouncementsViewModel), 200)]
         public async Task<IActionResult> SearchAnnouncements(SearchAnnouncementsQuery request)
         {
-            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
     }

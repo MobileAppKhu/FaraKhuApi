@@ -9,7 +9,7 @@ namespace Application.Features.Announcement.Queries.SearchAnnouncements
 {
     public class SearchAnnouncementsViewModel
     {
-        public ICollection<SearchAnnouncementDto> Announcements{get; set;}
+        public List<SearchAnnouncementDto> Announcements{get; set;}
         public int SearchLength { get; set; }
     }
 }

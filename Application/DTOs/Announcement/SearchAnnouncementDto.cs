@@ -9,6 +9,7 @@ namespace Application.DTOs.Announcement
         public string AnnouncementId { get; set; }
         public string AnnouncementTitle { get; set; }
         public string AnnouncementDescription { get; set; }
+        public string UserId { get; set; }
         public string UserFullname { get; set; }
         public string CreatorAvatarId { get; set; }
         public string AvatarId { get; set; }

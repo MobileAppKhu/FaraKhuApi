@@ -17,29 +17,38 @@ namespace Application.Features.Announcement.Commands.DeleteAnnouncement
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IMapper Mapper { get; }
 
-        public DeleteAnnouncementCommandHandler(IStringLocalizer<SharedResource> localizer, IMapper mapper
+        public DeleteAnnouncementCommandHandler(IStringLocalizer<SharedResource> localizer
             , IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
-            Mapper = mapper;
         }
         public async Task<Unit> Handle(DeleteAnnouncementCommand request, CancellationToken cancellationToken)
         {
-            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == request.UserId);
+            var user = _context.BaseUsers.FirstOrDefault(u => u.Id == request.UserId);
             var announcementObj = _context.Announcements.Include(announce => announce.BaseUser)
                 .FirstOrDefault(announce => announce.AnnouncementId == request.AnnouncementId);
-            if (user == null || 
-                announcementObj?.BaseUser.Id != user.Id)
+            if (announcementObj == null)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.AnnouncementNotFound,
+                    Message = Localizer["AnnouncementNotFound"]
+                });
+            }
+
+            if (announcementObj.BaseUser != user && user.UserType != UserType.Owner)
+            {
                 throw new CustomException(new Error
                 {
                     ErrorType = ErrorType.Unauthorized,
                     Message = Localizer["Unauthorized"]
-                });
-            if (announcementObj != null)
-                _context.Announcements.Remove(announcementObj);
+                }); 
+            }
+            
+            _context.Announcements.Remove(announcementObj);
+            
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;
         }

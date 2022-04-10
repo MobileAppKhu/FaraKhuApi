@@ -11,8 +11,6 @@ namespace Application.Features.Announcement.Queries.SearchAnnouncements
 {
     public class SearchAnnouncementsQuery : IRequest<SearchAnnouncementsViewModel>
     {
-        [JsonIgnore]
-        public string UserId { get; set; }
         public string AnnouncementId { get; set; }
         public string Description { get; set; }
         public string Title { get; set; }
