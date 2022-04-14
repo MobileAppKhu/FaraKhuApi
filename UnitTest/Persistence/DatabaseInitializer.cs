@@ -445,7 +445,7 @@ namespace UnitTest.Persistence
                 CourseId = "CourseId",
                 EventDescription = "DeleteDescription",
                 EventName = "DeleteEventName",
-                EventTime = DateTime.Now,
+                EventTime = DateTime.Today,
                 EventType = CourseEventType.Assignment,
                 CourseEventId = "1"
             };
@@ -457,12 +457,24 @@ namespace UnitTest.Persistence
                 CourseId = "CourseId",
                 EventDescription = "description",
                 EventName = "EventName",
-                EventTime = DateTime.Now,
+                EventTime = DateTime.Today,
                 EventType = CourseEventType.Assignment,
                 CourseEventId = "2"
             };
 
             await DatabaseContext.CourseEvents.AddAsync(editCourseEvent);
+            
+            var searchCourseEvent = new CourseEvent
+            {
+                CourseId = "SearchCourseId",
+                EventDescription = "SearchDescription",
+                EventName = "SearchEventName",
+                EventTime = DateTime.Now,
+                EventType = CourseEventType.Exam,
+                CourseEventId = "3"
+            };
+            
+            await DatabaseContext.CourseEvents.AddAsync(searchCourseEvent);
             await DatabaseContext.SaveChangesAsync();
         }
 
@@ -493,6 +505,19 @@ namespace UnitTest.Persistence
             };
 
             await DatabaseContext.Events.AddAsync(editEvent);
+            
+            var searchEvent = new Event
+            {
+                EventName = "SearchEventName",
+                EventDescription = "SearchEventDescription",
+                EventTime = DateTime.MaxValue,
+                CourseId = "SearchCourseId",
+                EventId = "SearchEventId",
+                UserId = "InstructorId",
+                isDone = false
+            };
+
+            await DatabaseContext.Events.AddAsync(searchEvent);
             await DatabaseContext.SaveChangesAsync();
         }
 

@@ -21,35 +21,19 @@ namespace Application.Features.Event.Queries.SearchEvent
     public class SearchEventQueryHandler : IRequestHandler<SearchEventQuery, SearchEventViewModel>
     {
         private readonly IMapper _mapper;
-        public IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
         private readonly IDatabaseContext _context;
 
-        public SearchEventQueryHandler(IMapper mapper,
-            IStringLocalizer<SharedResource> localizer, IHttpContextAccessor httpContextAccessor
+        public SearchEventQueryHandler(IMapper mapper
             , IDatabaseContext context)
         {
             _mapper = mapper;
-            Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
             _context = context;
         }
 
         public async Task<SearchEventViewModel> Handle(SearchEventQuery request, CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == userId,
-                cancellationToken);
-            if (user == null)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            }
-
-            IQueryable<Domain.Models.Event> eventsQueryable = _context.Events.Where(e => e.UserId == userId);
+            
+            IQueryable<Domain.Models.Event> eventsQueryable = _context.Events.Where(e => e.UserId == request.UserId);
 
             if (!string.IsNullOrWhiteSpace(request.Description))
             {
@@ -61,9 +45,9 @@ namespace Application.Features.Event.Queries.SearchEvent
                 eventsQueryable = eventsQueryable.Where(e => e.EventName.Contains(request.EventName));
             }
 
-            if (request.EventIds.Count != 0)
+            if (!string.IsNullOrWhiteSpace(request.EventId))
             {
-                eventsQueryable = eventsQueryable.Where(e => request.EventIds.Contains(e.EventId));
+                eventsQueryable = eventsQueryable.Where(e => e.EventId == request.EventId);
             }
 
             if (request.EventTime != null)

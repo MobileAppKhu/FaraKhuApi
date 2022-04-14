@@ -126,7 +126,7 @@ namespace UnitTest.ControllerTest.CourseEvent
             {
                 Description = "EditedDescription",
                 EventName = "EditedEventName",
-                CourseEventId = "3",
+                CourseEventId = "9",
                 CourseEventType = CourseEventType.Assignment
             };
             //Act

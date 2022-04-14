@@ -46,6 +46,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(typeof(SearchEventViewModel),200)]
         public async Task<IActionResult> SearchEvent(SearchEventQuery request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
         
@@ -53,6 +54,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(typeof(GetIncomingEventViewModel),200)]
         public async Task<IActionResult> GetIncomingEvents(GetIncomingEventQuery request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
     }

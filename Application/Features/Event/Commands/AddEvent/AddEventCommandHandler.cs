@@ -35,12 +35,7 @@ namespace Application.Features.Event.Commands.AddEvent
         public async Task<AddEventViewModel> Handle(AddEventCommand request, CancellationToken cancellationToken)
         {
             BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == request.UserId);
-            if (user == null)
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
+           
 
             var eventObj = new Domain.Models.Event()
             {

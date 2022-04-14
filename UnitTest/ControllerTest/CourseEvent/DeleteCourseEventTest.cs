@@ -53,7 +53,7 @@ namespace UnitTest.ControllerTest.CourseEvent
 
             var data = new DeleteCourseEventCommand()
             {
-                CourseEventId = "3"
+                CourseEventId = "9"
             };
             //Act
             var response = await client.PostAsync(_path, data);

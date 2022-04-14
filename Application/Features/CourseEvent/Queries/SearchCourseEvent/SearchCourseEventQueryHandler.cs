@@ -16,14 +16,12 @@ namespace Application.Features.CourseEvent.Queries.SearchCourseEvent
     public class SearchCourseEventQueryHandler : IRequestHandler<SearchCourseEventQuery, SearchCourseEventViewModel>
     {
         private readonly IDatabaseContext _context;
-        private IStringLocalizer<SharedResource> Localizer { get; }
         private IMapper _mapper { get; }
         
-        public SearchCourseEventQueryHandler(IStringLocalizer<SharedResource> localizer, IMapper mapper
+        public SearchCourseEventQueryHandler(IMapper mapper
             , IDatabaseContext context)
         {
             _context = context;
-            Localizer = localizer;
             _mapper = mapper;
         }
         public async Task<SearchCourseEventViewModel> Handle(SearchCourseEventQuery request, CancellationToken cancellationToken)

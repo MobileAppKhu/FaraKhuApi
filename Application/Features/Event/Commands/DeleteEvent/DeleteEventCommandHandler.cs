@@ -20,27 +20,18 @@ namespace Application.Features.Event.Commands.DeleteEvent
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
+        
 
-        public DeleteEventCommandHandler(IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, IDatabaseContext context)
+        public DeleteEventCommandHandler(IStringLocalizer<SharedResource> localizer, IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Unit> Handle(DeleteEventCommand request, CancellationToken cancellationToken)
         {
             BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == request.UserId);
-            if (user == null)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            }
+            
                 
             var eventObj = _context.Events
                 .Include(e => e.User)
