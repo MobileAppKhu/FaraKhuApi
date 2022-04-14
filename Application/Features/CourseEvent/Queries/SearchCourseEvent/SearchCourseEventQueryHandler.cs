@@ -29,9 +29,9 @@ namespace Application.Features.CourseEvent.Queries.SearchCourseEvent
         public async Task<SearchCourseEventViewModel> Handle(SearchCourseEventQuery request, CancellationToken cancellationToken)
         {
             IQueryable<Domain.Models.CourseEvent> courseEventsQueryable = _context.CourseEvents;
-            if (request.CourseEventIds.Count != 0)
+            if (!string.IsNullOrWhiteSpace(request.CourseEventId))
             {
-                courseEventsQueryable = courseEventsQueryable.Where(ce => request.CourseEventIds.Contains(ce.CourseEventId));
+                courseEventsQueryable = courseEventsQueryable.Where(ce => request.CourseEventId == ce.CourseEventId);
             }
 
             if (!string.IsNullOrWhiteSpace(request.EventName))

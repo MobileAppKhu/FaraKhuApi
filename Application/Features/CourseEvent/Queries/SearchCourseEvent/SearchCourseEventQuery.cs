@@ -6,7 +6,7 @@ namespace Application.Features.CourseEvent.Queries.SearchCourseEvent
 {
     public class SearchCourseEventQuery : IRequest<SearchCourseEventViewModel>
     {
-        public List<string> CourseEventIds { get; set; }
+        public string CourseEventId { get; set; }
         public string EventName { get; set; }
         public string EventDescription { get; set; }
         public string CourseId { get; set; }
