@@ -26,14 +26,7 @@ namespace Application.Features.Offer.Commands.EditOffer
         public async Task<Unit> Handle(EditOfferCommand request, CancellationToken cancellationToken)
         {
             BaseUser user = await _context.BaseUsers.FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken);
-            if (user == null)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            }
+            
 
             var offerObj =
                 await _context.Offers

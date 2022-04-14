@@ -97,7 +97,7 @@ namespace Application.Features.Offer.Queries.SearchOffers
             List<Domain.Models.Offer> offers = offerQueryable.Skip(request.Start).Take(request.Step).ToList();
             return new SearchOffersViewModel
             {
-                Offer = Mapper.Map<ICollection<UserOfferDto>>(offers),
+                Offer = Mapper.Map<List<UserOfferDto>>(offers),
                 SearchLength = searchLength
             };
         }

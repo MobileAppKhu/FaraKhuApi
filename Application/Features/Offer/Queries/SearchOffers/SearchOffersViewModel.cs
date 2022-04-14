@@ -5,7 +5,7 @@ namespace Application.Features.Offer.Queries.SearchOffers
 {
     public class SearchOffersViewModel
     {
-        public ICollection<UserOfferDto> Offer { get; set; }
+        public List<UserOfferDto> Offer { get; set; }
         public int SearchLength { get; set; }
     }
 }

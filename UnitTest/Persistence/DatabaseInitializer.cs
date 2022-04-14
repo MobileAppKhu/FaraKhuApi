@@ -552,6 +552,21 @@ namespace UnitTest.Persistence
             };
 
             await DatabaseContext.Offers.AddAsync(editOffer);
+            
+            var searchOffer = new Offer()
+            {
+                AvatarId = "smiley.png",
+                Description = "SearchDescription",
+                Price = "9999",
+                Title = "SearchTitle",
+                CreatedDate = DateTime.MaxValue,
+                OfferId = "SearchOfferId",
+                OfferType = OfferType.Sell,
+                UserId = "SecondInstructorId",
+                IsDeleted = false
+            };
+
+            await DatabaseContext.Offers.AddAsync(searchOffer);
             await DatabaseContext.SaveChangesAsync();
         }
 

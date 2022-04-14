@@ -75,7 +75,7 @@ namespace UnitTest.ControllerTest.Offer
             var data = new EditOfferCommand()
             {
                 OfferId = "SecondOfferId",
-                OfferType = OfferType.Sell 
+                OfferType = OfferType.Buy
             };
             //Act
             var response = await client.PostAsync(_path, data);
