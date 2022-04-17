@@ -22,15 +22,13 @@ namespace Application.Features.Poll.Commands.RetractVote
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IMapper _mapper { get; }
 
         public RetractVoteCommandHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, IMapper mapper
+            IHttpContextAccessor httpContextAccessor
             , IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
-            _mapper = mapper;
         }
 
         public async Task<RetractVoteViewModel> Handle(RetractVoteCommand request, CancellationToken cancellationToken)

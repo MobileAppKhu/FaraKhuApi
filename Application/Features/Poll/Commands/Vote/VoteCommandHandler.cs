@@ -22,14 +22,12 @@ namespace Application.Features.Poll.Commands.Vote
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IMapper _mapper { get; }
 
-        public VoteCommandHandler( IStringLocalizer<SharedResource> localizer, IMapper mapper
+        public VoteCommandHandler( IStringLocalizer<SharedResource> localizer
             , IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
-            _mapper = mapper;
         }
 
         public async Task<VoteViewModel> Handle(VoteCommand request, CancellationToken cancellationToken)

@@ -588,7 +588,7 @@ namespace UnitTest.Persistence
             var deleteTicket = new Ticket()
             {
                 Description = "description",
-                Priority = TicketPriority.Important,
+                Priority = TicketPriority.Normal,
                 Status = TicketStatus.Init,
                 CreatedDate = DateTime.Now,
                 CreatorId = "InstructorId",
@@ -724,6 +724,18 @@ namespace UnitTest.Persistence
                 Answers = new List<PollAnswer>()
             };
             await DatabaseContext.PollQuestions.AddAsync(deletePollQuestion);
+            
+            var searchPollQuestion = new PollQuestion()
+            {
+                CourseId = "SearchCourseId",
+                CreatedDate = DateTime.MaxValue,
+                IsOpen = true,
+                MultiVote = true,
+                QuestionDescription = "SearchDescription",
+                QuestionId = "SearchQuestionId",
+                Answers = new List<PollAnswer>()
+            };
+            await DatabaseContext.PollQuestions.AddAsync(searchPollQuestion);
           
             await DatabaseContext.SaveChangesAsync();
         }

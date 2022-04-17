@@ -25,14 +25,6 @@ namespace Application.Features.Poll.Commands.DeleteQuestion
         public async Task<Unit> Handle(DeleteQuestionCommand request, CancellationToken cancellationToken)
         {
             Instructor user = await _context.Instructors.FirstOrDefaultAsync(i => i.Id == request.UserId, cancellationToken);
-            if (user == null)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            }
             var question = await _context.PollQuestions
                 .Include(q => q.Answers)
                 .Include(q => q.Course)

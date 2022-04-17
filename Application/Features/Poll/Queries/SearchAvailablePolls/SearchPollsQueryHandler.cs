@@ -17,14 +17,12 @@ namespace Application.Features.Poll.Queries.SearchAvailablePolls
     public class SearchPollsQueryHandler : IRequestHandler<SearchPollsQuery, SearchPollsViewModel>
     {
         private readonly IDatabaseContext _context;
-        private IStringLocalizer<SharedResource> Localizer { get; }
         private IMapper _mapper { get; }
 
-        public SearchPollsQueryHandler( IStringLocalizer<SharedResource> localizer,IMapper mapper
+        public SearchPollsQueryHandler(IMapper mapper
                                     , IDatabaseContext context)
         {
             _context = context;
-            Localizer = localizer;
             _mapper = mapper;
         }
         public async Task<SearchPollsViewModel> Handle(SearchPollsQuery request, CancellationToken cancellationToken)
@@ -38,7 +36,7 @@ namespace Application.Features.Poll.Queries.SearchAvailablePolls
                 .CountAsync(question => question.CourseId == request.CourseId, cancellationToken);
             return new SearchPollsViewModel
             {
-                Polls = _mapper.Map<ICollection<PollQuestionShortDto>>(polls),
+                Polls = _mapper.Map<List<PollQuestionShortDto>>(polls),
                 SearchLength = searchLength
             };
         }

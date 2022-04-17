@@ -13,14 +13,12 @@ namespace Application.Features.Poll.Queries.SearchPoll
     public class SearchPollQueryHandler : IRequestHandler<SearchPollQuery, SearchPollViewModel>
     {
         private readonly IDatabaseContext _context;
-        private IStringLocalizer<SharedResource> Localizer { get; }
         private IMapper _mapper { get; }
 
-        public SearchPollQueryHandler( IStringLocalizer<SharedResource> localizer,IMapper mapper
+        public SearchPollQueryHandler(IMapper mapper
             , IDatabaseContext context)
         {
             _context = context;
-            Localizer = localizer;
             _mapper = mapper;
         }
         public async Task<SearchPollViewModel> Handle(SearchPollQuery request, CancellationToken cancellationToken)

@@ -20,25 +20,17 @@ namespace Application.Features.Poll.Commands.EditQuestion
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IMapper Mapper { get; }
 
-        public EditQuestionCommandHandler( IStringLocalizer<SharedResource> localizer, IMapper mapper
+        public EditQuestionCommandHandler( IStringLocalizer<SharedResource> localizer
             , IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
-            Mapper = mapper;
         }
         public async Task<Unit> Handle(EditQuestionCommand request, CancellationToken cancellationToken)
         {
             var user = await _context.Instructors.
                 FirstOrDefaultAsync(i => i.Id == request.UserId, cancellationToken);
-            if(user == null)
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
             var questionObj =
                 await _context.PollQuestions.Include(question => question.Course)
                     .ThenInclude(course => course.Instructor)
