@@ -598,6 +598,19 @@ namespace UnitTest.Persistence
             };
             await DatabaseContext.Tickets.AddAsync(deleteTicket);
             
+            var searchTicket = new Ticket()
+            {
+                Description = "SearchDescription",
+                Priority = TicketPriority.Urgent,
+                Status = TicketStatus.InProgress,
+                CreatedDate = DateTime.Now,
+                CreatorId = "SecondInstructorId",
+                TicketId = "SearchTicketId",
+                IsDeleted = false,
+                DeadLine = DateTime.Now
+            };
+            await DatabaseContext.Tickets.AddAsync(searchTicket);
+            
             await DatabaseContext.SaveChangesAsync();
         }
 

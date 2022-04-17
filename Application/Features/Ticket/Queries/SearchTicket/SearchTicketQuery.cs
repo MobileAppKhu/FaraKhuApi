@@ -7,9 +7,9 @@ namespace Application.Features.Ticket.Queries.SearchTicket
 {
     public class SearchTicketQuery : IRequest<SearchTicketQueryViewModel>
     {
-        public List<String> TicketIds { get; set; }
-        public List<TicketPriority> TicketPriorities { get; set; }
-        public List<TicketStatus> TicketStatusList { get; set; }
+        public string TicketId { get; set; }
+        public TicketPriority TicketPriority { get; set; }
+        public TicketStatus TicketStatus { get; set; }
         public string Description { get; set; }
         public int Start { get; set; }
         public int Step { get; set; }

@@ -20,13 +20,11 @@ namespace Application.Features.Ticket.Commands.AddTicket
     {
         private readonly IDatabaseContext _context;
         private IMapper _mapper { get; }
-        private IStringLocalizer<SharedResource> Localizer { get; }
 
-        public AddTicketCommandHandler(IMapper mapper, IDatabaseContext context, IStringLocalizer<SharedResource> localizer)
+        public AddTicketCommandHandler(IMapper mapper, IDatabaseContext context)
         {
             _context = context;
             _mapper = mapper;
-            Localizer = localizer;
         }
 
         public async Task<AddTicketCommandViewModel> Handle(AddTicketCommand request,
