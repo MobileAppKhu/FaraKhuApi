@@ -201,7 +201,7 @@ namespace UnitTest.ControllerTest.Ticket
 
             //Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            Assert.True(searchResult.TicketDtos.SequenceEqual(searchResult.TicketDtos.OrderBy(c => c.Priority).ToList()));
+            Assert.True(searchResult.TicketDtos.SequenceEqual(searchResult.TicketDtos.OrderBy(c => c.Priority).ThenBy(c => c.TicketId).ToList()));
         }
         
         [Fact]

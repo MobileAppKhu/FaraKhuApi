@@ -1,16 +1,14 @@
-﻿using System.Linq;
-using System.Security.Claims;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.Resources;
+using Application.DTOs.User;
 using AutoMapper;
 using Domain.BaseModels;
 using Domain.Enum;
 using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Localization;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.User.Queries.SearchUser
 {
@@ -18,42 +16,87 @@ namespace Application.Features.User.Queries.SearchUser
     {
         
         private readonly IMapper _mapper;
-        public IStringLocalizer<SharedResource> Localizer { get; }
         private readonly IDatabaseContext _context;
-        private IHttpContextAccessor HttpContextAccessor { get; }
 
 
-        public SearchUserQueryHandler(IMapper mapper, IStringLocalizer<SharedResource> localizer
-            , IDatabaseContext context, IHttpContextAccessor httpContextAccessor)
+        public SearchUserQueryHandler(IMapper mapper, IDatabaseContext context)
         {
             _mapper = mapper;
-            Localizer = localizer;
             _context = context;
-            HttpContextAccessor = httpContextAccessor;
         }
-        public Task<SearchUserViewModel> Handle(SearchUserQuery request, CancellationToken cancellationToken)
+        public async Task<SearchUserViewModel> Handle(SearchUserQuery request, CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
-            if (user == null)
+            IQueryable<BaseUser> usersQueryable = _context.BaseUsers.Include(baseUser => baseUser.Favourites);
+
+            if (!string.IsNullOrWhiteSpace(request.FirstName))
             {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
+                usersQueryable = usersQueryable.Where(bu => bu.FirstName.Contains(request.FirstName));
+            }
+            
+            if (!string.IsNullOrWhiteSpace(request.LastName))
+            {
+                usersQueryable = usersQueryable.Where(bu => bu.LastName.Contains(request.LastName));
+            }
+            
+            if (!string.IsNullOrWhiteSpace(request.GoogleScholar))
+            {
+                usersQueryable = usersQueryable.Where(bu => bu.GoogleScholar.Contains(request.GoogleScholar));
+            }
+            
+            if (!string.IsNullOrWhiteSpace(request.LinkedIn))
+            {
+                usersQueryable = usersQueryable.Where(bu => bu.LinkedIn.Contains(request.LinkedIn));
             }
 
-            if (user.UserType != UserType.Owner)
+            switch (request.UserColumn)
             {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
+                case UserColumn.Id:
+                    usersQueryable = request.OrderDirection
+                        ? usersQueryable.OrderBy(bu => bu.Id)
+                        : usersQueryable.OrderByDescending(bu => bu.Id);
+                    break;
+                case UserColumn.Firstname:
+                    usersQueryable = request.OrderDirection
+                        ? usersQueryable.OrderBy(bu => bu.FirstName)
+                            .ThenBy(bu => bu.Id)
+                        : usersQueryable.OrderByDescending(bu => bu.FirstName)
+                            .ThenByDescending(bu => bu.Id);
+                    break;
+                case UserColumn.Lastname:
+                    usersQueryable = request.OrderDirection
+                        ? usersQueryable.OrderBy(bu => bu.LastName)
+                            .ThenBy(bu => bu.Id)
+                        : usersQueryable.OrderByDescending(bu => bu.LastName)
+                            .ThenByDescending(bu => bu.Id);
+                    break;
+                case UserColumn.GoogleScholar:
+                    usersQueryable = request.OrderDirection
+                        ? usersQueryable.OrderBy(bu => bu.GoogleScholar)
+                            .ThenBy(bu => bu.Id)
+                        : usersQueryable.OrderByDescending(bu => bu.GoogleScholar)
+                            .ThenByDescending(bu => bu.Id);
+                    break;
+                case UserColumn.LinkedIn:
+                    usersQueryable = request.OrderDirection
+                        ? usersQueryable.OrderBy(bu => bu.LinkedIn)
+                            .ThenBy(bu => bu.Id)
+                        : usersQueryable.OrderByDescending(bu => bu.LinkedIn)
+                            .ThenByDescending(bu => bu.Id);
+                    break;
             }
 
-            return null;
+            int searchLength = await usersQueryable.CountAsync(cancellationToken);
+
+            List<BaseUser> baseUsers = await usersQueryable
+                .Skip(request.Start)
+                .Take(request.Step)
+                .ToListAsync(cancellationToken);
+
+            return new SearchUserViewModel()
+            {
+                Users = _mapper.Map<List<ProfileDto>>(baseUsers),
+                SearchLength = searchLength
+            };
         }
     }
 }

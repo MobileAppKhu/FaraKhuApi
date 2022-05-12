@@ -34,7 +34,7 @@ namespace UnitTest.ControllerTest.Offer
                 Price = "1000",
                 Title = "Title",
                 AvatarId = "smiley.png",
-                OfferType = OfferType.Sell
+                OfferType = OfferType.Buy
             };
             //Act
             var response = await client.PostAsync(_path, data);

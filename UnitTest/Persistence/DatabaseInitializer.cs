@@ -250,17 +250,11 @@ namespace UnitTest.Persistence
 
         private async Task FacultyInitializer()
         {
-            List<Faculty> faculties = new List<Faculty>();
-            faculties.Add(new Faculty
+            var faculties = new List<Faculty>
             {
-                FacultyCode = "1",
-                FacultyTitle = "فنی و مهندسی"
-            });
-            faculties.Add(new Faculty
-            {
-                FacultyCode = "2",
-                FacultyTitle = "شیمی و فیزیک"
-            });
+                new() {FacultyId = "FirstFacultyId", FacultyCode = "1", FacultyTitle = "فنی و مهندسی"},
+                new() {FacultyId = "SecondFacultyId", FacultyCode = "2", FacultyTitle = "شیمی و فیزیک"}
+            };
 
             await DatabaseContext.Faculties.AddRangeAsync(faculties);
             await DatabaseContext.SaveChangesAsync();
@@ -273,6 +267,7 @@ namespace UnitTest.Persistence
             List<Department> departments = new List<Department>();
             departments.Add(new Department
             {
+                DepartmentId = "FirstDepartmentId",
                 Faculty = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "1"),
                 FacultyId = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "1").FacultyId,
                 DepartmentCode = "11",
@@ -280,6 +275,7 @@ namespace UnitTest.Persistence
             });
             departments.Add(new Department
             {
+                DepartmentId = "SecondDepartmentId",
                 Faculty = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "1"),
                 FacultyId = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "1").FacultyId,
                 DepartmentCode = "12",
@@ -287,6 +283,7 @@ namespace UnitTest.Persistence
             });
             departments.Add(new Department
             {
+                DepartmentId = "ThirdDepartmentId",
                 Faculty = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "2"),
                 FacultyId = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "2").FacultyId,
                 DepartmentCode = "21",
@@ -294,6 +291,7 @@ namespace UnitTest.Persistence
             });
             departments.Add(new Department
             {
+                DepartmentId = "ForthDepartmentId",
                 Faculty = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "2"),
                 FacultyId = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "2").FacultyId,
                 DepartmentCode = "22",

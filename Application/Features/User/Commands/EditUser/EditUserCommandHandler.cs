@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,21 +12,20 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Account.Commands.EditProfile
+namespace Application.Features.User.Commands.EditUser
 {
-    public class EditProfileCommandHandler : IRequestHandler<EditProfileCommand>
+    public class EditUserCommandHandler : IRequestHandler<EditUserCommand>
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
 
-        public EditProfileCommandHandler(IStringLocalizer<SharedResource> localizer,
+        public EditUserCommandHandler(IStringLocalizer<SharedResource> localizer,
             IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
         }
-
-        public async Task<Unit> Handle(EditProfileCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(EditUserCommand request, CancellationToken cancellationToken)
         {
             var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == request.UserId,
                 cancellationToken);

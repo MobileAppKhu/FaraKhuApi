@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using Application.Features.CourseEvent.Queries.SearchCourseEvent;
 using Application.Features.Event.Queries.SearchEvent;
 using Domain.Enum;
 using Microsoft.AspNetCore.TestHost;
