@@ -22,13 +22,11 @@ namespace Application.Features.Notification.Queries.SearchNotification
     {
         private readonly IDatabaseContext _context;
         private IMapper Mapper { get; }
-        private IStringLocalizer<SharedResource> Localizer { get; }
         
-        public SearchNotificationQueryHandler(IMapper mapper, IDatabaseContext context, IStringLocalizer<SharedResource> localizer)
+        public SearchNotificationQueryHandler(IMapper mapper, IDatabaseContext context)
         {
             _context = context;
             Mapper = mapper;
-            Localizer = localizer;
         }
         
         public async Task<SearchNotificationViewModel> Handle(SearchNotificationQuery request, CancellationToken cancellationToken)

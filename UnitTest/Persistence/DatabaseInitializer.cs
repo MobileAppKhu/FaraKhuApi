@@ -72,6 +72,7 @@ namespace UnitTest.Persistence
             await PollInitializer();
             await NewsInitializer();
             await AnnouncementInitializer();
+            await NotificationInitializer();
             await DatabaseContext.InitializeHistories.AddAsync(new InitializeHistory
             {
                 Version = version
@@ -785,6 +786,34 @@ namespace UnitTest.Persistence
             };
             
             await DatabaseContext.Announcements.AddAsync(searchAnnouncement);
+            await DatabaseContext.SaveChangesAsync();
+        }
+
+        public async Task NotificationInitializer()
+        {
+            var deleteNotification = new Notification
+            {
+                Description = "DeleteNotification",
+                EntityId = "",
+                NotificationId = "DeleteNotificationId",
+                UserId = "StudentId",
+                NotificationOperation = NotificationOperation.InstructorMessage,
+                NotificationObjectType = NotificationObjectType.Course
+            };
+
+            await DatabaseContext.Notifications.AddAsync(deleteNotification);
+
+            var searchNotification = new Notification
+            {
+                Description = "DeleteNotification",
+                EntityId = "",
+                NotificationId = "SearchNotificationId",
+                UserId = "StudentId",
+                NotificationOperation = NotificationOperation.InstructorMessage,
+                NotificationObjectType = NotificationObjectType.Course
+            };
+            
+            await DatabaseContext.Notifications.AddAsync(searchNotification);
 
             await DatabaseContext.SaveChangesAsync();
         }

@@ -29,13 +29,18 @@ namespace Application.Features.Notification.Commands.AddCourseNotification
         
         public async Task<AddCourseNotificationViewModel> Handle(AddCourseNotificationCommand request, CancellationToken cancellationToken)
         {
-            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == request.UserId);
-            if (user == null)
+            var user =
+                await _context.BaseUsers.FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken);
+
+            var courseObj = await _context.Courses
+                .Include(course => course.Students)
+                .FirstOrDefaultAsync(course => course.CourseId == request.CourseId, cancellationToken);
+            if (courseObj == null)
             {
                 throw new CustomException(new Error
                 {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
+                    ErrorType = ErrorType.CourseNotFound,
+                    Message = Localizer["CourseNotFound"]
                 });
             }
 
@@ -48,15 +53,12 @@ namespace Application.Features.Notification.Commands.AddCourseNotification
                 });
             }
 
-            var courseObj = await _context.Courses
-                .Include(course => course.Students)
-                .FirstOrDefaultAsync(course => course.CourseId == request.CourseId, cancellationToken);
-            if (courseObj == null)
+            if (courseObj.InstructorId != user.Id)
             {
                 throw new CustomException(new Error
                 {
-                    ErrorType = ErrorType.CourseNotFound,
-                    Message = Localizer["CourseNotFound"]
+                    ErrorType = ErrorType.Unauthorized,
+                    Message = Localizer["Unauthorized"]
                 });
             }
 
