@@ -25,12 +25,10 @@ namespace Application.Features.Notification.Commands.DeleteNotification
         }
         public async Task<Unit> Handle(DeleteNotificationCommand request, CancellationToken cancellationToken)
         {
-            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == request.UserId);
-
             var notificationObj = await _context.Notifications
                 .FirstOrDefaultAsync(
                     notification => notification.NotificationId == request.NotificationId &&
-                                    notification.UserId == user.Id, cancellationToken);
+                                    notification.UserId == request.UserId, cancellationToken);
 
             if (notificationObj == null)
             {
