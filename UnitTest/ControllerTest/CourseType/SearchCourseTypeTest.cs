@@ -55,7 +55,7 @@ namespace UnitTest.ControllerTest.CourseType
             await client.AuthToInstructor();
             var data = new SearchCourseTypeQuery()
             {
-                CourseTypeCode = "11",
+                CourseTypeCode = "111",
                 Start = 0,
                 Step = 25
             };
