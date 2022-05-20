@@ -193,7 +193,9 @@ namespace UnitTest.Persistence
                 EmailConfirmed = true,
                 AvatarId = "smiley.png",
                 UserName = "",
-                Id = "SearchStudentId"
+                Id = "SearchStudentId",
+                GoogleScholar = "TestGoogleScholar",
+                LinkedIn = "TestLinkedIn"
             };
 
             await UserManager.CreateAsync(searchStudent, "SearchStudentPassword");
@@ -386,7 +388,8 @@ namespace UnitTest.Persistence
                         EndTime = DateTime.MaxValue,
                         WeekDay = WeekDay.Saturday
                     }
-                }
+                },
+                EndDate = DateTime.Now
             };
 
             var student =
@@ -402,7 +405,8 @@ namespace UnitTest.Persistence
                 AvatarId = "smiley.png",
                 CourseId = "DeleteCourseId",
                 CourseTypeId = "2",
-                Students = new List<Student>()
+                Students = new List<Student>(),
+                EndDate = DateTime.Now
             };
             
             var searchCourse = new Course
