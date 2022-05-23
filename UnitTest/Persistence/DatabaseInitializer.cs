@@ -200,7 +200,86 @@ namespace UnitTest.Persistence
 
             await UserManager.CreateAsync(searchStudent, "SearchStudentPassword");
             await UserManager.AddToRoleAsync(searchStudent, UserType.Student.ToString().Normalize());
+            
+            var deleteStudent = new Student()
+            {
+                FirstName = "Student",
+                LastName = "User",
+                Email = "DeleteStudent@FaraKhu.app",
+                UserType = UserType.Student,
+                StudentId = "12345123451234512345",
+                EmailConfirmed = true,
+                AvatarId = "smiley.png",
+                UserName = "",
+                Id = "DeleteStudentId",
+                GoogleScholar = "TestGoogleScholar",
+                LinkedIn = "TestLinkedIn"
+            };
+
+            await UserManager.CreateAsync(deleteStudent, "DeleteStudentPassword");
+            await UserManager.AddToRoleAsync(deleteStudent, UserType.Student.ToString().Normalize());
+            
+            var deleteInstructor = new Instructor()
+            {
+                FirstName = "Student",
+                LastName = "User",
+                Email = "DeleteInstructor@FaraKhu.app",
+                UserType = UserType.Instructor,
+                InstructorId = "12345123451234512345",
+                EmailConfirmed = true,
+                AvatarId = "smiley.png",
+                UserName = "",
+                Id = "DeleteInstructorId",
+                GoogleScholar = "TestGoogleScholar",
+                LinkedIn = "TestLinkedIn"
+            };
+
+            await UserManager.CreateAsync(deleteInstructor, "DeleteInstructorPassword");
+            await UserManager.AddToRoleAsync(deleteInstructor, UserType.Instructor.ToString().Normalize());
+
+            var deletePROfficer = new BaseUser()
+            {
+                FirstName = "PublicRelation",
+                LastName = "Officer",
+                Email = "DeletePROfficer@FaraKhu.app",
+                UserType = UserType.PROfficer,
+                EmailConfirmed = true,
+                AvatarId = "smiley.png",
+                UserName = "",
+                Id = "DeletePROfficerId",
+                GoogleScholar = "TestGoogleScholar",
+                LinkedIn = "TestLinkedIn"
+            };
+
+            await UserManager.CreateAsync(deletePROfficer, "DeletePROfficerPassword");
+            await UserManager.AddToRoleAsync(deletePROfficer, UserType.PROfficer.ToString().Normalize());
+
+            var editUser = new BaseUser()
+            {
+                FirstName = "Edit",
+                LastName = "User",
+                Email = "EditUser@FaraKhu.app",
+                UserType = UserType.PROfficer,
+                EmailConfirmed = true,
+                AvatarId = "smiley.png",
+                UserName = "",
+                Id = "EditUserId",
+                GoogleScholar = "TestGoogleScholar",
+                LinkedIn = "TestLinkedIn",
+                Favourites = new List<Favourite>
+                {
+                    new()
+                    {
+                        Description = "Description",
+                        FavouriteId = "EditUserFavouriteId"
+                    }
+                }
+            };
+
+            await UserManager.CreateAsync(editUser, "EditUserPassword");
+            await UserManager.AddToRoleAsync(editUser, UserType.PROfficer.ToString().Normalize());
         }
+        
 
         private async Task AvatarInitializer()
         {

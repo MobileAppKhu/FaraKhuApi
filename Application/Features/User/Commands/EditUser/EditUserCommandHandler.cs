@@ -30,6 +30,15 @@ namespace Application.Features.User.Commands.EditUser
             var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == request.UserId,
                 cancellationToken);
 
+            if (user == null)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.UserNotFound,
+                    Message = Localizer["UserNotFound"]
+                });
+            }
+
             if (!string.IsNullOrWhiteSpace(request.FirstName))
             {
                 user.FirstName = request.FirstName;
@@ -58,7 +67,7 @@ namespace Application.Features.User.Commands.EditUser
                 user.Avatar = avatar;
             }
 
-            if (request.AddFavourites.Count != 0)
+            if (request.AddFavourites != null && request.AddFavourites.Count != 0)
             {
                 foreach (var favouriteDescription in request.AddFavourites)
                 {
@@ -71,7 +80,7 @@ namespace Application.Features.User.Commands.EditUser
                 }
             }
 
-            if (request.DeleteFavourites.Count != 0)
+            if (request.DeleteFavourites != null && request.DeleteFavourites.Count != 0)
             {
                 List<Favourite> deletingFavourites = await _context.Favourites.Where(favourite =>
                         request.DeleteFavourites.Contains(favourite.FavouriteId) && favourite.UserId == request.UserId)
