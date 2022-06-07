@@ -1,9 +1,9 @@
-﻿using Application.DTOs.News;
+﻿using Domain.Models;
 
 namespace Application.Features.News.Commands.AddComment
 {
     public class AddCommentViewModel
     {
-        public bool Status { get; set; } 
+        public Comment Comment { get; set; }
     }
 }

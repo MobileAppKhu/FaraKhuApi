@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Resources;
-using AutoMapper;
 using Domain.BaseModels;
 using Domain.Enum;
 using MediatR;
@@ -16,26 +15,27 @@ namespace Application.Features.News.Commands.CommentApproval
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IMapper _mapper { get; }
 
         public CommentApprovalCommandHandler( IStringLocalizer<SharedResource> localizer,
-            IDatabaseContext context, IMapper mapper)
+            IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
-            _mapper = mapper;
         }
 
         public async Task<Unit> Handle(CommentApprovalCommand request, CancellationToken cancellationToken)
         {
             var comment = await _context.Comments
-                .FirstOrDefaultAsync(comment => comment.CommentId == request.CommentId, cancellationToken);
+                .FirstOrDefaultAsync(c => c.CommentId == request.CommentId, cancellationToken);
             if (comment == null)
+            {
                 throw new CustomException(new Error()
                 {
                     ErrorType = ErrorType.CommentNotFound,
-                    Message = "Comment Not Found"
+                    Message = Localizer["CommentNotFound"]
                 });
+            }
+
             comment.Status = request.Status;
             await _context.SaveChangesAsync(cancellationToken);
             return Unit.Value;

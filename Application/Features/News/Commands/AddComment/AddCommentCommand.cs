@@ -4,7 +4,7 @@ using MediatR;
 namespace Application.Features.News.Commands.AddComment
 
 {
-    public class AddCommentCommand : IRequest<Unit>
+    public class AddCommentCommand : IRequest<AddCommentViewModel>
     {
         [JsonIgnore] public string UserId { get; set; }
         public string Text { get; set; }

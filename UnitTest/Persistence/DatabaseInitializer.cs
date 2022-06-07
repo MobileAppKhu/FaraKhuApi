@@ -186,7 +186,7 @@ namespace UnitTest.Persistence
             var searchStudent = new Student()
             {
                 FirstName = "Student",
-                LastName = "User",
+                LastName = "SearchStudent",
                 Email = "SearchStudent@FaraKhu.app",
                 UserType = UserType.Student,
                 StudentId = "123451234512345",
@@ -212,8 +212,8 @@ namespace UnitTest.Persistence
                 AvatarId = "smiley.png",
                 UserName = "",
                 Id = "DeleteStudentId",
-                GoogleScholar = "TestGoogleScholar",
-                LinkedIn = "TestLinkedIn"
+                GoogleScholar = "",
+                LinkedIn = ""
             };
 
             await UserManager.CreateAsync(deleteStudent, "DeleteStudentPassword");
@@ -230,8 +230,8 @@ namespace UnitTest.Persistence
                 AvatarId = "smiley.png",
                 UserName = "",
                 Id = "DeleteInstructorId",
-                GoogleScholar = "TestGoogleScholar",
-                LinkedIn = "TestLinkedIn"
+                GoogleScholar = "",
+                LinkedIn = ""
             };
 
             await UserManager.CreateAsync(deleteInstructor, "DeleteInstructorPassword");
@@ -240,15 +240,15 @@ namespace UnitTest.Persistence
             var deletePROfficer = new BaseUser()
             {
                 FirstName = "PublicRelation",
-                LastName = "Officer",
+                LastName = "DeleteOfficer",
                 Email = "DeletePROfficer@FaraKhu.app",
                 UserType = UserType.PROfficer,
                 EmailConfirmed = true,
                 AvatarId = "smiley.png",
                 UserName = "",
                 Id = "DeletePROfficerId",
-                GoogleScholar = "TestGoogleScholar",
-                LinkedIn = "TestLinkedIn"
+                GoogleScholar = "",
+                LinkedIn = ""
             };
 
             await UserManager.CreateAsync(deletePROfficer, "DeletePROfficerPassword");
@@ -264,8 +264,8 @@ namespace UnitTest.Persistence
                 AvatarId = "smiley.png",
                 UserName = "",
                 Id = "EditUserId",
-                GoogleScholar = "TestGoogleScholar",
-                LinkedIn = "TestLinkedIn",
+                GoogleScholar = "",
+                LinkedIn = "",
                 Favourites = new List<Favourite>
                 {
                     new()
@@ -279,7 +279,6 @@ namespace UnitTest.Persistence
             await UserManager.CreateAsync(editUser, "EditUserPassword");
             await UserManager.AddToRoleAsync(editUser, UserType.PROfficer.ToString().Normalize());
         }
-        
 
         private async Task AvatarInitializer()
         {
@@ -341,8 +340,7 @@ namespace UnitTest.Persistence
             await DatabaseContext.Faculties.AddRangeAsync(faculties);
             await DatabaseContext.SaveChangesAsync();
         }
-
-
+        
         private async Task DepartmentInitializer()
         {
             List<Faculty> faculties = DatabaseContext.Faculties.ToList();
@@ -715,12 +713,36 @@ namespace UnitTest.Persistence
                 LastModifiedDate = DateTime.Now,
                 News = news,
                 Status = CommentStatus.Approved,
+                UserId = "StudentId"
             };
+
+            var deleteNews = new News
+            {
+                Description = "خوش آمدید.",
+                Title = "خبر تستی",
+                NewsId = "DeleteNewsId",
+                CreatedDate = DateTime.Now,
+                FileId = "smiley.png",
+                LastModifiedDate = DateTime.Now,
+            };
+
+            var deleteComment = new Comment
+            {
+                
+                CommentId = "RemoveCommentId",
+                CreatedDate = DateTime.Now,
+                LastModifiedDate = DateTime.Now,
+                News = news,
+                Status = CommentStatus.Approved,
+                UserId = "StudentId"
+            };
+
             await DatabaseContext.News.AddAsync(news);
+            await DatabaseContext.News.AddAsync(deleteNews);
             await DatabaseContext.Comments.AddAsync(comment);
+            await DatabaseContext.Comments.AddAsync(deleteComment);
             await DatabaseContext.SaveChangesAsync();
         }
-
 
         private async Task PollInitializer()
         {

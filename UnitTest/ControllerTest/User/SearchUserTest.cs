@@ -57,7 +57,7 @@ namespace UnitTest.ControllerTest.User
 
             var data = new SearchUserQuery
             {
-                LastName = "Officer",
+                LastName = "SearchStudent",
                 Start = 0,
                 Step = 25
             };
@@ -72,7 +72,7 @@ namespace UnitTest.ControllerTest.User
             //Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             Assert.True(searchResult.Users.Count == 1);
-            Assert.True(searchResult.Users[0].UserId == "OfficerId");
+            Assert.True(searchResult.Users[0].UserId == "SearchStudentId");
         }
 
         [Fact]

@@ -79,7 +79,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "PROfficerPolicy")]
+        [Authorize]
         public async Task<IActionResult> RemoveComment(RemoveCommentCommand request)
         {
             request.UserId = this.GetUserId();
