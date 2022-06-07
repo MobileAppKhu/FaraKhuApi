@@ -12,7 +12,7 @@ using Microsoft.Extensions.Localization;
 
 namespace Application.Features.News.Commands.AddComment
 {
-    public class AddCommentCommandHandler : IRequestHandler<AddCommentCommand, AddCommentViewModel>
+    public class AddCommentCommandHandler : IRequestHandler<AddCommentCommand>
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
@@ -24,7 +24,7 @@ namespace Application.Features.News.Commands.AddComment
             Localizer = localizer;
         }
 
-        public async Task<AddCommentViewModel> Handle(AddCommentCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(AddCommentCommand request, CancellationToken cancellationToken)
         {
             var news = await _context.News.FirstOrDefaultAsync(n => n.NewsId == request.NewsId, cancellationToken);
             if (news == null)
@@ -62,10 +62,7 @@ namespace Application.Features.News.Commands.AddComment
             };
             await _context.Comments.AddAsync(comment, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
-            return new AddCommentViewModel
-            {
-                Comment = comment
-            };
+            return Unit.Value;
         }
     }
 }
