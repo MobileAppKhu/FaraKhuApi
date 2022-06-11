@@ -18,6 +18,12 @@ namespace Infrastructure.Persistence.Configuration
                 .WithMany(course => course.Polls)
                 .HasForeignKey(question => question.CourseId);
             // end of Option 2
+            
+            builder.Property(question => question.CreatedDate).HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAdd();
+            builder.Property(question => question.LastModifiedDate)
+                .HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAddOrUpdate();
         }
     }
 }

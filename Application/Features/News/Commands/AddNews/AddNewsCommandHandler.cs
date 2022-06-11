@@ -24,36 +24,17 @@ namespace Application.Features.News.Commands.AddNews
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
         private IMapper _mapper { get; }
 
         public AddNewsCommandHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, IDatabaseContext context, 
-            IMapper mapper)
+            IDatabaseContext context, IMapper mapper)
         {
             _context = context;
             Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
             _mapper = mapper;
         }
         public async Task<AddNewsViewModel> Handle(AddNewsCommand request, CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
-            if(user == null)
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            if (user.UserType != UserType.PROfficer && user.UserType != UserType.Owner)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            }
             var fileEntity = await _context.Files.FirstOrDefaultAsync(f => f.Id == request.FileId,
                 cancellationToken);
 

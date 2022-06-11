@@ -3,7 +3,7 @@ using Application.Utilities;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Account.ResetPasswordValidation
+namespace Application.Features.Account.Commands.ResetPasswordValidation
 {
     public class ResetPasswordValidationCommandValidator : AbstractValidator<ResetPasswordValidationCommand>
     {

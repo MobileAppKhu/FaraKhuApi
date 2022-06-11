@@ -6,6 +6,7 @@ using Application.Features.Ticket.Queries.SearchTicket;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Utilities;
 
 namespace WebApi.Controllers
 {
@@ -24,6 +25,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(typeof(AddTicketCommandViewModel), 200)]
         public async Task<IActionResult> AddTicket(AddTicketCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
         
@@ -31,6 +33,7 @@ namespace WebApi.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> EditTicket(EditTicketCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
         
@@ -38,6 +41,7 @@ namespace WebApi.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> DeleteTicket(DeleteTicketCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
         

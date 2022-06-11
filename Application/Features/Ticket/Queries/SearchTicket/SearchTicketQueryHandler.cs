@@ -22,15 +22,13 @@ namespace Application.Features.Ticket.Queries.SearchTicket
         private readonly IDatabaseContext _context;
         private IHttpContextAccessor HttpContextAccessor { get; }
         private IMapper Mapper { get; }
-        private IStringLocalizer<SharedResource> Localizer { get; }
 
         public SearchTicketQueryHandler(IHttpContextAccessor httpContextAccessor,
-            IMapper mapper, IDatabaseContext context, IStringLocalizer<SharedResource> localizer)
+            IMapper mapper, IDatabaseContext context)
         {
             _context = context;
             HttpContextAccessor = httpContextAccessor;
             Mapper = mapper;
-            Localizer = localizer;
         }
 
         public async Task<SearchTicketQueryViewModel> Handle(SearchTicketQuery request,
@@ -39,31 +37,23 @@ namespace Application.Features.Ticket.Queries.SearchTicket
             var userId = HttpContextAccessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
             var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == userId,
                 cancellationToken);
-            if (user == null)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            }
 
             IQueryable<Domain.Models.Ticket> ticketsQueryable = _context.Tickets
                 .Include(ticket => ticket.Creator);
 
-            if (request.TicketIds.Count != 0)
+            if (!string.IsNullOrWhiteSpace(request.TicketId))
             {
-                ticketsQueryable = ticketsQueryable.Where(ticket => request.TicketIds.Contains(ticket.TicketId));
+                ticketsQueryable = ticketsQueryable.Where(ticket => ticket.TicketId.Contains(request.TicketId));
             }
 
-            if (request.TicketPriorities.Count != 0)
+            if (request.TicketPriority != 0)
             {
-                ticketsQueryable = ticketsQueryable.Where(ticket => request.TicketPriorities.Contains(ticket.Priority));
+                ticketsQueryable = ticketsQueryable.Where(ticket => request.TicketPriority == ticket.Priority);
             }
 
-            if (request.TicketStatusList.Count != 0)
+            if (request.TicketStatus != 0)
             {
-                ticketsQueryable = ticketsQueryable.Where(ticket => request.TicketStatusList.Contains(ticket.Status));
+                ticketsQueryable = ticketsQueryable.Where(ticket => request.TicketStatus == ticket.Status);
             }
 
             if (!string.IsNullOrWhiteSpace(request.Description))

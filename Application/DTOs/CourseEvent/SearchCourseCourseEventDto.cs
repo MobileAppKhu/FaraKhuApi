@@ -14,6 +14,8 @@ namespace Application.DTOs.CourseEvent
         public DateTime EventTime { get; set; }
 
         public CourseEventType EventType { get; set; }
+
+        public string CourseId { get; set; }
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Domain.Models.CourseEvent, SearchCourseCourseEventDto>()

@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
-using Application.Features.Account.SignIn;
+using Application.Features.Account.Commands.SignIn;
 using Domain.Enum;
 
 
@@ -22,7 +22,7 @@ namespace UnitTest.Utilities
             var errors = (await response.GetJson())["errors"];
             if (errorCode == null)
                 return errors != null && errors.ToArray().Any();
-            return errors != null && errors.ToArray().Any(error => (ErrorType) error["code"].Value<int>() == errorCode);
+            return errors != null && errors.ToArray().Any(error => (ErrorType) error["errorType"].Value<int>() == errorCode);
         }
 
         private static async Task<JObject> GetJson(this HttpResponseMessage response)
@@ -89,6 +89,21 @@ namespace UnitTest.Utilities
 
             client.DefaultRequestHeaders.Add("Cookie", response.Headers.GetValues("Set-Cookie").ToArray()[0]);
         }
+        
+        public static async Task AuthToSecondStudent(this HttpClient client)
+        {
+            var userObj = new SignInCommand
+            {
+                Logon = "SecondStudent@Farakhu.app",
+                Password = "SecondStudentPassword"
+            };
+            var user = JsonConvert.SerializeObject(userObj);
+
+            var response = await client.PostAsync( "api/Account/SignIn",
+                new StringContent(user, Encoding.UTF8, "application/json"));
+
+            client.DefaultRequestHeaders.Add("Cookie", response.Headers.GetValues("Set-Cookie").ToArray()[0]);
+        }
 
         public static async Task AuthToInstructor(this HttpClient client)
         {
@@ -96,6 +111,51 @@ namespace UnitTest.Utilities
             {
                 Logon = "Instructor@Farakhu.app",
                 Password = "InstructorPassword"
+            };
+            var user = JsonConvert.SerializeObject(userObj);
+
+            var response = await client.PostAsync("api/Account/SignIn",
+                new StringContent(user, Encoding.UTF8, "application/json"));
+
+            client.DefaultRequestHeaders.Add("Cookie", response.Headers.GetValues("Set-Cookie").ToArray()[0]);
+        }
+        
+        public static async Task AuthToSecondInstructor(this HttpClient client)
+        {
+            var userObj = new SignInCommand
+            {
+                Logon = "SecondInstructor@Farakhu.app",
+                Password = "SecondInstructorPassword"
+            };
+            var user = JsonConvert.SerializeObject(userObj);
+
+            var response = await client.PostAsync("api/Account/SignIn",
+                new StringContent(user, Encoding.UTF8, "application/json"));
+
+            client.DefaultRequestHeaders.Add("Cookie", response.Headers.GetValues("Set-Cookie").ToArray()[0]);
+        }
+        
+        public static async Task AuthToOwner(this HttpClient client)
+        {
+            var userObj = new SignInCommand
+            {
+                Logon = "Owner@FaraKhu.app",
+                Password = "OwnerPassword"
+            };
+            var user = JsonConvert.SerializeObject(userObj);
+
+            var response = await client.PostAsync("api/Account/SignIn",
+                new StringContent(user, Encoding.UTF8, "application/json"));
+
+            client.DefaultRequestHeaders.Add("Cookie", response.Headers.GetValues("Set-Cookie").ToArray()[0]);
+        }
+        
+        public static async Task AuthToPublicRelation(this HttpClient client)
+        {
+            var userObj = new SignInCommand
+            {
+                Logon = "PublicRelation@FaraKhu.app",
+                Password = "PROfficerPassword"
             };
             var user = JsonConvert.SerializeObject(userObj);
 

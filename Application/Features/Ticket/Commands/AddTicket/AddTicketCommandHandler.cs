@@ -19,32 +19,18 @@ namespace Application.Features.Ticket.Commands.AddTicket
     public class AddTicketCommandHandler : IRequestHandler<AddTicketCommand, AddTicketCommandViewModel>
     {
         private readonly IDatabaseContext _context;
-        private IHttpContextAccessor HttpContextAccessor { get; }
         private IMapper _mapper { get; }
-        private IStringLocalizer<SharedResource> Localizer { get; }
 
-        public AddTicketCommandHandler(IHttpContextAccessor httpContextAccessor,
-            IMapper mapper, IDatabaseContext context, IStringLocalizer<SharedResource> localizer)
+        public AddTicketCommandHandler(IMapper mapper, IDatabaseContext context)
         {
             _context = context;
-            HttpContextAccessor = httpContextAccessor;
             _mapper = mapper;
-            Localizer = localizer;
         }
 
         public async Task<AddTicketCommandViewModel> Handle(AddTicketCommand request,
             CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _context.BaseUsers.FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
-            if (user == null)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            }
+            var user = await _context.BaseUsers.FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken);
             //check if this works
             var ticket = new Domain.Models.Ticket
             {
@@ -52,7 +38,7 @@ namespace Application.Features.Ticket.Commands.AddTicket
                 Priority = request.Priority,
                 Status = TicketStatus.Init,
                 DeadLine = request.DeadLine,
-                CreatorId = userId,
+                CreatorId = user.Id,
                 Creator = user,
                 CreatedDate = DateTime.Now
             };

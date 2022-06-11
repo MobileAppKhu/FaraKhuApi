@@ -2,7 +2,7 @@
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Account.SignIn
+namespace Application.Features.Account.Commands.SignIn
 {
     public class SignInCommandValidator : AbstractValidator<SignInCommand>
     {

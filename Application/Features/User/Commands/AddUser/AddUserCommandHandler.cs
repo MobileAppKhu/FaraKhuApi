@@ -23,19 +23,14 @@ namespace Application.Features.User.Commands.AddUser
         private readonly IDatabaseContext _context;
         
         private IStringLocalizer<SharedResource> _localizer { get; }
-        
-        private IHttpContextAccessor HttpContextAccessor { get; }
-        
         private UserManager<BaseUser> _userManager { get; }
         private IMapper _mapper { get; }
 
-        public AddUserCommandHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
-            , IDatabaseContext context)
+        public AddUserCommandHandler( IStringLocalizer<SharedResource> localizer, UserManager<BaseUser> userManager
+            , IMapper mapper, IDatabaseContext context)
         {
             _context = context;
             _localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
             _userManager = userManager;
             _mapper = mapper;
         }

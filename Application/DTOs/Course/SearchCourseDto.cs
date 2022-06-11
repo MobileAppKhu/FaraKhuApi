@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using Application.Common.Mappings;
 using Application.DTOs.CourseEvent;
 using Application.DTOs.Instructor;
@@ -12,11 +13,14 @@ namespace Application.DTOs.Course
     public class SearchCourseDto : IMapFrom<Domain.Models.Course>
     {
         public string CourseId { get; set; }
+        public string CourseTypeId { get; set; }
         public string CourseType { get; set; }
         public string Department { get; set; }
         public string Faculty { get; set; }
         public string Address { get; set; }
         public DateTime CreatedDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public string InstructorId { get; set; }
 
         public ICollection<SearchCourseTimeDto> Times { get; set; }
 

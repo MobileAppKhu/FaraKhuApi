@@ -24,32 +24,20 @@ namespace Application.Features.CourseEvent.Commands.AddCourseEvent
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
         private IMapper Mapper { get; }
 
         public AddCourseEventCommandHandler(IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, IMapper mapper, IDatabaseContext context)
+            IMapper mapper, IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
             Mapper = mapper;
         }
 
         public async Task<AddCourseEventViewModel> Handle(AddCourseEventCommand request,
             CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
-
-            if (user == null)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            }
+            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == request.UserId);
             
             Domain.Models.Course courseObj = _context.Courses
                 .Include(c => c.CourseEvents)

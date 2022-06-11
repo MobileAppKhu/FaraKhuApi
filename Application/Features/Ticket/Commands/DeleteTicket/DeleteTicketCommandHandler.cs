@@ -17,34 +17,31 @@ namespace Application.Features.Ticket.Commands.DeleteTicket
     public class DeleteTicketCommandHandler : IRequestHandler<DeleteTicketCommand>
     {
         private readonly IDatabaseContext _context;
-        private IHttpContextAccessor HttpContextAccessor { get; }
         private IStringLocalizer<SharedResource> Localizer { get; }
 
-        public DeleteTicketCommandHandler(IHttpContextAccessor httpContextAccessor,
-            IDatabaseContext context, IStringLocalizer<SharedResource> localizer)
+        public DeleteTicketCommandHandler(IDatabaseContext context, IStringLocalizer<SharedResource> localizer)
         {
             _context = context;
-            HttpContextAccessor = httpContextAccessor;
             Localizer = localizer;
         }
 
         public async Task<Unit> Handle(DeleteTicketCommand request, CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == userId, cancellationToken);
-            if (user == null)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            }
+            var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == request.UserId, cancellationToken);
 
             var deletingTicket =
                 await _context.Tickets.FirstOrDefaultAsync(ticket => ticket.TicketId == request.TicketId, cancellationToken);
 
-            if (deletingTicket.CreatorId != userId && user.UserType != UserType.Owner)
+            if (deletingTicket == null)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.TicketNotFound,
+                    Message = Localizer["TicketNotFound"]
+                });
+            }
+
+            if (deletingTicket.CreatorId != user.Id && user.UserType != UserType.Owner)
             {
                 throw new CustomException(new Error
                 {

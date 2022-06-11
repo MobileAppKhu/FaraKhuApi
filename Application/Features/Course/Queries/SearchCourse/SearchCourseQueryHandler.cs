@@ -40,14 +40,6 @@ namespace Application.Features.Course.Queries.SearchCourse
             var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
             BaseUser user = await _context.BaseUsers.FirstOrDefaultAsync(u => u.Id == userId
             ,cancellationToken);
-            if (user == null)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            }
 
             IQueryable<Domain.Models.Course> coursesQueryable = _context.Courses
                 .Include(course => course.Instructor)
@@ -94,11 +86,6 @@ namespace Application.Features.Course.Queries.SearchCourse
                 coursesQueryable = coursesQueryable.Where(course => course.CourseTypeId == request.CourseType);
             }
 
-            if (request.EndDate != null)
-            {
-                coursesQueryable = coursesQueryable.Where(course => course.EndDate == request.EndDate);
-            }
-
             switch (request.CourseColumn)
             {
                 case CourseColumn.CourseId:
@@ -108,9 +95,9 @@ namespace Application.Features.Course.Queries.SearchCourse
                     break;
                 case CourseColumn.CourseTypeId:
                     coursesQueryable = request.OrderDirection
-                        ? coursesQueryable.OrderBy(course => course.CourseType)
+                        ? coursesQueryable.OrderBy(course => course.CourseTypeId)
                             .ThenBy(course => course.CourseId)
-                        : coursesQueryable.OrderByDescending(course => course.CourseType)
+                        : coursesQueryable.OrderByDescending(course => course.CourseTypeId)
                             .ThenByDescending(course => course.CourseId);
                     break;
                 case CourseColumn.InstructorId:

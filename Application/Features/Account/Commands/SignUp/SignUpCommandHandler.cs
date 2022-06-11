@@ -1,10 +1,8 @@
-﻿
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
-using Application.DTOs.User;
 using Application.Resources;
 using Application.Utilities;
 using AutoMapper;
@@ -16,8 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-
-namespace Application.Features.Account.SignUp
+namespace Application.Features.Account.Commands.SignUp
 {
     public class SignUpCommandHandler : IRequestHandler<SignUpCommand,SignUpViewModel>
     {

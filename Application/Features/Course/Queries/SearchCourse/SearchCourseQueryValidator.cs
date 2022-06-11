@@ -8,7 +8,6 @@ namespace Application.Features.Course.Queries.SearchCourse
     {
         public SearchCourseQueryValidator(IStringLocalizer<SharedResource> localizer)
         {
-            //TODO
         }
     }
 }

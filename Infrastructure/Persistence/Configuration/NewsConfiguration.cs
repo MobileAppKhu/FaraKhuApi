@@ -12,6 +12,11 @@ namespace Infrastructure.Persistence.Configuration
             builder.Property(n => n.NewsId).ValueGeneratedOnAdd();
             builder.Property(n => n.Title).IsRequired();
             builder.HasOne(n => n.FileEntity).WithMany().HasForeignKey(n => n.FileId);
+            builder.Property(n => n.CreatedDate).HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAdd();
+            builder.Property(n => n.LastModifiedDate)
+                .HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAddOrUpdate();
         }
     }
 }

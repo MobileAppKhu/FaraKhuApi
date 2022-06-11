@@ -22,33 +22,18 @@ namespace Application.Features.Notification.Queries.SearchNotification
     {
         private readonly IDatabaseContext _context;
         private IMapper Mapper { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
-        private IStringLocalizer<SharedResource> Localizer { get; }
         
-        public SearchNotificationQueryHandler(IMapper mapper, IDatabaseContext context,
-            IHttpContextAccessor httpContextAccessor, IStringLocalizer<SharedResource> localizer)
+        public SearchNotificationQueryHandler(IMapper mapper, IDatabaseContext context)
         {
             _context = context;
             Mapper = mapper;
-            HttpContextAccessor = httpContextAccessor;
-            Localizer = localizer;
         }
         
         public async Task<SearchNotificationViewModel> Handle(SearchNotificationQuery request, CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
-            if (user == null)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            }
 
             var notifications = await _context.Notifications
-                .Where(notification => notification.UserId == userId).ToListAsync(cancellationToken);
+                .Where(notification => notification.UserId == request.UserId).ToListAsync(cancellationToken);
 
             return new SearchNotificationViewModel
             {

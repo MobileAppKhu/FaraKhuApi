@@ -9,7 +9,6 @@ namespace Application.Features.Course.Queries.SearchCourse
         public string CourseId { get; set; }
         public string Instructor { get; set; }
         public string Student { get; set; }
-        public DateTime? EndDate { get; set; }
         public string CourseType { get; set; }
         public int Start { get; set; }
         public int Step { get; set; }

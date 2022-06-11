@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
@@ -10,23 +9,18 @@ using AutoMapper;
 using Domain.BaseModels;
 using Domain.Enum;
 using MediatR;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Account.EmailVerification
+namespace Application.Features.Account.Commands.EmailVerification
 {
     public class EmailVerificationCommandHandler : IRequestHandler<EmailVerificationCommand, EmailVerificationViewModel>
     {
         private IStringLocalizer<SharedResource> Localizer { get; }
         private UserManager<BaseUser> UserManager { get; }
-
         private readonly IDatabaseContext _context;
-
         private readonly IMapper _mapper;
-        
         private SignInManager<BaseUser> _signInManager { get; }
-
 
         public EmailVerificationCommandHandler(UserManager<BaseUser> userManager,
             IStringLocalizer<SharedResource> localizer, IDatabaseContext context

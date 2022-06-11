@@ -22,26 +22,17 @@ namespace Application.Features.Course.Commands.EditCourse
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
 
-        public EditCourseCommandHandler(IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, IDatabaseContext context)
+        public EditCourseCommandHandler(IStringLocalizer<SharedResource> localizer, IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Unit> Handle(EditCourseCommand request, CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Instructor user = _context.Instructors.FirstOrDefault(u => u.Id == userId);
-            if (user == null)
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
+            Instructor user = _context.Instructors.FirstOrDefault(u => u.Id == request.UserId);
+
             var editingCourse =
                 await _context.Courses.Include(course => course.Students)
                     .Include(course => course.Times)
@@ -92,10 +83,35 @@ namespace Application.Features.Course.Commands.EditCourse
                 editingCourse.Address = request.Address;
             }
 
+            if (request.EndDate != null)
+            {
+                editingCourse.EndDate = request.EndDate.Value;
+            }
+
+            if (request.AvatarId != null)
+            {
+                var avatar =
+                    await _context.Files.FirstOrDefaultAsync(avatar => avatar.Id == request.AvatarId,
+                        cancellationToken);
+                if (avatar == null)
+                {
+                    throw new CustomException(new Error
+                    {
+                        ErrorType = ErrorType.FileNotFound,
+                        Message = Localizer["FileNotFound"]
+                    });
+                }
+
+                editingCourse.AvatarId = request.AvatarId;
+                editingCourse.Avatar = avatar;
+            }
+
             if (request.AddStudentDto != null && request.AddStudentDto.StudentIds.Count != 0)
             {
                 List<Student> addStudents = _context.Students
-                    .Where(student => request.AddStudentDto.StudentIds.Contains(student.StudentId)).ToList();
+                    .Include(student => student.Courses)
+                    .Where(student => request.AddStudentDto.StudentIds.Contains(student.StudentId) &&
+                                      !student.Courses.Contains(editingCourse)).ToList();
                 if (addStudents.Count != request.AddStudentDto.StudentIds.Count)
                 {
                     throw new CustomException(new Error
@@ -119,7 +135,14 @@ namespace Application.Features.Course.Commands.EditCourse
             {
                 List<Student> deleteStudents = await _context.Students
                     .Where(student => request.DeleteStudentDto.StudentIds.Contains(student.StudentId)).ToListAsync(cancellationToken);
-
+                if (deleteStudents.Count != request.DeleteStudentDto.StudentIds.Count)
+                {
+                    throw new CustomException(new Error
+                    {
+                        ErrorType = ErrorType.StudentNotFound,
+                        Message = Localizer["StudentNotFound"]
+                    });
+                }
                 foreach (var student in deleteStudents)
                 {
                     if (!editingCourse.Students.Contains(student))
@@ -138,13 +161,19 @@ namespace Application.Features.Course.Commands.EditCourse
             // delete time
             if (request.DeleteTimeDto != null && request.DeleteTimeDto.TimeIds.Count != 0)
             {
-                foreach (var time in editingCourse.Times)
+                var times = await _context.Times.Where(time => request.DeleteTimeDto.TimeIds.Contains(time.TimeId))
+                    .ToListAsync(cancellationToken);
+                if (times.Count != request.DeleteTimeDto.TimeIds.Count)
                 {
-                    if (request.DeleteTimeDto.TimeIds.Contains(time.TimeId))
+                    throw new CustomException(new Error
                     {
-                        editingCourse.Times.Remove(time);
-                    }
-                    else
+                        ErrorType = ErrorType.TimeNotFound,
+                        Message = Localizer["TimeNotFound"]
+                    });
+                }
+                foreach (var time in times)
+                {
+                    if (!editingCourse.Times.Contains(time))
                     {
                         throw new CustomException(new Error
                         {
@@ -152,6 +181,8 @@ namespace Application.Features.Course.Commands.EditCourse
                             Message = Localizer["TimeNotFound"]
                         });
                     }
+                    
+                    editingCourse.Times.Remove(time);
                 }
             }
 

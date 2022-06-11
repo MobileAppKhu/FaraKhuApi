@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Features.Account.SignIn
+namespace Application.Features.Account.Commands.SignIn
 {
     public class SignInCommand : IRequest<SignInViewModel>
     {

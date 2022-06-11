@@ -11,7 +11,6 @@ using Domain.Enum;
 using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
@@ -21,29 +20,17 @@ namespace Application.Features.Poll.Commands.EditQuestion
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
-        private IMapper Mapper { get; }
 
-        public EditQuestionCommandHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, IMapper mapper
+        public EditQuestionCommandHandler( IStringLocalizer<SharedResource> localizer
             , IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
-            Mapper = mapper;
         }
         public async Task<Unit> Handle(EditQuestionCommand request, CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Instructor user = await _context.Instructors.
-                FirstOrDefaultAsync(i => i.Id == userId, cancellationToken);
-            if(user == null)
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
+            var user = await _context.Instructors.
+                FirstOrDefaultAsync(i => i.Id == request.UserId, cancellationToken);
             var questionObj =
                 await _context.PollQuestions.Include(question => question.Course)
                     .ThenInclude(course => course.Instructor)
@@ -67,7 +54,7 @@ namespace Application.Features.Poll.Commands.EditQuestion
                 });
             }
 
-            if (request.DeleteAnswers.Count != 0)
+            if (request.DeleteAnswers != null && request.DeleteAnswers.Count != 0)
             {
                 var deleteAnswers = await _context.PollAnswers.Where(answer =>
                         answer.QuestionId == questionObj.QuestionId && request.DeleteAnswers.Contains(answer.AnswerId))
@@ -86,7 +73,7 @@ namespace Application.Features.Poll.Commands.EditQuestion
                 }
             }
 
-            if (request.AddAnswers.Count != 0)
+            if (request.AddAnswers != null && request.AddAnswers.Count != 0)
             {
                 foreach (var answerDescription in request.AddAnswers)
                 {

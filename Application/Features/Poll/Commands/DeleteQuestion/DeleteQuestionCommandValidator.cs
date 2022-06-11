@@ -4,9 +4,9 @@ using Microsoft.Extensions.Localization;
 
 namespace Application.Features.Poll.Commands.DeleteQuestion
 {
-    public class RemoveQuestionCommandValidator : AbstractValidator<RemoveQuestionCommand>
+    public class DeleteQuestionCommandValidator : AbstractValidator<DeleteQuestionCommand>
     {
-        public RemoveQuestionCommandValidator(IStringLocalizer<SharedResource> localizer)
+        public DeleteQuestionCommandValidator(IStringLocalizer<SharedResource> localizer)
         {
             RuleFor(r => r.QuestionId)
                 .NotEmpty()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using Domain.Enum;
 using MediatR;
 
@@ -7,7 +8,8 @@ namespace Application.Features.Event.Queries.SearchEvent
 {
     public class SearchEventQuery : IRequest<SearchEventViewModel>
     {
-        public List<string> EventIds { get; set; }
+        [JsonIgnore] public string UserId { get; set; }
+        public string EventId { get; set; }
         public string EventName { get; set; }
         public string Description { get; set; }
         public DateTime? EventTime { get; set; }

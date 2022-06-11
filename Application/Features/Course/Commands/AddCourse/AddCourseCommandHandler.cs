@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.DTOs.Course;
-using Application.DTOs.Time;
 using Application.Features.Notification.SystemCallCommands;
 using Application.Resources;
 using AutoMapper;
@@ -16,7 +14,6 @@ using Domain.Enum;
 using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
@@ -26,7 +23,6 @@ namespace Application.Features.Course.Commands.AddCourse
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
         private IMapper Mapper { get; }
 
         public AddCourseCommandHandler(IStringLocalizer<SharedResource> localizer,
@@ -35,22 +31,12 @@ namespace Application.Features.Course.Commands.AddCourse
         {
             _context = context;
             Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
             Mapper = mapper;
         }
 
         public async Task<AddCourseViewModel> Handle(AddCourseCommand request, CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
-            if (user == null)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            }
+            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == request.UserId);
 
             if (user.UserType != UserType.Owner && user.UserType != UserType.Instructor)
             {
@@ -99,6 +85,7 @@ namespace Application.Features.Course.Commands.AddCourse
                 });
             }
 
+            var times = new List<Time>();
             Domain.Models.Course courseObj = new Domain.Models.Course
             {
                 CourseTypeId = request.CourseTypeId,
@@ -107,7 +94,9 @@ namespace Application.Features.Course.Commands.AddCourse
                 Instructor = (Instructor)user,
                 InstructorId = user.Id,
                 EndDate = request.EndDate,
-                CreatedDate = DateTime.Now
+                CreatedDate = DateTime.Now,
+                Students = new List<Student>(),
+                Times = times
             };
             await _context.Courses.AddAsync(courseObj, cancellationToken);
 

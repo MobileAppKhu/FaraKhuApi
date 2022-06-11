@@ -5,8 +5,7 @@
         AnnouncementId = 1,
         Title = 2,
         Description = 3,
-        DepartmentId = 4,
-        UserId = 5,
-        CreationDate = 6
+        UserId = 4,
+        CreationDate = 5
     }
 }

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
@@ -10,8 +9,6 @@ using Domain.BaseModels;
 using Domain.Enum;
 using Domain.Models;
 using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
@@ -21,32 +18,18 @@ namespace Application.Features.Account.Commands.EditProfile
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
-        private UserManager<BaseUser> UserManager { get; }
 
         public EditProfileCommandHandler(IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager
-            , IDatabaseContext context)
+            IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
-            UserManager = userManager;
         }
 
         public async Task<Unit> Handle(EditProfileCommand request, CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == userId,
+            var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == request.UserId,
                 cancellationToken);
-            if (user == null)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            }
 
             if (!string.IsNullOrWhiteSpace(request.FirstName))
             {
@@ -84,7 +67,7 @@ namespace Application.Features.Account.Commands.EditProfile
                     {
                         Description = favouriteDescription,
                         BaseUser = user,
-                        UserId = userId
+                        UserId = request.UserId
                     }, cancellationToken);
                 }
             }
@@ -92,7 +75,7 @@ namespace Application.Features.Account.Commands.EditProfile
             if (request.DeleteFavourites.Count != 0)
             {
                 List<Favourite> deletingFavourites = await _context.Favourites.Where(favourite =>
-                        request.DeleteFavourites.Contains(favourite.FavouriteId) && favourite.UserId == userId)
+                        request.DeleteFavourites.Contains(favourite.FavouriteId) && favourite.UserId == request.UserId)
                     .ToListAsync(cancellationToken);
                 if (deletingFavourites.Count != request.DeleteFavourites.Count)
                 {

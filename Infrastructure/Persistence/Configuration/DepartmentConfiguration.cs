@@ -15,6 +15,11 @@ namespace Infrastructure.Persistence.Configuration
             builder.HasOne(e => e.Faculty)
                 .WithMany(f => f.Departments)
                 .HasForeignKey(e => e.FacultyId);
+            builder.Property(d => d.CreatedDate).HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAdd();
+            builder.Property(d => d.LastModifiedDate)
+                .HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAddOrUpdate();
         }
     }
 }

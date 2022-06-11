@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
@@ -25,31 +26,19 @@ namespace Application.Features.Poll.Commands.AddQuestion
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
         private IMapper _mapper { get; }
 
-        public AddQuestionCommandHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, IMapper mapper
+        public AddQuestionCommandHandler( IStringLocalizer<SharedResource> localizer, IMapper mapper
             , IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
             _mapper = mapper;
         }
 
         public async Task<AddQuestionViewModel> Handle(AddQuestionCommand request, CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Instructor user = await _context.Instructors.FirstOrDefaultAsync(i => i.Id == userId, cancellationToken);
-            if (user == null)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            }
+            Instructor user = await _context.Instructors.FirstOrDefaultAsync(i => i.Id == request.UserId, cancellationToken);
 
             var course = await _context.Courses
                 .Include(c => c.Instructor)
@@ -66,13 +55,15 @@ namespace Application.Features.Poll.Commands.AddQuestion
                     Message = Localizer["Unauthorized"]
                 });
             }
+            
             var poll = new PollQuestion
             {
                 QuestionDescription = request.QuestionDescription,
                 MultiVote = bool.Parse(request.MultiVote),
                 Course = course,
                 CourseId = course.CourseId,
-                CreatedDate = DateTime.Now
+                CreatedDate = DateTime.Now,
+                Answers = new List<PollAnswer>()
             };
 
             foreach (var answerDescription in request.Answers)

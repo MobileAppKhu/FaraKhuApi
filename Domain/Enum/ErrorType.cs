@@ -32,6 +32,7 @@
         FavouriteNotFound,
         CommentNotFound,
         NotificationNotFound,
-        InstructorNotFound
+        InstructorNotFound,
+        TicketNotFound
     }
 }

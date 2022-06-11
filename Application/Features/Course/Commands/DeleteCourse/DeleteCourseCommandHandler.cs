@@ -21,26 +21,16 @@ namespace Application.Features.Course.Commands.DeleteCourse
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
 
-        public DeleteCourseCommandHandler(IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, IDatabaseContext context)
+        public DeleteCourseCommandHandler(IStringLocalizer<SharedResource> localizer, IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Unit> Handle(DeleteCourseCommand request, CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            Instructor user = _context.Instructors.FirstOrDefault(u => u.Id == userId);
-            if (user == null)
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
+            Instructor user = _context.Instructors.FirstOrDefault(u => u.Id == request.UserId);
             var courseObj = _context.Courses.Include(c => c.Students)
                 .FirstOrDefault(c => c.CourseId == request.CourseId);
             if (courseObj == null)

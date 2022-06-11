@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Features.Account.EmailVerification
+namespace Application.Features.Account.Commands.EmailVerification
 {
     public class EmailVerificationCommand : IRequest<EmailVerificationViewModel>
     {

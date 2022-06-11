@@ -21,29 +21,14 @@ namespace Application.Features.News.Commands.EditNews
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
 
-        public EditNewsCommandHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, IDatabaseContext context)
+        public EditNewsCommandHandler( IStringLocalizer<SharedResource> localizer, IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
         }
         public async Task<Unit> Handle(EditNewsCommand request, CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
-            if (user == null)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                }); 
-            }
-                
-           
             var news = await _context.News.Include(n => n.FileEntity).
                 FirstOrDefaultAsync(n => n.NewsId == request.NewsId, cancellationToken);
             if (news == null)
@@ -54,17 +39,7 @@ namespace Application.Features.News.Commands.EditNews
                     Message = Localizer["NewsNotFound"]
                 });
             }
-            /*var oldFile = await _context.Files.FirstOrDefaultAsync(f => f.Id == news.FileId, cancellationToken);
 
-            _context.Files.Remove(oldFile);*/
-            if (user.UserType != UserType.PROfficer && user.UserType != UserType.Owner)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                }); 
-            }
             if (!string.IsNullOrWhiteSpace(request.Description))
             {
                 news.Description = request.Description;

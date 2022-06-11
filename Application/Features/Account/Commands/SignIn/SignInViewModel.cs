@@ -1,8 +1,6 @@
-﻿using Application.DTOs.BaseUser;
-using Application.DTOs.User;
-using Domain.BaseModels;
+﻿using Application.DTOs.User;
 
-namespace Application.Features.Account.SignIn
+namespace Application.Features.Account.Commands.SignIn
 {
     public class SignInViewModel
     {

@@ -1,16 +1,17 @@
 ﻿using System.Threading.Tasks;
-using Application.Features.Account.ChangePassword;
+using Application.Features.Account.Commands.ChangePassword;
 using Application.Features.Account.Commands.EditProfile;
-using Application.Features.Account.EmailVerification;
-using Application.Features.Account.ForgetPassword;
-using Application.Features.Account.ResetPassword;
-using Application.Features.Account.ResetPasswordValidation;
-using Application.Features.Account.SignIn;
-using Application.Features.Account.SignOut;
-using Application.Features.Account.SignUp;
+using Application.Features.Account.Commands.EmailVerification;
+using Application.Features.Account.Commands.ForgetPassword;
+using Application.Features.Account.Commands.ResetPassword;
+using Application.Features.Account.Commands.ResetPasswordValidation;
+using Application.Features.Account.Commands.SignIn;
+using Application.Features.Account.Commands.SignOut;
+using Application.Features.Account.Commands.SignUp;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Utilities;
 
 namespace WebApi.Controllers
 {
@@ -51,8 +52,7 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> SignOut(SignOutCommand request)
         {
-            await _mediator.Send(request);
-            return Ok();
+            return Ok(await _mediator.Send(request));
         }
         
         [HttpPost]
@@ -76,12 +76,14 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
 
         [HttpPost]
         public async Task<IActionResult> EditProfile(EditProfileCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
     }

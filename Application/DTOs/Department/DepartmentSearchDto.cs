@@ -8,6 +8,7 @@ namespace Application.DTOs.Department
         public string DepartmentId { get; set; }
         public string DepartmentTitle { get; set; }
         public string DepartmentCode { get; set; }
+        public string FacultyId { get; set; }
 
         public void Mapping(Profile profile)
         {

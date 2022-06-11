@@ -6,6 +6,7 @@ using Application.Features.Event.Queries.GetIncomingEvent;
 using Application.Features.Event.Queries.SearchEvent;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Utilities;
 
 namespace WebApi.Controllers
 {
@@ -23,18 +24,21 @@ namespace WebApi.Controllers
         [ProducesResponseType(typeof(AddEventViewModel),200)]
         public async Task<IActionResult> AddEvent(AddEventCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
         
         [HttpPost]
         public async Task<IActionResult> DeleteEvent(DeleteEventCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
         
         [HttpPost]
         public async Task<IActionResult> EditEvent(EditEventCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
         
@@ -42,6 +46,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(typeof(SearchEventViewModel),200)]
         public async Task<IActionResult> SearchEvent(SearchEventQuery request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
         
@@ -49,6 +54,7 @@ namespace WebApi.Controllers
         [ProducesResponseType(typeof(GetIncomingEventViewModel),200)]
         public async Task<IActionResult> GetIncomingEvents(GetIncomingEventQuery request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
     }

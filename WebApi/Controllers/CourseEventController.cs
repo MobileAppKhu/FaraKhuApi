@@ -6,6 +6,7 @@ using Application.Features.CourseEvent.Queries.SearchCourseEvent;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Utilities;
 
 namespace WebApi.Controllers
 {
@@ -24,18 +25,21 @@ namespace WebApi.Controllers
         [ProducesResponseType(typeof(AddCourseEventViewModel), 200)]
         public async Task<IActionResult> AddCourseEvent(AddCourseEventCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
         
         [HttpPost]
         public async Task<IActionResult> EditCourseEvent(EditCourseEventCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
         
         [HttpPost]
         public async Task<IActionResult> DeleteCourseEvent(DeleteCourseEventCommand request)
         {
+            request.UserId = this.GetUserId();
             return Ok(await _mediator.Send(request));
         }
 

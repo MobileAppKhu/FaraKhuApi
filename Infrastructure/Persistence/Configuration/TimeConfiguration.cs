@@ -16,6 +16,11 @@ namespace Infrastructure.Persistence.Configuration
                 .OnDelete(DeleteBehavior.Cascade);
             builder.Property(time => time.StartTime).IsRequired();
             builder.Property(time => time.EndTime).IsRequired();
+            builder.Property(time => time.CreatedDate).HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAdd();
+            builder.Property(time => time.LastModifiedDate)
+                .HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAddOrUpdate();
         }
     }
 }

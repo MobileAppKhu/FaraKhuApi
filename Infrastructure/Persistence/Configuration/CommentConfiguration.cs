@@ -13,6 +13,9 @@ namespace Infrastructure.Persistence.Configuration
             builder.Property(comment => comment.CommentId).ValueGeneratedOnAdd();
             builder.Property(comment => comment.CreatedDate)
                 .HasDefaultValueSql("now() at time zone 'utc'").ValueGeneratedOnAdd();
+            builder.Property(comment => comment.LastModifiedDate)
+                .HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAddOrUpdate();
             builder.HasOne(comment => comment.User)
                 .WithMany(comment => comment.Comments)
                 .HasForeignKey(comment => comment.UserId);

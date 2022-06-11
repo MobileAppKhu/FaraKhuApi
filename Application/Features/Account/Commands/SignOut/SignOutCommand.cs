@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Application.Features.Account.SignOut
+namespace Application.Features.Account.Commands.SignOut
 {
     public class SignOutCommand : IRequest
     {

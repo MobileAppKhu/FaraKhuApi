@@ -20,26 +20,27 @@ namespace Application.Features.Notification.Commands.AddCourseNotification
     {
         private readonly IDatabaseContext _context;
         private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
 
-        public AddCourseNotificationCommandHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, IDatabaseContext context)
+        public AddCourseNotificationCommandHandler( IStringLocalizer<SharedResource> localizer, IDatabaseContext context)
         {
             _context = context;
             Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
         }
         
         public async Task<AddCourseNotificationViewModel> Handle(AddCourseNotificationCommand request, CancellationToken cancellationToken)
         {
-            var userId = HttpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == userId);
-            if (user == null)
+            var user =
+                await _context.BaseUsers.FirstOrDefaultAsync(u => u.Id == request.UserId, cancellationToken);
+
+            var courseObj = await _context.Courses
+                .Include(course => course.Students)
+                .FirstOrDefaultAsync(course => course.CourseId == request.CourseId, cancellationToken);
+            if (courseObj == null)
             {
                 throw new CustomException(new Error
                 {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
+                    ErrorType = ErrorType.CourseNotFound,
+                    Message = Localizer["CourseNotFound"]
                 });
             }
 
@@ -52,15 +53,12 @@ namespace Application.Features.Notification.Commands.AddCourseNotification
                 });
             }
 
-            var courseObj = await _context.Courses
-                .Include(course => course.Students)
-                .FirstOrDefaultAsync(course => course.CourseId == request.CourseId, cancellationToken);
-            if (courseObj == null)
+            if (courseObj.InstructorId != user.Id)
             {
                 throw new CustomException(new Error
                 {
-                    ErrorType = ErrorType.CourseNotFound,
-                    Message = Localizer["CourseNotFound"]
+                    ErrorType = ErrorType.Unauthorized,
+                    Message = Localizer["Unauthorized"]
                 });
             }
 
