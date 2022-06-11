@@ -36,7 +36,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="DTOs\Comment" />
       <Folder Include="Features\Account\Commands" />
       <Folder Include="Features\File\Commands" />
       <Folder Include="Features\File\Queries" />

@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.DTOs.Comment;
 using AutoMapper;
 using Domain.BaseModels;
 using Domain.Enum;
@@ -72,7 +73,7 @@ namespace Application.Features.News.Queries.GetComments
                 comments.GetPage(request.Page.GetValueOrDefault());
             return new CommentsQueryViewModel()
             {
-                Comments = comments
+                Comments = Mapper.Map<List<CommentDto>>(comments)
             };
         }
     }
