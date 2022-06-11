@@ -14,6 +14,9 @@ namespace Infrastructure.Persistence.Configuration
             builder.Property(file => file.IsDeleted).HasDefaultValue(false);
             builder.Property(file => file.CreatedDate).HasDefaultValueSql("now() at time zone 'utc'")
                 .ValueGeneratedOnAdd();
+            builder.Property(file => file.LastModifiedDate)
+                .HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAddOrUpdate();
         }
     }
 }

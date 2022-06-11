@@ -2,7 +2,7 @@
 
 namespace Domain.Models
 {
-    public class CourseType
+    public class CourseType : BaseEntity
     {
         public string CourseTypeId { get; set; }
         public string CourseTypeTitle { get; set; }

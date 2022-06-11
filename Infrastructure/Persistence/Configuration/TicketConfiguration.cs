@@ -16,6 +16,11 @@ namespace Infrastructure.Persistence.Configuration
             builder.Property(ticket => ticket.Description).IsRequired();
             builder.Property(ticket => ticket.Status).IsRequired();
             builder.Property(ticket => ticket.Priority).IsRequired();
+            builder.Property(ticket => ticket.CreatedDate).HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAdd();
+            builder.Property(ticket => ticket.LastModifiedDate)
+                .HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAddOrUpdate();
         }
     }
 }

@@ -1,10 +1,9 @@
 ﻿using System;
-using Domain.BaseModels;
 using Domain.Enum;
 
 namespace Domain.Models
 {
-    public class CourseEvent
+    public class CourseEvent : BaseEntity
     {
         public string CourseEventId { get; set; }
         

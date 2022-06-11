@@ -18,6 +18,11 @@ namespace Infrastructure.Persistence.Configuration
             builder.HasOne(course => course.CourseType).WithMany().HasForeignKey(course => course.CourseTypeId);
             builder.HasOne(course => course.Avatar)
                 .WithMany().HasForeignKey(course => course.AvatarId);
+            builder.Property(course => course.CreatedDate).HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAdd();
+            builder.Property(course => course.LastModifiedDate)
+                .HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAddOrUpdate();
         }
     }
 }

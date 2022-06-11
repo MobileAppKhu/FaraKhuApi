@@ -12,6 +12,11 @@ namespace Infrastructure.Persistence.Configuration
             builder.Property(e => e.FacultyId).ValueGeneratedOnAdd();
             builder.Property(e => e.FacultyCode).IsRequired();
             builder.Property(e => e.FacultyTitle).IsRequired();
+            builder.Property(e => e.CreatedDate).HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAdd();
+            builder.Property(e => e.LastModifiedDate)
+                .HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAddOrUpdate();
         }
     }
 }

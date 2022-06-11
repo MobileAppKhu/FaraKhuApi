@@ -14,6 +14,11 @@ namespace Infrastructure.Persistence.Configuration
                 .WithMany(u => u.Offers)
                 .HasForeignKey(o => o.UserId);
             builder.HasOne(o => o.Avatar).WithMany().HasForeignKey(o => o.AvatarId);
+            builder.Property(o => o.CreatedDate).HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAdd();
+            builder.Property(o => o.LastModifiedDate)
+                .HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAddOrUpdate();
         }
     }
 }

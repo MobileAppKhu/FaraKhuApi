@@ -698,8 +698,8 @@ namespace UnitTest.Persistence
         {
             var news = new News
             {
-                Description = "خوش آمدید.",
-                Title = "خبر تستی",
+                Description = "News Description",
+                Title = "News Title",
                 NewsId = "NewsId",
                 CreatedDate = DateTime.Now,
                 FileId = "smiley.png",
@@ -718,8 +718,8 @@ namespace UnitTest.Persistence
 
             var deleteNews = new News
             {
-                Description = "خوش آمدید.",
-                Title = "خبر تستی",
+                Description = "Delete News Description",
+                Title = "Delete News Title",
                 NewsId = "DeleteNewsId",
                 CreatedDate = DateTime.Now,
                 FileId = "smiley.png",
@@ -737,8 +737,19 @@ namespace UnitTest.Persistence
                 UserId = "StudentId"
             };
 
+            var searchNews = new News
+            {
+                Title = "search",
+                Description = "search",
+                NewsId = "SearchNewsId",
+                CreatedDate = DateTime.Now,
+                FileId = "smiley.png",
+                LastModifiedDate = DateTime.Now,
+            };
+
             await DatabaseContext.News.AddAsync(news);
             await DatabaseContext.News.AddAsync(deleteNews);
+            await DatabaseContext.News.AddAsync(searchNews);
             await DatabaseContext.Comments.AddAsync(comment);
             await DatabaseContext.Comments.AddAsync(deleteComment);
             await DatabaseContext.SaveChangesAsync();

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Domain.Models
 {
-    public class Faculty
+    public class Faculty : BaseEntity
     {
         public string FacultyId { get; set; }
         public string FacultyTitle { get; set; }

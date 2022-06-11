@@ -83,8 +83,6 @@ namespace WebApi
                     return Task.CompletedTask;
                 };
             });
-            //TODO to be able to give all permissions to owner we shouldn't create/update/ sth using httpaccessor
-            //should get instructor id/ student id from request
             services.AddAuthorization(option =>
             {
                 option.DefaultPolicy = new AuthorizationPolicyBuilder()

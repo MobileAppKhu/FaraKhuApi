@@ -3,7 +3,7 @@ using Domain.Enum;
 
 namespace Domain.Models
 {
-    public class Notification
+    public class Notification : BaseEntity
     {
         public string NotificationId { get; set; }
         public string Description { get; set; }

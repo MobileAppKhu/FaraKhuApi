@@ -13,6 +13,11 @@ namespace Infrastructure.Persistence.Configuration
             builder.HasMany(student => student.Courses).
                 WithMany(course => course.Students);
             builder.Property(student => student.UserType).HasDefaultValue(UserType.Student);
+            builder.Property(student => student.CreatedDate).HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAdd();
+            builder.Property(student => student.LastModifiedDate)
+                .HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAddOrUpdate();
         }
     }
 }

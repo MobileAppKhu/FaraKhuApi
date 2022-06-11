@@ -13,6 +13,11 @@ namespace Infrastructure.Persistence.Configuration
             builder.HasOne(s => s.Sender)
                 .WithMany(user => user.Suggestions)
                 .HasForeignKey(s => s.SenderId);
+            builder.Property(s => s.CreatedDate).HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAdd();
+            builder.Property(s => s.LastModifiedDate)
+                .HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAddOrUpdate();
         }
     }
 }

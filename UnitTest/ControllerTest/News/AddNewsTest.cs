@@ -28,8 +28,8 @@ namespace UnitTest.ControllerTest.News
 
             var data = new AddNewsCommand
             {
-                Title = "خبر جدید",
-                Description = "به فراخو خوش آمدید",
+                Title = "New News Title",
+                Description = "New News Description",
                 FileId = "smiley.png"
             };
             

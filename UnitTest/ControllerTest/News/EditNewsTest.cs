@@ -29,8 +29,8 @@ namespace UnitTest.ControllerTest.News
             var data = new EditNewsCommand
             {
                 NewsId = "NewsId",
-                Title = "خبر جدید",
-                Description = "به فراخو خوش آمدید",
+                Title = "Edit Title",
+                Description = "Edit Description",
                 FileId = "smiley.png",
             };
             

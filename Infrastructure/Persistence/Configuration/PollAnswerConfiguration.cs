@@ -15,6 +15,11 @@ namespace Infrastructure.Persistence.Configuration
                 .HasForeignKey(answer => answer.QuestionId);
             builder.HasMany(answer => answer.Voters)
                 .WithMany(student => student.PollAnswers);
+            builder.Property(answer => answer.CreatedDate).HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAdd();
+            builder.Property(answer => answer.LastModifiedDate)
+                .HasDefaultValueSql("now() at time zone 'utc'")
+                .ValueGeneratedOnAddOrUpdate();
         }
     }
 }
