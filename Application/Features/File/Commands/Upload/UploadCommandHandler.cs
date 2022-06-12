@@ -48,8 +48,10 @@ namespace Application.Features.File.Commands.Upload
 
             await _context.Files.AddAsync(file, cancellationToken);
             
-            var fileId = file.Id;
-            var path = _config["StorePath"] + fileId;
+            // Static Files Require File Extension(Appending extension to id)
+            file.Id += "." + file.Name.Split(".")[^1];
+            
+            var path = _config["StorePath"] + file.Id;
 
             await using var stream = System.IO.File.Create(path);
             await request.File.CopyToAsync(stream, cancellationToken);

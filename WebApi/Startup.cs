@@ -134,7 +134,7 @@ namespace WebApi
             {
                 FileProvider = new PhysicalFileProvider(
                     Path.Combine(env.ContentRootPath, Configuration["StorePath"])),
-                RequestPath = "/myfiles"
+                RequestPath = "/files"
             });
 
             app.UseDeveloperExceptionPage();
