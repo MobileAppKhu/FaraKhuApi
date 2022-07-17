@@ -10,7 +10,6 @@ using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Infrastructure.Persistence
@@ -32,7 +31,7 @@ namespace Infrastructure.Persistence
 
         public async Task Initialize()
         {
-            await DatabaseContext.Database.MigrateAsync();
+            //await DatabaseContext.Database.MigrateAsync();
             // await DatabaseContext.Database.EnsureDeletedAsync();
             // await DatabaseContext.Database.EnsureCreatedAsync();
             if (DatabaseContext.UserRoles.Any())
@@ -138,7 +137,7 @@ namespace Infrastructure.Persistence
         private async Task<FileEntity> UploadFile(string path, FileType fileType)
         {
             var directory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            var fileStream = System.IO.File.OpenRead(directory + path);
+            var fileStream = File.OpenRead(directory + path);
             var avatar = new FileEntity
             {
                 Id = Path.GetFileName(fileStream.Name),
@@ -148,7 +147,7 @@ namespace Infrastructure.Persistence
                 Name = Path.GetFileName(fileStream.Name)
             };
             await DatabaseContext.Files.AddAsync(avatar);
-            var stream = System.IO.File.Create(Configuration["StorePath"] + avatar.Id);
+            var stream = File.Create(Configuration["StorePath"] + avatar.Id);
             await fileStream.CopyToAsync(stream);
             fileStream.Close();
             stream.Close();
@@ -180,28 +179,28 @@ namespace Infrastructure.Persistence
             departments.Add(new Department
             {
                 Faculty = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "1"),
-                FacultyId = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "1").FacultyId,
+                FacultyId = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "1")?.FacultyId,
                 DepartmentCode = "11",
                 DepartmentTitle = "کامپیوتر"
             });
             departments.Add(new Department
             {
                 Faculty = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "1"),
-                FacultyId = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "1").FacultyId,
+                FacultyId = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "1")?.FacultyId,
                 DepartmentCode = "12",
                 DepartmentTitle = "برق"
             });
             departments.Add(new Department
             {
                 Faculty = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "2"),
-                FacultyId = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "2").FacultyId,
+                FacultyId = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "2")?.FacultyId,
                 DepartmentCode = "21",
                 DepartmentTitle = "مکانیک"
             });
             departments.Add(new Department
             {
                 Faculty = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "2"),
-                FacultyId = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "2").FacultyId,
+                FacultyId = faculties.FirstOrDefault(faculty => faculty.FacultyCode == "2")?.FacultyId,
                 DepartmentCode = "22",
                 DepartmentTitle = "شیمی آلی"
             });
@@ -217,28 +216,28 @@ namespace Infrastructure.Persistence
             courseTypes.Add(new CourseType
             {
                 Department = departments.FirstOrDefault(department => department.DepartmentCode == "11"),
-                DepartmentId = departments.FirstOrDefault(department => department.DepartmentCode == "11").DepartmentId,
+                DepartmentId = departments.FirstOrDefault(department => department.DepartmentCode == "11")?.DepartmentId,
                 CourseTypeCode = "111",
                 CourseTypeTitle = "مبانی کامپیوتر"
             });
             courseTypes.Add(new CourseType
             {
                 Department = departments.FirstOrDefault(department => department.DepartmentCode == "12"),
-                DepartmentId = departments.FirstOrDefault(department => department.DepartmentCode == "12").DepartmentId,
+                DepartmentId = departments.FirstOrDefault(department => department.DepartmentCode == "12")?.DepartmentId,
                 CourseTypeCode = "121",
                 CourseTypeTitle = "مبانی برق"
             });
             courseTypes.Add(new CourseType
             {
                 Department = departments.FirstOrDefault(department => department.DepartmentCode == "21"),
-                DepartmentId = departments.FirstOrDefault(department => department.DepartmentCode == "21").DepartmentId,
+                DepartmentId = departments.FirstOrDefault(department => department.DepartmentCode == "21")?.DepartmentId,
                 CourseTypeCode = "211",
                 CourseTypeTitle = "مبانی مکانیک"
             });
             courseTypes.Add(new CourseType
             {
                 Department = departments.FirstOrDefault(department => department.DepartmentCode == "22"),
-                DepartmentId = departments.FirstOrDefault(department => department.DepartmentCode == "22").DepartmentId,
+                DepartmentId = departments.FirstOrDefault(department => department.DepartmentCode == "22")?.DepartmentId,
                 CourseTypeCode = "221",
                 CourseTypeTitle = "مبانی شیمی"
             });

@@ -1,20 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="MailKit" Version="2.11.1" />
-      <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="5.0.5" />
+      <PackageReference Include="MailKit" Version="3.3.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.7" />
       <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.5">
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.7">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
-      <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="5.0.5" />
+      <PackageReference Include="Microsoft.Extensions.Localization.Abstractions" Version="6.0.7" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.5.1" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.5" />
     </ItemGroup>
 
     <ItemGroup>

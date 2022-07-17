@@ -3,7 +3,7 @@ version: "3.8"
 services:
   fara-khu-api-test:
     container_name: fara-khu-api-test
-    image: mcr.microsoft.com/dotnet/sdk:5.0-focal
+    image: mcr.microsoft.com/dotnet/sdk:6.0-focal
     volumes:
       - .:/src
     entrypoint: "sh -c"
