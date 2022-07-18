@@ -83,7 +83,7 @@ public class CourseTests : AppFactory
 
     [Fact]
     [Endpoint("[controller]/AddCourse")]
-    [PublicRelationAgent]
+    [PublicRelationOfficerHandler]
     public async Task PublicRelationOfficerCannotCreateCourse()
     {
         var data = new AddCourseCommand

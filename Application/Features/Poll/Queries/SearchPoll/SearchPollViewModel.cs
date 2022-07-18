@@ -1,9 +1,8 @@
 ﻿using Application.DTOs.Poll;
 
-namespace Application.Features.Poll.Queries.SearchPoll
+namespace Application.Features.Poll.Queries.SearchPoll;
+
+public class SearchPollViewModel
 {
-    public class SearchPollViewModel
-    {
-        public PollQuestionDto Question { get; set; }
-    }
+    public PollQuestionDto Question { get; set; }
 }

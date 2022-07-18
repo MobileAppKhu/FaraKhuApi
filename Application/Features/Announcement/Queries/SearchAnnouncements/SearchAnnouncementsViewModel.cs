@@ -1,15 +1,10 @@
 ﻿using Application.DTOs.Announcement;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Application.Features.Announcement.Queries.SearchAnnouncements
+namespace Application.Features.Announcement.Queries.SearchAnnouncements;
+
+public class SearchAnnouncementsViewModel
 {
-    public class SearchAnnouncementsViewModel
-    {
-        public List<SearchAnnouncementDto> Announcements{get; set;}
-        public int SearchLength { get; set; }
-    }
+    public List<SearchAnnouncementDto> Announcements{get; set;}
+    public int SearchLength { get; set; }
 }

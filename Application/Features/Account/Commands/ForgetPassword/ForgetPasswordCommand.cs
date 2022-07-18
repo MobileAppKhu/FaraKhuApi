@@ -1,9 +1,8 @@
 ﻿using MediatR;
 
-namespace Application.Features.Account.Commands.ForgetPassword
+namespace Application.Features.Account.Commands.ForgetPassword;
+
+public class ForgetPasswordCommand : IRequest<Unit>
 {
-    public class ForgetPasswordCommand : IRequest<Unit>
-    {
-        public string Email { get; set; }
-    }
+    public string Email { get; set; }
 }

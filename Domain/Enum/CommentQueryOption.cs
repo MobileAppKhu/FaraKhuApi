@@ -1,9 +1,8 @@
-﻿namespace Domain.Enum
+﻿namespace Domain.Enum;
+
+public enum CommentQueryOption
 {
-    public enum CommentQueryOption
-    {
-        All = 1,
-        ByNews = 2,
-        ByUser = 3
-    }
+    All = 1,
+    ByNews = 2,
+    ByUser = 3
 }

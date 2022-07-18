@@ -1,11 +1,10 @@
 ﻿using System.Text.Json.Serialization;
 using MediatR;
 
-namespace Application.Features.Offer.Commands.DeleteOffer
+namespace Application.Features.Offer.Commands.DeleteOffer;
+
+public class DeleteOfferCommand : IRequest<Unit>
 {
-    public class DeleteOfferCommand : IRequest<Unit>
-    {
-        [JsonIgnore] public string UserId { get; set; }
-        public string OfferId { get; set; }
-    }
+    [JsonIgnore] public string UserId { get; set; }
+    public string OfferId { get; set; }
 }

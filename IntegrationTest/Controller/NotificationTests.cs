@@ -60,7 +60,7 @@ public class NotificationTests : AppFactory
     }
     
     [Fact]
-    [PublicRelationAgent]
+    [PublicRelationOfficerHandler]
     [Endpoint("[controller]/AddCourseNotification")]
     public async Task PublicRelationAgentCannotAddNotification()
     {

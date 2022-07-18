@@ -1,9 +1,8 @@
 ﻿using MediatR;
 
-namespace Application.Features.News.Commands.DeleteNews
+namespace Application.Features.News.Commands.DeleteNews;
+
+public class DeleteNewsCommand : IRequest<Unit>
 {
-    public class DeleteNewsCommand : IRequest<Unit>
-    {
-        public string NewsId { get; set; }
-    }
+    public string NewsId { get; set; }
 }

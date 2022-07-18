@@ -1,9 +1,8 @@
 ﻿using MediatR;
 
-namespace Application.Features.Poll.Queries.SearchPoll
+namespace Application.Features.Poll.Queries.SearchPoll;
+
+public class SearchPollQuery : IRequest<SearchPollViewModel>
 {
-    public class SearchPollQuery : IRequest<SearchPollViewModel>
-    {
-        public string QuestionId { get; set; }
-    }
+    public string QuestionId { get; set; }
 }

@@ -1,13 +1,12 @@
-﻿namespace Domain.Enum
+﻿namespace Domain.Enum;
+
+public enum WeekDay
 {
-    public enum WeekDay
-    {
-        Saturday,
-        Sunday,
-        Monday,
-        Tuesday,
-        Wednesday,
-        Thursday,
-        Friday
-    }
+    Saturday,
+    Sunday,
+    Monday,
+    Tuesday,
+    Wednesday,
+    Thursday,
+    Friday
 }

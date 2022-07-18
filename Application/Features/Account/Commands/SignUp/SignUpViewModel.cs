@@ -1,6 +1,5 @@
-﻿namespace Application.Features.Account.Commands.SignUp
+﻿namespace Application.Features.Account.Commands.SignUp;
+
+public class SignUpViewModel
 {
-    public class SignUpViewModel
-    {
-    }
 }

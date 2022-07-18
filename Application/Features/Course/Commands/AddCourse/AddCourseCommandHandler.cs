@@ -17,28 +17,39 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Course.Commands.AddCourse
-{
-    public class AddCourseCommandHandler : IRequestHandler<AddCourseCommand, AddCourseViewModel>
-    {
-        private readonly IDatabaseContext _context;
-        private IStringLocalizer<SharedResource> Localizer { get; }
-        private IMapper Mapper { get; }
+namespace Application.Features.Course.Commands.AddCourse;
 
-        public AddCourseCommandHandler(IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, IMapper mapper
-            , IDatabaseContext context)
+public class AddCourseCommandHandler : IRequestHandler<AddCourseCommand, AddCourseViewModel>
+{
+    private readonly IDatabaseContext _context;
+    private IStringLocalizer<SharedResource> Localizer { get; }
+    private IMapper Mapper { get; }
+
+    public AddCourseCommandHandler(IStringLocalizer<SharedResource> localizer,
+        IHttpContextAccessor httpContextAccessor, IMapper mapper
+        , IDatabaseContext context)
+    {
+        _context = context;
+        Localizer = localizer;
+        Mapper = mapper;
+    }
+
+    public async Task<AddCourseViewModel> Handle(AddCourseCommand request, CancellationToken cancellationToken)
+    {
+        BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == request.UserId);
+
+        if (user.UserType != UserType.Owner && user.UserType != UserType.Instructor)
         {
-            _context = context;
-            Localizer = localizer;
-            Mapper = mapper;
+            throw new CustomException(new Error
+            {
+                ErrorType = ErrorType.Unauthorized,
+                Message = Localizer["Unauthorized"]
+            });
         }
 
-        public async Task<AddCourseViewModel> Handle(AddCourseCommand request, CancellationToken cancellationToken)
+        if (!string.IsNullOrWhiteSpace(request.InstructorId))
         {
-            BaseUser user = _context.BaseUsers.FirstOrDefault(u => u.Id == request.UserId);
-
-            if (user.UserType != UserType.Owner && user.UserType != UserType.Instructor)
+            if (user.UserType != UserType.Owner)
             {
                 throw new CustomException(new Error
                 {
@@ -47,135 +58,123 @@ namespace Application.Features.Course.Commands.AddCourse
                 });
             }
 
-            if (!string.IsNullOrWhiteSpace(request.InstructorId))
-            {
-                if (user.UserType != UserType.Owner)
-                {
-                    throw new CustomException(new Error
-                    {
-                        ErrorType = ErrorType.Unauthorized,
-                        Message = Localizer["Unauthorized"]
-                    });
-                }
-
-                user = await 
-                    _context.Instructors.FirstOrDefaultAsync(
-                        instructor => instructor.InstructorId == request.InstructorId, cancellationToken);
-                if (user == null)
-                {
-                    throw new CustomException(new Error
-                    {
-                        ErrorType = ErrorType.InstructorNotFound,
-                        Message = Localizer["InstructorNotFound"]
-                    });
-                }
-            }
-
-            Domain.Models.CourseType courseType = await _context.CourseTypes
-                .Include(type => type.Department)
-                .ThenInclude(department => department.Faculty)
-                .FirstOrDefaultAsync(type => type.CourseTypeId == request.CourseTypeId,
-                    cancellationToken);
-            if (courseType == null)
+            user = await 
+                _context.Instructors.FirstOrDefaultAsync(
+                    instructor => instructor.InstructorId == request.InstructorId, cancellationToken);
+            if (user == null)
             {
                 throw new CustomException(new Error
                 {
-                    ErrorType = ErrorType.CourseTypeNotFound,
-                    Message = Localizer["CourseTypeNotFound"]
+                    ErrorType = ErrorType.InstructorNotFound,
+                    Message = Localizer["InstructorNotFound"]
                 });
             }
-
-            var times = new List<Time>();
-            Domain.Models.Course courseObj = new Domain.Models.Course
-            {
-                CourseTypeId = request.CourseTypeId,
-                Address = request.Address,
-                CourseType = courseType,
-                Instructor = (Instructor)user,
-                InstructorId = user.Id,
-                EndDate = request.EndDate,
-                CreatedDate = DateTime.Now,
-                Students = new List<Student>(),
-                Times = times
-            };
-            await _context.Courses.AddAsync(courseObj, cancellationToken);
-
-            List<Student> students =
-                _context.Students.Include(student => student.Courses)
-                    .Where(student => request.AddStudentDto.StudentIds.Contains(student.StudentId)).ToList();
-            if (students.Count != request.AddStudentDto.StudentIds.Count)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.StudentNotFound,
-                    Message = Localizer["StudentNotFound"]
-                });
-            }
-
-            foreach (var student in students)
-            {
-                student.Courses.Add(courseObj);
-                NotificationAdder.AddNotification(_context,
-                    Localizer["YouHaveBeenAddedToACourse"],
-                    courseObj.CourseId, NotificationObjectType.Course, NotificationOperation.AddStudentToCourse,
-                    student);
-            }
-
-            foreach (var time in request.AddTimeDtos)
-            {
-                string[] startTimes = time.StartTime.Split("-");
-                string[] endTime = time.EndTime.Split("-");
-                await _context.Times.AddAsync(new Domain.Models.Time
-                {
-                    Course = courseObj,
-                    CourseId = courseObj.CourseId,
-                    StartTime = new DateTime(2000, 12, 25, Int32.Parse(startTimes[0]), Int32.Parse(startTimes[1]), 0),
-                    EndTime = new DateTime(2000, 12, 25, Int32.Parse(endTime[0]), Int32.Parse(endTime[1]), 0),
-                    WeekDay = time.WeekDay
-                }, cancellationToken);
-            }
-
-            foreach (var timei in courseObj.Times)
-            {
-                foreach (var timej in courseObj.Times)
-                {
-                    if (timei.Equals(timej))
-                    {
-                        continue;
-                    }
-
-                    if ((timei.WeekDay == timej.WeekDay) &&
-                        ((timei.StartTime < timej.StartTime && timei.EndTime > timej.StartTime) ||
-                         (timei.EndTime > timej.EndTime && timei.StartTime < timej.EndTime)))
-                    {
-                        throw new CustomException(new Error
-                        {
-                            ErrorType = ErrorType.TimeConflict,
-                            Message = Localizer["TimeConflict"]
-                        });
-                    }
-                }
-            }
-
-            var avatarObj =
-                await _context.Files.FirstOrDefaultAsync(avatar => avatar.Id == request.AvatarId, cancellationToken);
-            if (avatarObj == null)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.FileNotFound,
-                    Message = Localizer["FileNotFound"]
-                });
-            }
-
-            courseObj.Avatar = avatarObj;
-            courseObj.AvatarId = avatarObj.Id;
-
-            await _context.SaveChangesAsync(cancellationToken);
-            return new AddCourseViewModel
-            {
-                Course = Mapper.Map<SearchCourseDto>(courseObj)
-            };
         }
+
+        Domain.Models.CourseType courseType = await _context.CourseTypes
+            .Include(type => type.Department)
+            .ThenInclude(department => department.Faculty)
+            .FirstOrDefaultAsync(type => type.CourseTypeId == request.CourseTypeId,
+                cancellationToken);
+        if (courseType == null)
+        {
+            throw new CustomException(new Error
+            {
+                ErrorType = ErrorType.CourseTypeNotFound,
+                Message = Localizer["CourseTypeNotFound"]
+            });
+        }
+
+        var times = new List<Time>();
+        Domain.Models.Course courseObj = new Domain.Models.Course
+        {
+            CourseTypeId = request.CourseTypeId,
+            Address = request.Address,
+            CourseType = courseType,
+            Instructor = (Instructor)user,
+            InstructorId = user.Id,
+            EndDate = request.EndDate,
+            CreatedDate = DateTime.Now,
+            Students = new List<Student>(),
+            Times = times
+        };
+        await _context.Courses.AddAsync(courseObj, cancellationToken);
+
+        List<Student> students =
+            _context.Students.Include(student => student.Courses)
+                .Where(student => request.AddStudentDto.StudentIds.Contains(student.StudentId)).ToList();
+        if (students.Count != request.AddStudentDto.StudentIds.Count)
+        {
+            throw new CustomException(new Error
+            {
+                ErrorType = ErrorType.StudentNotFound,
+                Message = Localizer["StudentNotFound"]
+            });
+        }
+
+        foreach (var student in students)
+        {
+            student.Courses.Add(courseObj);
+            NotificationAdder.AddNotification(_context,
+                Localizer["YouHaveBeenAddedToACourse"],
+                courseObj.CourseId, NotificationObjectType.Course, NotificationOperation.AddStudentToCourse,
+                student);
+        }
+
+        foreach (var time in request.AddTimeDtos)
+        {
+            string[] startTimes = time.StartTime.Split("-");
+            string[] endTime = time.EndTime.Split("-");
+            await _context.Times.AddAsync(new Domain.Models.Time
+            {
+                Course = courseObj,
+                CourseId = courseObj.CourseId,
+                StartTime = new DateTime(2000, 12, 25, Int32.Parse(startTimes[0]), Int32.Parse(startTimes[1]), 0),
+                EndTime = new DateTime(2000, 12, 25, Int32.Parse(endTime[0]), Int32.Parse(endTime[1]), 0),
+                WeekDay = time.WeekDay
+            }, cancellationToken);
+        }
+
+        foreach (var timei in courseObj.Times)
+        {
+            foreach (var timej in courseObj.Times)
+            {
+                if (timei.Equals(timej))
+                {
+                    continue;
+                }
+
+                if ((timei.WeekDay == timej.WeekDay) &&
+                    ((timei.StartTime < timej.StartTime && timei.EndTime > timej.StartTime) ||
+                     (timei.EndTime > timej.EndTime && timei.StartTime < timej.EndTime)))
+                {
+                    throw new CustomException(new Error
+                    {
+                        ErrorType = ErrorType.TimeConflict,
+                        Message = Localizer["TimeConflict"]
+                    });
+                }
+            }
+        }
+
+        var avatarObj =
+            await _context.Files.FirstOrDefaultAsync(avatar => avatar.Id == request.AvatarId, cancellationToken);
+        if (avatarObj == null)
+        {
+            throw new CustomException(new Error
+            {
+                ErrorType = ErrorType.FileNotFound,
+                Message = Localizer["FileNotFound"]
+            });
+        }
+
+        courseObj.Avatar = avatarObj;
+        courseObj.AvatarId = avatarObj.Id;
+
+        await _context.SaveChangesAsync(cancellationToken);
+        return new AddCourseViewModel
+        {
+            Course = Mapper.Map<SearchCourseDto>(courseObj)
+        };
     }
 }

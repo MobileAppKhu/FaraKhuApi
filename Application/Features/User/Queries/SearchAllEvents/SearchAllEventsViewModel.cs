@@ -1,9 +1,8 @@
 ﻿using Application.DTOs.User;
 
-namespace Application.Features.User.Queries.SearchAllEvents
+namespace Application.Features.User.Queries.SearchAllEvents;
+
+public class SearchAllEventsViewModel
 {
-    public class SearchAllEventsViewModel
-    {
-        public AllEventsDto Events { get; set; }
-    }
+    public AllEventsDto Events { get; set; }
 }

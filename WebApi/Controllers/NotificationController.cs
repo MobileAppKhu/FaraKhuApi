@@ -7,43 +7,42 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Utilities;
 
-namespace WebApi.Controllers
-{
-    [ApiController]
-    [Route("api/[controller]/[action]")]
-    public class NotificationController : ControllerBase
-    {
-        private IMediator _mediator;
+namespace WebApi.Controllers;
 
-        public NotificationController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+[ApiController]
+[Route("api/[controller]/[action]")]
+public class NotificationController : ControllerBase
+{
+    private IMediator _mediator;
+
+    public NotificationController(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
         
-        [HttpPost]
-        [Authorize(Policy = "InstructorPolicy")]
-        [ProducesResponseType(typeof(AddCourseNotificationViewModel), 200)]
-        public async Task<IActionResult> AddCourseNotification(AddCourseNotificationCommand request)
-        {
-            request.UserId = this.GetUserId();
-            return Ok(await _mediator.Send(request));
-        }
+    [HttpPost]
+    [Authorize(Policy = "InstructorPolicy")]
+    [ProducesResponseType(typeof(AddCourseNotificationViewModel), 200)]
+    public async Task<IActionResult> AddCourseNotification(AddCourseNotificationCommand request)
+    {
+        request.UserId = this.GetUserId();
+        return Ok(await _mediator.Send(request));
+    }
         
-        [HttpPost]
-        [Authorize]
-        [ProducesResponseType(typeof(SearchNotificationViewModel), 200)]
-        public async Task<IActionResult> SearchNotification(SearchNotificationQuery request)
-        {
-            request.UserId = this.GetUserId();
-            return Ok(await _mediator.Send(request));
-        }
+    [HttpPost]
+    [Authorize]
+    [ProducesResponseType(typeof(SearchNotificationViewModel), 200)]
+    public async Task<IActionResult> SearchNotification(SearchNotificationQuery request)
+    {
+        request.UserId = this.GetUserId();
+        return Ok(await _mediator.Send(request));
+    }
         
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> DeleteNotification(DeleteNotificationCommand request)
-        {
-            request.UserId = this.GetUserId();
-            return Ok(await _mediator.Send(request));
-        }
+    [HttpPost]
+    [Authorize]
+    public async Task<IActionResult> DeleteNotification(DeleteNotificationCommand request)
+    {
+        request.UserId = this.GetUserId();
+        return Ok(await _mediator.Send(request));
     }
 }

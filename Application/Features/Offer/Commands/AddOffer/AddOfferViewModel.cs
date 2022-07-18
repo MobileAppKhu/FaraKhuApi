@@ -1,9 +1,8 @@
 ﻿using Application.DTOs.Offer;
 
-namespace Application.Features.Offer.Commands.AddOffer
+namespace Application.Features.Offer.Commands.AddOffer;
+
+public class AddOfferViewModel
 {
-    public class AddOfferViewModel
-    {
-        public OfferDto Offer { get; set; }
-    }
+    public OfferDto Offer { get; set; }
 }

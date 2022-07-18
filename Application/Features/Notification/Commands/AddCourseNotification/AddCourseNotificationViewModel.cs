@@ -1,6 +1,5 @@
-﻿namespace Application.Features.Notification.Commands.AddCourseNotification
+﻿namespace Application.Features.Notification.Commands.AddCourseNotification;
+
+public class AddCourseNotificationViewModel
 {
-    public class AddCourseNotificationViewModel
-    {
-    }
 }

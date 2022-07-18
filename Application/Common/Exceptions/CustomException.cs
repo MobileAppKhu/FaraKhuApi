@@ -2,20 +2,19 @@
 using System.Collections.Generic;
 using Domain.BaseModels;
 
-namespace Application.Common.Exceptions
+namespace Application.Common.Exceptions;
+
+public class CustomException : Exception
 {
-    public class CustomException : Exception
+    public IEnumerable<Error> Errors { get; }
+
+    public CustomException(Error error)
     {
-        public IEnumerable<Error> Errors { get; }
+        Errors = new[] {error};
+    }
 
-        public CustomException(Error error)
-        {
-            Errors = new[] {error};
-        }
-
-        public CustomException(IEnumerable<Error> errors)
-        {
-            Errors = errors;
-        }
+    public CustomException(IEnumerable<Error> errors)
+    {
+        Errors = errors;
     }
 }

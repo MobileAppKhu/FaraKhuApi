@@ -2,12 +2,11 @@ using Application.Resources;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.File.Commands.Upload
+namespace Application.Features.File.Commands.Upload;
+
+public class UploadCommandValidator : AbstractValidator<UploadCommand>
 {
-    public class UploadCommandValidator : AbstractValidator<UploadCommand>
+    public UploadCommandValidator(IStringLocalizer<SharedResource> localizer)
     {
-        public UploadCommandValidator(IStringLocalizer<SharedResource> localizer)
-        {
-        }
     }
 }

@@ -1,9 +1,8 @@
-﻿namespace Domain.Enum
+﻿namespace Domain.Enum;
+
+public enum TicketStatus
 {
-    public enum TicketStatus
-    {
-        Init = 1,
-        InProgress = 2,
-        Solved = 3
-    }
+    Init = 1,
+    InProgress = 2,
+    Solved = 3
 }

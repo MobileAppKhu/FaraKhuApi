@@ -154,8 +154,7 @@ public class CourseEventTests : AppFactory
     [Theory]
     [InstructorHandler]
     [MemberData(nameof(SearchCourseEventDataProvider))]
-    public async Task SearchCourseEvent(string courseEventId, string eventName, string eventDescription,
-        string courseId,
+    public async Task SearchCourseEvent(string courseEventId, string eventName, string eventDescription, string courseId,
         CourseEventColumn courseEventColumn = CourseEventColumn.CourseId, bool orderDirection = false,
         bool testingOrder = false, Func<SearchCourseCourseEventDto, IComparable> getProp = null, int start = 0,
         int step = 25)

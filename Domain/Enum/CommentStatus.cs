@@ -1,9 +1,8 @@
-﻿namespace Domain.Enum
+﻿namespace Domain.Enum;
+
+public enum CommentStatus
 {
-    public enum CommentStatus
-    {
-        Unapproved = 1,
-        Approved = 2,
-        Rejected = 3
-    }
+    Unapproved = 1,
+    Approved = 2,
+    Rejected = 3
 }

@@ -1,9 +1,8 @@
 ﻿using Application.DTOs.Student;
 
-namespace Application.Features.User.Queries.SearchStudent
+namespace Application.Features.User.Queries.SearchStudent;
+
+public class SearchStudentViewModel
 {
-    public class SearchStudentViewModel
-    {
-        public StudentShortDto StudentShortDto { get; set; }
-    }
+    public StudentShortDto StudentShortDto { get; set; }
 }

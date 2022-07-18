@@ -1,7 +1,6 @@
-namespace Application.Features.File.Commands.Upload
+namespace Application.Features.File.Commands.Upload;
+
+public class UploadViewModel
 {
-    public class UploadViewModel
-    {
-        public string FileId { get; set; }
-    }
+    public string FileId { get; set; }
 }

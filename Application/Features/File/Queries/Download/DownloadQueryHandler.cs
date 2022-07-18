@@ -14,48 +14,47 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.File.Queries.Download
+namespace Application.Features.File.Queries.Download;
+
+public class DownloadQueryHandler : IRequestHandler<DownloadQuery, DownloadViewModel>
 {
-    public class DownloadQueryHandler : IRequestHandler<DownloadQuery, DownloadViewModel>
+    private readonly IDatabaseContext _context;
+    private IStringLocalizer<SharedResource> Localizer { get; }
+    private IHttpContextAccessor HttpContextAccessor { get; }
+    private UserManager<BaseUser> UserManager { get; }
+    private IMapper _mapper { get; }
+    public IConfiguration _config { get; set; }
+
+    public DownloadQueryHandler( IStringLocalizer<SharedResource> localizer,
+        IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
+        , IDatabaseContext context, IConfiguration configuration)
     {
-        private readonly IDatabaseContext _context;
-        private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
-        private UserManager<BaseUser> UserManager { get; }
-        private IMapper _mapper { get; }
-        public IConfiguration _config { get; set; }
+        _context = context;
+        Localizer = localizer;
+        HttpContextAccessor = httpContextAccessor;
+        UserManager = userManager;
+        _mapper = mapper;
+        _config = configuration;
+    }
 
-        public DownloadQueryHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
-            , IDatabaseContext context, IConfiguration configuration)
-        {
-            _context = context;
-            Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
-            UserManager = userManager;
-            _mapper = mapper;
-            _config = configuration;
-        }
+    public async Task<DownloadViewModel> Handle(DownloadQuery request, CancellationToken cancellationToken)
+    {
+        var id = request.FileId;
 
-        public async Task<DownloadViewModel> Handle(DownloadQuery request, CancellationToken cancellationToken)
-        {
-            var id = request.FileId;
+        var file = await _context.Files.FirstOrDefaultAsync(entity => entity.Id == id,cancellationToken);
+        if (file == null)
+            throw new CustomException(new Error
+                {ErrorType = ErrorType.FileNotFound, Message = Localizer["FileNotFound"]});
 
-            var file = await _context.Files.FirstOrDefaultAsync(entity => entity.Id == id,cancellationToken);
-            if (file == null)
-                throw new CustomException(new Error
-                    {ErrorType = ErrorType.FileNotFound, Message = Localizer["FileNotFound"]});
-
-            var path = _config["StorePath"] + id;
+        var path = _config["StorePath"] + id;
             
-            return new DownloadViewModel
+        return new DownloadViewModel
+        {
+            DownloadDto = new DownloadDto
             {
-                DownloadDto = new DownloadDto
-                {
-                    Name = file.Name, Path = path, ContentType = file.ContentType
-                }
-            };
+                Name = file.Name, Path = path, ContentType = file.ContentType
+            }
+        };
             
-        }
     }
 }

@@ -1,8 +1,7 @@
 ﻿using MediatR;
 
-namespace Application.Features.Offer.Queries.SearchUserOffers
+namespace Application.Features.Offer.Queries.SearchUserOffers;
+
+public class SearchUserOffersQuery : IRequest<SearchUserOffersViewModel>
 {
-    public class SearchUserOffersQuery : IRequest<SearchUserOffersViewModel>
-    {
-    }
 }

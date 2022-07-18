@@ -5,7 +5,7 @@ using MarkopTest.Handler;
 
 namespace IntegrationTest.Handlers;
 
-public class PublicRelationAgent : TestHandler
+public class PublicRelationOfficerHandler : TestHandler
 {
     public override async Task BeforeRequest(HttpClient client)
     {

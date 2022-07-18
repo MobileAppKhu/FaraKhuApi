@@ -1,9 +1,8 @@
-﻿namespace Domain.Enum
+﻿namespace Domain.Enum;
+
+public enum TicketPriority
 {
-    public enum TicketPriority
-    {
-        Normal = 1,
-        Important = 2,
-        Urgent = 3
-    }
+    Normal = 1,
+    Important = 2,
+    Urgent = 3
 }

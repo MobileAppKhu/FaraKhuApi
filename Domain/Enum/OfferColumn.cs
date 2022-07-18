@@ -1,12 +1,11 @@
-﻿namespace Domain.Enum
+﻿namespace Domain.Enum;
+
+public enum OfferColumn
 {
-    public enum OfferColumn
-    {
-        OfferId = 1,
-        Title = 2,
-        Description = 3,
-        OfferType = 4,
-        Price = 5,
-        CreationDate = 6
-    }
+    OfferId = 1,
+    Title = 2,
+    Description = 3,
+    OfferType = 4,
+    Price = 5,
+    CreationDate = 6
 }

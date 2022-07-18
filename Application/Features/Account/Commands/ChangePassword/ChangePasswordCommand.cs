@@ -1,14 +1,13 @@
 ﻿using System.Text.Json.Serialization;
 using MediatR;
 
-namespace Application.Features.Account.Commands.ChangePassword
+namespace Application.Features.Account.Commands.ChangePassword;
+
+public class ChangePasswordCommand : IRequest<Unit>
 {
-    public class ChangePasswordCommand : IRequest<Unit>
-    {
-        [JsonIgnore]
-        public string UserId { get; set; }
-        public string OldPassword { get; set; }
+    [JsonIgnore]
+    public string UserId { get; set; }
+    public string OldPassword { get; set; }
         
-        public string NewPassword { get; set; }
-    }
+    public string NewPassword { get; set; }
 }

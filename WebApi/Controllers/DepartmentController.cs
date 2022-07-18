@@ -4,24 +4,23 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebApi.Controllers
+namespace WebApi.Controllers;
+
+[ApiController]
+[Route("api/[controller]/[action]")]
+[Authorize]
+public class DepartmentController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]/[action]")]
-    [Authorize]
-    public class DepartmentController : ControllerBase
+    private IMediator _mediator;
+    public DepartmentController(IMediator mediator)
     {
-        private IMediator _mediator;
-        public DepartmentController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+        _mediator = mediator;
+    }
         
-        [HttpPost]
-        [ProducesResponseType(typeof(SearchDepartmentViewModel), 200)]
-        public async Task<IActionResult> SearchDepartment(SearchDepartmentQuery request)
-        {
-            return Ok(await _mediator.Send(request));
-        }
+    [HttpPost]
+    [ProducesResponseType(typeof(SearchDepartmentViewModel), 200)]
+    public async Task<IActionResult> SearchDepartment(SearchDepartmentQuery request)
+    {
+        return Ok(await _mediator.Send(request));
     }
 }

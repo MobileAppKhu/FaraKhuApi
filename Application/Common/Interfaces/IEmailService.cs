@@ -1,8 +1,7 @@
-﻿namespace Application.Common.Interfaces
+﻿namespace Application.Common.Interfaces;
+
+public interface IEmailService
 {
-    public interface IEmailService
-    {
-        public void SendEmail(string destinationMail, string name, string subject, string emailTitle,
-            string emailContent);
-    }
+    public void SendEmail(string destinationMail, string name, string subject, string emailTitle,
+        string emailContent);
 }

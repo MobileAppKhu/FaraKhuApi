@@ -1,10 +1,9 @@
-﻿namespace Domain.Enum
+﻿namespace Domain.Enum;
+
+public enum DepartmentColumn
 {
-    public enum DepartmentColumn
-    {
-        DepartmentId = 1,
-        DepartmentTitle = 2,
-        DepartmentCode = 3,
-        FacultyId = 4
-    }
+    DepartmentId = 1,
+    DepartmentTitle = 2,
+    DepartmentCode = 3,
+    FacultyId = 4
 }

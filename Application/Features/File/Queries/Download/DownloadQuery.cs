@@ -1,9 +1,8 @@
 using MediatR;
 
-namespace Application.Features.File.Queries.Download
+namespace Application.Features.File.Queries.Download;
+
+public class DownloadQuery: IRequest<DownloadViewModel>
 {
-    public class DownloadQuery: IRequest<DownloadViewModel>
-    {
-        public string FileId { get; set; }
-    }
+    public string FileId { get; set; }
 }

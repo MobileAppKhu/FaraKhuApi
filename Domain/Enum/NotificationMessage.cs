@@ -1,10 +1,9 @@
-﻿namespace Domain.Enum
+﻿namespace Domain.Enum;
+
+public enum NotificationMessage
 {
-    public enum NotificationMessage
-    {
-        YouHaveBeenAddedToACourse = 1,
-        YouHaveANewCourseEvent = 2,
-        YourTicketIsInProgress = 3,
-        YourTicketHasBeenSolved = 4
-    }
+    YouHaveBeenAddedToACourse = 1,
+    YouHaveANewCourseEvent = 2,
+    YourTicketIsInProgress = 3,
+    YourTicketHasBeenSolved = 4
 }

@@ -1,6 +1,5 @@
-﻿namespace Application.Features.News.Commands.CommentApproval
+﻿namespace Application.Features.News.Commands.CommentApproval;
+
+public class AddCommentViewModel
 {
-    public class AddCommentViewModel
-    {
-    }
 }
