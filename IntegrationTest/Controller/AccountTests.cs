@@ -77,18 +77,20 @@ public class AccountTests : AppFactory
     [Theory]
     [StudentHandler]
     [MemberData(nameof(EditProfileDataProvider))]
-    public async Task EditProfile(string? firstname, string? lastname, List<string> AddFavourites,
-        List<string> DeleteFavourites, string linkedIn = null, string googleScholar = null,
+    public async Task EditProfile(string? firstname, string? lastname, string? avatarId, List<string> addFavourites,
+        List<string> deleteFavourites, string linkedIn = null, string googleScholar = null, bool deleteAvatar = false,
         HttpStatusCode httpStatusCode = HttpStatusCode.OK, ErrorType? errorCode = null)
     {
         var data = new EditProfileCommand()
         {
             FirstName = firstname,
             LastName = lastname,
-            AddFavourites = new List<string>(),
-            DeleteFavourites = new List<string>(),
+            AddFavourites = addFavourites,
+            DeleteFavourites = deleteFavourites,
             LinkedIn = linkedIn,
-            GoogleScholar = googleScholar
+            GoogleScholar = googleScholar,
+            DeleteAvatar = deleteAvatar,
+            AvatarId = avatarId
         };
 
         PostJson(data, new FetchOptions
@@ -100,11 +102,15 @@ public class AccountTests : AppFactory
 
     public static IEnumerable<object[]> EditProfileDataProvider()
     {
-        yield return new object[] { "EditedFirstname", null, new List<string>(), new List<string>() };
-        yield return new object[] { null, "EditedLastname", new List<string>(), new List<string>() };
-        yield return new object[] { null, null, new List<string> { "Java" }, new List<string>() };
-        yield return new object[] { null, null, new List<string>(), new List<string>(), "LinkedIn" };
-        yield return new object[] { null, null, new List<string>(), new List<string>(), null, "GoogleScholar" };
+        yield return new object[] { "EditedFirstname", null, null, new List<string>(), new List<string>() };
+        yield return new object[] { null, "EditedLastname", null, new List<string>(), new List<string>() };
+        yield return new object[] { null, null, "sad.png", new List<string>(), new List<string>() };
+        yield return new object[] { null, null, null, new List<string> { "Java" }, new List<string>() };
+        yield return new object[] { null, null, null, new List<string>(), new List<string> { "StudentFavouriteId" } };
+        yield return new object[] { null, null, null, new List<string>(), new List<string>(), "LinkedIn" };
+        yield return new object[] { null, null, null, new List<string>(), new List<string>(), null, "GoogleScholar" };
+        yield return new object[] { null, null, null, new List<string>(), new List<string>(), null, null, true};
+        yield return new object[] { null, null, null, new List<string>(), new List<string> { "WrongFavouriteId" }, null, null, null,HttpStatusCode.NotAcceptable, ErrorType.FavouriteNotFound };
     }
 
     [Fact]

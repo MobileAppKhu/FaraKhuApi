@@ -21,23 +21,21 @@ using Xunit.Abstractions;
 namespace IntegrationTest.Controller;
 
 [Endpoint("[controller]/[action]")]
-
 public class EventTests : AppFactory
 {
-
     public EventTests(ITestOutputHelper outputHelper, HttpClient client = null) : base(outputHelper, client)
     {
     }
-    
+
     [Theory]
     [InstructorHandler]
-    [InlineData("CourseId", "Description", "EventName",  HttpStatusCode.OK)]
-    [InlineData("WrongCourseId", "Description", "EventName",  HttpStatusCode.NotAcceptable,
+    [InlineData("CourseId", "Description", "EventName", HttpStatusCode.OK)]
+    [InlineData("WrongCourseId", "Description", "EventName", HttpStatusCode.NotAcceptable,
         ErrorType.CourseNotFound)]
-    [InlineData("CourseId", "Description", null,  HttpStatusCode.NotAcceptable,
+    [InlineData("CourseId", "Description", null, HttpStatusCode.NotAcceptable,
         ErrorType.InvalidInput)]
     public async Task AddEvent(string courseId, string eventDescription, string eventName,
-         HttpStatusCode httpStatusCode, ErrorType? errorCode = null)
+        HttpStatusCode httpStatusCode, ErrorType? errorCode = null)
     {
         var data = new AddEventCommand
         {
@@ -88,16 +86,17 @@ public class EventTests : AppFactory
             ErrorCode = ErrorType.Unauthorized
         });
     }
-    
+
     [Theory]
     [InstructorHandler]
     [InlineData("2", "New Description", null, false, "CourseId")]
-    [InlineData("2", null, "EventName", false, "CourseId" )]
-    [InlineData("2", null, null, false, "EditedCourseId" )]
+    [InlineData("2", null, "EventName", false, "CourseId")]
+    [InlineData("2", null, null, false, "EditedCourseId")]
     [InlineData("2", null, null, true, "CourseId")]
-    [InlineData("WrongCourseEventId", null, null, false,"CourseId", HttpStatusCode.NotAcceptable, ErrorType.EventNotFound)]
+    [InlineData("WrongCourseEventId", null, null, false, "CourseId", HttpStatusCode.NotAcceptable,
+        ErrorType.EventNotFound)]
     public async Task EditEvent(string eventId, string description, string eventName, Boolean isDone, string courseId,
-         HttpStatusCode httpStatusCode = HttpStatusCode.OK,
+        HttpStatusCode httpStatusCode = HttpStatusCode.OK,
         ErrorType? errorCode = null)
     {
         var data = new EditEventCommand
@@ -134,7 +133,7 @@ public class EventTests : AppFactory
             ErrorCode = ErrorType.Unauthorized
         });
     }
-    
+
     [Theory]
     [InstructorHandler]
     [MemberData(nameof(SearchEventDataProvider))]
@@ -162,7 +161,8 @@ public class EventTests : AppFactory
             HttpStatusCode = HttpStatusCode.OK
         });
 
-        var searchResult = (SearchEventViewModel)JObject.Parse(response.GetContent().Result).ToObject(typeof(SearchEventViewModel));
+        var searchResult =
+            (SearchEventViewModel)JObject.Parse(response.GetContent().Result).ToObject(typeof(SearchEventViewModel));
 
 
         if (testingOrder)
@@ -210,15 +210,16 @@ public class EventTests : AppFactory
             (Func<EventShortDto, IComparable>)(c => c.EventTime)
         };
     }
-    
+
     [Fact]
     [InstructorHandler]
-    public async Task GetIncomingEvents(){
+    public async Task GetIncomingEvents()
+    {
         var data = new GetIncomingEventQuery();
     
-            PostJson(data, new FetchOptions
-            {
-                HttpStatusCode = HttpStatusCode.OK,
-            });
-        }
+        PostJson(data, new FetchOptions
+        {
+            HttpStatusCode = HttpStatusCode.OK,
+        });
+    }
 }

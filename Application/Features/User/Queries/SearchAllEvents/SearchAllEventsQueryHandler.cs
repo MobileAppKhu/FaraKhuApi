@@ -29,6 +29,7 @@ public class SearchAllEventsQueryHandler : IRequestHandler<SearchAllEventsQuery,
         if (user.UserType == UserType.Student)
         {
             baseUser = await _context.Students.Include(s => s.Events).
+                IgnoreAutoIncludes().
                 Include(s => s.Courses).ThenInclude(c => c.Times).
                 Include(s => s.Courses).ThenInclude(c => c.CourseEvents).
                 Include(s => s.Courses).ThenInclude(c => c.Instructor).
@@ -38,6 +39,7 @@ public class SearchAllEventsQueryHandler : IRequestHandler<SearchAllEventsQuery,
         else
         {
             baseUser = await _context.Instructors.Include(s => s.Events).
+                IgnoreAutoIncludes().
                 Include(i => i.Courses).ThenInclude(c => c.Times).
                 Include(i => i.Courses).ThenInclude(c => c.CourseEvents).
                 Include(i => i.Courses).ThenInclude(c => c.Instructor).

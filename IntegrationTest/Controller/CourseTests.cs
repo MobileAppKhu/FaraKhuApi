@@ -341,6 +341,16 @@ public class CourseTests : AppFactory
             "WrongCourseId", null, null, null, null, null, null, null, null
             , HttpStatusCode.NotAcceptable, ErrorType.CourseNotFound
         };
+        yield return new object[]
+        {
+            "EditedCourseId", null, null, "WrongCourseType", null, null, null, null, null
+            , HttpStatusCode.NotAcceptable, ErrorType.CourseTypeNotFound
+        };
+        yield return new object[]
+        {
+            "EditedCourseId", null, null, null, "WrongFileId", null, null, null, null
+            , HttpStatusCode.NotAcceptable, ErrorType.FileNotFound
+        };
     }
     
     [Fact]

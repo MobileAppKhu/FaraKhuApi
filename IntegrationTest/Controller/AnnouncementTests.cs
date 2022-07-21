@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Application.DTOs.Announcement;
 using Application.Features.Announcement.Commands.AddAnnouncement;
+using Application.Features.Announcement.Commands.DeleteAnnouncement;
 using Application.Features.Announcement.Commands.EditAnnouncement;
 using Application.Features.Announcement.Queries.SearchAnnouncements;
 using Domain.Enum;
@@ -165,5 +167,40 @@ public class AnnouncementTests : AppFactory
             null, null, null, null, AnnouncementColumn.UserId, true, true,
             (Func<SearchAnnouncementDto, IComparable>)(c => c.UserId),
         };
+    }
+
+    [Theory]
+    [StudentHandler]
+    [InlineData("DeleteAnnouncement", HttpStatusCode.OK, null)]
+    [InlineData("WrongAnnouncementId", HttpStatusCode.NotAcceptable, ErrorType.AnnouncementNotFound)]
+    public async Task DeleteAnnouncement(string announcementId, HttpStatusCode httpStatusCode, ErrorType? errorCode)
+    {
+        var data = new DeleteAnnouncementCommand
+        {
+            AnnouncementId = announcementId
+        };
+
+        PostJson(data, new FetchOptions
+        {
+            HttpStatusCode = httpStatusCode,
+            ErrorCode = errorCode
+        });
+    }
+
+    [Fact]
+    [InstructorHandler]
+    [Endpoint("[controller]/DeleteAnnouncement")]
+    public async Task AnotherUserCannotDeleteAnnouncement()
+    {
+        var data = new DeleteAnnouncementCommand
+        {
+            AnnouncementId = "EditAnnouncement"
+        };
+
+        PostJson(data, new FetchOptions
+        {
+            HttpStatusCode = HttpStatusCode.NotAcceptable,
+            ErrorCode = ErrorType.Unauthorized
+        });
     }
 }

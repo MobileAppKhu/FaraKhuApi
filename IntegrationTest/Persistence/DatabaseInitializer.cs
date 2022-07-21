@@ -161,7 +161,15 @@ public class DatabaseInitializer
             EmailConfirmed = true,
             AvatarId = "smiley.png",
             UserName = "",
-            Id = "StudentId"
+            Id = "StudentId",
+            Favourites = new List<Favourite>
+            {
+                new()
+                {
+                    Description = "Description",
+                    FavouriteId = "StudentFavouriteId"
+                }
+            }
         };
 
         await UserManager.CreateAsync(student, "StudentPassword");
@@ -185,7 +193,7 @@ public class DatabaseInitializer
             
         var searchStudent = new Student()
         {
-            FirstName = "Student",
+            FirstName = "SearchStudent",
             LastName = "SearchStudent",
             Email = "SearchStudent@FaraKhu.app",
             UserType = UserType.Student,

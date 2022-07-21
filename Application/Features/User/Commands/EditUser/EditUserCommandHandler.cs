@@ -54,6 +54,14 @@ public class EditUserCommandHandler : IRequestHandler<EditUserCommand>
             var avatar =
                 await _context.Files.FirstOrDefaultAsync(entity => entity.Id == request.AvatarId,
                     cancellationToken);
+            if (avatar == null)
+            {
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.FileNotFound,
+                    Message = Localizer["FileNotFound"]
+                });
+            }
             user.AvatarId = request.AvatarId;
             user.Avatar = avatar;
         }
