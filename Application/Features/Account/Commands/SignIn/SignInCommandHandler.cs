@@ -37,13 +37,12 @@ public class SignInCommandHandler : IRequestHandler<SignInCommand, SignInViewMod
     }
     public async Task<SignInViewModel> Handle(SignInCommand request, CancellationToken cancellationToken)
     {
-        // this api doesn't show favourites
         var user = await _userManager.FindByEmailAsync(request.Logon.EmailNormalize());
         if (user == null)
             throw new CustomException(new Error
             {
-                ErrorType = ErrorType.UserNotFound,
-                Message = _localizer["UserNotFound"]
+                ErrorType = ErrorType.InvalidInput,
+                Message = _localizer["InvalidInput"]
             });
         if (!user.EmailConfirmed)
         {

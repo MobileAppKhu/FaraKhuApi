@@ -29,7 +29,7 @@ public class AccountTests : AppFactory
     [InlineData("PublicRelation@FaraKhu.app", "PROfficerPassword")]
     [InlineData("Owner@Farakhu.app", "OwnerPassword")]
     [InlineData("Student@Farakhu.app", "NotStudentPassword", HttpStatusCode.NotAcceptable, ErrorType.InvalidInput)]
-    [InlineData("Instructor@Farakhu.com", "InstructorPassword", HttpStatusCode.NotAcceptable, ErrorType.UserNotFound)]
+    [InlineData("Instructor@Farakhu.com", "InstructorPassword", HttpStatusCode.NotAcceptable, ErrorType.InvalidInput)]
     public async Task SignIn(string logon, string password, HttpStatusCode httpStatusCode = HttpStatusCode.OK,
         ErrorType? errorCode = null)
     {
