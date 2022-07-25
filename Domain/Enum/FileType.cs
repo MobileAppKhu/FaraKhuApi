@@ -1,11 +1,10 @@
-﻿namespace Domain.Enum
+﻿namespace Domain.Enum;
+
+public enum FileType : byte
 {
-    public enum FileType : byte
-    {
-        Image,
-        Video,
-        Audio,
-        Gif,
-        Document
-    }
+    Image,
+    Video,
+    Audio,
+    Gif,
+    Document
 }

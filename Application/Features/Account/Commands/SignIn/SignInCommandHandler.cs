@@ -13,66 +13,64 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Account.Commands.SignIn
+namespace Application.Features.Account.Commands.SignIn;
+
+public class SignInCommandHandler : IRequestHandler<SignInCommand, SignInViewModel>
 {
-    public class SignInCommandHandler : IRequestHandler<SignInCommand, SignInViewModel>
+    private IMapper _mapper { get; }
+    private UserManager<BaseUser> _userManager { get; }
+    private IStringLocalizer<SharedResource> _localizer { get; }
+    private SignInManager<BaseUser> _signInManager { get; }
+    private readonly IDatabaseContext _context;
+    private IEmailService _emailService { get; set; }
+
+    public SignInCommandHandler(IMapper mapper, UserManager<BaseUser> userManager,
+        SignInManager<BaseUser> signInManager, IStringLocalizer<SharedResource> localizer
+        ,IDatabaseContext context, IEmailService emailService)
     {
-        private IMapper _mapper { get; }
-        private UserManager<BaseUser> _userManager { get; }
-        private IStringLocalizer<SharedResource> _localizer { get; }
-        private SignInManager<BaseUser> _signInManager { get; }
-        private readonly IDatabaseContext _context;
-        private IEmailService _emailService { get; set; }
-
-        public SignInCommandHandler(IMapper mapper, UserManager<BaseUser> userManager,
-            SignInManager<BaseUser> signInManager, IStringLocalizer<SharedResource> localizer
-            ,IDatabaseContext context, IEmailService emailService)
-        {
-            _mapper = mapper;
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _localizer = localizer;
-            _context = context;
-            _emailService = emailService;
-        }
-        public async Task<SignInViewModel> Handle(SignInCommand request, CancellationToken cancellationToken)
-        {
-            // this api doesn't show favourites
-            var user = await _userManager.FindByEmailAsync(request.Logon.EmailNormalize());
-            if (user == null)
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.UserNotFound,
-                    Message = _localizer["UserNotFound"]
-                });
-            if (!user.EmailConfirmed)
+        _mapper = mapper;
+        _userManager = userManager;
+        _signInManager = signInManager;
+        _localizer = localizer;
+        _context = context;
+        _emailService = emailService;
+    }
+    public async Task<SignInViewModel> Handle(SignInCommand request, CancellationToken cancellationToken)
+    {
+        var user = await _userManager.FindByEmailAsync(request.Logon.EmailNormalize());
+        if (user == null)
+            throw new CustomException(new Error
             {
-                user.IsValidating = true;
-                string validationCode = ConfirmEmailCodeGenerator.GenerateCode();
-                user.ValidationCode = validationCode;
+                ErrorType = ErrorType.InvalidInput,
+                Message = _localizer["InvalidInput"]
+            });
+        if (!user.EmailConfirmed)
+        {
+            user.IsValidating = true;
+            string validationCode = ConfirmEmailCodeGenerator.GenerateCode();
+            user.ValidationCode = validationCode;
 
-                await _userManager.UpdateAsync(user);
-                await _context.SaveChangesAsync(cancellationToken);
+            await _userManager.UpdateAsync(user);
+            await _context.SaveChangesAsync(cancellationToken);
             
-                _emailService.SendEmail(request.Logon,
-                    "Farakhu", "EmailVerification", "EmailVerification",
-                    validationCode);
-                return null;
-            }
-            var result = await _signInManager.PasswordSignInAsync(user, request.Password, true, false);
-            
-            if (!result.Succeeded)
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.InvalidInput,
-                    Message = _localizer["InvalidInput"]
-                });
-            var signInViewModel = new SignInViewModel
-            {
-                ProfileDto = _mapper.Map<ProfileDto>(user)
-            };
-            signInViewModel.ProfileDto.Roles = _userManager.GetRolesAsync(user).Result.ToArray();
-            return signInViewModel;
+            _emailService.SendEmail(request.Logon,
+                "Farakhu", "EmailVerification", "EmailVerification",
+                validationCode);
+            return null;
         }
+        var result = await _signInManager.PasswordSignInAsync(user, request.Password, true, false);
+            
+        if (!result.Succeeded)
+            throw new CustomException(new Error
+            {
+                ErrorType = ErrorType.InvalidInput,
+                Message = _localizer["InvalidInput"]
+            });
+        var signInViewModel = new SignInViewModel
+        {
+            ProfileDto = _mapper.Map<ProfileDto>(user)
+        };
+        signInViewModel.ProfileDto.Roles = _userManager.GetRolesAsync(user).Result.ToArray();
+        return signInViewModel;
     }
 }

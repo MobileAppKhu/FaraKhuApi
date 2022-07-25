@@ -1,9 +1,8 @@
-﻿namespace Domain.Enum
+﻿namespace Domain.Enum;
+
+public enum FacultyColumn
 {
-    public enum FacultyColumn
-    {
-        FacultyId = 1,
-        FacultyTitle = 2,
-        FacultyCode = 3
-    }
+    FacultyId = 1,
+    FacultyTitle = 2,
+    FacultyCode = 3
 }

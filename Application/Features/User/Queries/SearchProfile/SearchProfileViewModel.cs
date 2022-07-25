@@ -1,9 +1,8 @@
 ﻿using Application.DTOs.User;
 
-namespace Application.Features.User.Queries.SearchProfile
+namespace Application.Features.User.Queries.SearchProfile;
+
+public class SearchProfileViewModel
 {
-    public class SearchProfileViewModel
-    {
-        public ProfileDto Profile { get; set; }
-    }
+    public ProfileDto Profile { get; set; }
 }

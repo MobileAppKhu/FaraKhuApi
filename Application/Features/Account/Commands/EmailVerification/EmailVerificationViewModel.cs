@@ -1,9 +1,8 @@
 ﻿using Application.DTOs.User;
 
-namespace Application.Features.Account.Commands.EmailVerification
+namespace Application.Features.Account.Commands.EmailVerification;
+
+public class EmailVerificationViewModel
 {
-    public class EmailVerificationViewModel
-    {
-        public ProfileDto ProfileDto { get; set; }
-    }
+    public ProfileDto ProfileDto { get; set; }
 }

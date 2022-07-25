@@ -2,24 +2,23 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Persistence.Configuration
+namespace Infrastructure.Persistence.Configuration;
+
+public class CourseTypeConfiguration : IEntityTypeConfiguration<CourseType>
 {
-    public class CourseTypeConfiguration : IEntityTypeConfiguration<CourseType>
+    public void Configure(EntityTypeBuilder<CourseType> builder)
     {
-        public void Configure(EntityTypeBuilder<CourseType> builder)
-        {
-            builder.HasKey(e => e.CourseTypeId);
-            builder.Property(e => e.CourseTypeId).ValueGeneratedOnAdd();
-            builder.Property(e => e.CourseTypeCode).IsRequired();
-            builder.Property(e => e.CourseTypeTitle).IsRequired();
-            builder.HasOne(e => e.Department)
-                .WithMany(d => d.CourseTypes)
-                .HasForeignKey(e => e.DepartmentId);
-            builder.Property(e => e.CreatedDate).HasDefaultValueSql("now() at time zone 'utc'")
-                .ValueGeneratedOnAdd();
-            builder.Property(e => e.LastModifiedDate)
-                .HasDefaultValueSql("now() at time zone 'utc'")
-                .ValueGeneratedOnAddOrUpdate();
-        }
+        builder.HasKey(e => e.CourseTypeId);
+        builder.Property(e => e.CourseTypeId).ValueGeneratedOnAdd();
+        builder.Property(e => e.CourseTypeCode).IsRequired();
+        builder.Property(e => e.CourseTypeTitle).IsRequired();
+        builder.HasOne(e => e.Department)
+            .WithMany(d => d.CourseTypes)
+            .HasForeignKey(e => e.DepartmentId);
+        builder.Property(e => e.CreatedDate).HasDefaultValueSql("now() at time zone 'utc'")
+            .ValueGeneratedOnAdd();
+        builder.Property(e => e.LastModifiedDate)
+            .HasDefaultValueSql("now() at time zone 'utc'")
+            .ValueGeneratedOnAddOrUpdate();
     }
 }

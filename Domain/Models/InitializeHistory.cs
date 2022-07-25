@@ -1,10 +1,9 @@
 ﻿using System;
 
-namespace Domain.Models
+namespace Domain.Models;
+
+public class InitializeHistory
 {
-    public class InitializeHistory
-    {
-        public string Version { get; set; }
-        public DateTime DateTime { get; set; }
-    }
+    public string Version { get; set; }
+    public DateTime DateTime { get; set; }
 }

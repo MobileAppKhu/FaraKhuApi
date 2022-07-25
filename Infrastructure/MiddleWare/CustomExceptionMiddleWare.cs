@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Net;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Resources;
@@ -12,54 +11,53 @@ using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Infrastructure.MiddleWare
+namespace Infrastructure.MiddleWare;
+
+public class CustomExceptionMiddleWare
 {
-    public class CustomExceptionMiddleWare
+    private readonly RequestDelegate _next;
+
+    public CustomExceptionMiddleWare(RequestDelegate next)
     {
-        private readonly RequestDelegate _next;
+        _next = next;
+    }
 
-        public CustomExceptionMiddleWare(RequestDelegate next)
+    public async Task InvokeAsync(HttpContext context,
+        IStringLocalizer<SharedResource> localizer)
+    {
+        try
         {
-            _next = next;
+            await _next.Invoke(context);
         }
-
-        public async Task InvokeAsync(HttpContext context,
-            IStringLocalizer<SharedResource> localizer)
+        catch (CustomException e)
         {
-            try
+            context.Response.StatusCode = (int) HttpStatusCode.NotAcceptable;
+            context.Response.ContentType = "application/json; charset=utf-8";
+            var newResponse = JsonConvert.SerializeObject(new
             {
-                await _next.Invoke(context);
-            }
-            catch (CustomException e)
+                Errors = e.Errors
+            }, new JsonSerializerSettings
             {
-                context.Response.StatusCode = (int) HttpStatusCode.NotAcceptable;
-                context.Response.ContentType = "application/json; charset=utf-8";
-                var newResponse = JsonConvert.SerializeObject(new
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            });
+            await context.Response.WriteAsync(newResponse);
+        }
+        catch (Exception)
+        {
+            Debugger.Break();
+            // loggerService.Error(e);
+            context.Response.StatusCode = (int) HttpStatusCode.NotAcceptable;
+            context.Response.ContentType = "application/json; charset=utf-8";
+            var newResponse = JsonConvert.SerializeObject(new Error
                 {
-                    Errors = e.Errors
-                }, new JsonSerializerSettings
+                    Message = localizer["Unexpected"],
+                    ErrorType = ErrorType.Unexpected
+                },
+                new JsonSerializerSettings
                 {
                     ContractResolver = new CamelCasePropertyNamesContractResolver()
                 });
-                await context.Response.WriteAsync(newResponse);
-            }
-            catch (Exception)
-            {
-                Debugger.Break();
-                // loggerService.Error(e);
-                context.Response.StatusCode = (int) HttpStatusCode.NotAcceptable;
-                context.Response.ContentType = "application/json; charset=utf-8";
-                var newResponse = JsonConvert.SerializeObject(new Error
-                    {
-                        Message = localizer["Unexpected"],
-                        ErrorType = ErrorType.Unexpected
-                    },
-                    new JsonSerializerSettings
-                    {
-                        ContractResolver = new CamelCasePropertyNamesContractResolver()
-                    });
-                await context.Response.WriteAsync(newResponse);
-            }
+            await context.Response.WriteAsync(newResponse);
         }
     }
 }

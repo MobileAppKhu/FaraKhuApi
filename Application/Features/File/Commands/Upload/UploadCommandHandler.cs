@@ -1,4 +1,3 @@
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
@@ -12,78 +11,79 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.File.Commands.Upload
+namespace Application.Features.File.Commands.Upload;
+
+public class UploadCommandHandler : IRequestHandler<UploadCommand, UploadViewModel>
 {
-    public class UploadCommandHandler : IRequestHandler<UploadCommand, UploadViewModel>
+    private readonly IDatabaseContext _context;
+    private IStringLocalizer<SharedResource> Localizer { get; }
+    private IHttpContextAccessor HttpContextAccessor { get; }
+    private UserManager<BaseUser> UserManager { get; }
+    private IMapper _mapper { get; }
+
+    public IConfiguration _config { get; set; }
+
+    public UploadCommandHandler( IStringLocalizer<SharedResource> localizer,
+        IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
+        , IDatabaseContext context, IConfiguration configuration)
     {
-        private readonly IDatabaseContext _context;
-        private IStringLocalizer<SharedResource> Localizer { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
-        private UserManager<BaseUser> UserManager { get; }
-        private IMapper _mapper { get; }
+        _context = context;
+        Localizer = localizer;
+        HttpContextAccessor = httpContextAccessor;
+        UserManager = userManager;
+        _mapper = mapper;
+        _config = configuration;
+    }
 
-        public IConfiguration _config { get; set; }
-
-        public UploadCommandHandler( IStringLocalizer<SharedResource> localizer,
-            IHttpContextAccessor httpContextAccessor, UserManager<BaseUser> userManager, IMapper mapper
-            , IDatabaseContext context, IConfiguration configuration)
+    public async Task<UploadViewModel> Handle(UploadCommand request, CancellationToken cancellationToken)
+    {
+        var file = new FileEntity
         {
-            _context = context;
-            Localizer = localizer;
-            HttpContextAccessor = httpContextAccessor;
-            UserManager = userManager;
-            _mapper = mapper;
-            _config = configuration;
-        }
+            Name = request.File.FileName,
+            Size = request.File.Length,
+            ContentType = request.File.ContentType,
+            Type = FileType.Image
+        };
 
-        public async Task<UploadViewModel> Handle(UploadCommand request, CancellationToken cancellationToken)
-        {
-            var file = new FileEntity
-            {
-                Name = request.File.FileName,
-                Size = request.File.Length,
-                ContentType = request.File.ContentType,
-                Type = FileType.Image
-            };
-
-            await _context.Files.AddAsync(file, cancellationToken);
+        await _context.Files.AddAsync(file, cancellationToken);
             
-            var fileId = file.Id;
-            var path = _config["StorePath"] + fileId;
+        // Static Files Require File Extension(Appending extension to id)
+        file.Id += "." + file.Name.Split(".")[^1];
+            
+        var path = _config["StorePath"] + file.Id;
 
-            await using var stream = System.IO.File.Create(path);
-            await request.File.CopyToAsync(stream, cancellationToken);
+        await using var stream = System.IO.File.Create(path);
+        await request.File.CopyToAsync(stream, cancellationToken);
 
-            await _context.SaveChangesAsync(cancellationToken);
-            return new UploadViewModel
-            {
-                FileId = file.Id
-            };
-            /*var file = request.Form.Files.FirstOrDefault();
-            if (file == null)
-                throw new CustomException(new Error
-                    {ErrorType = ErrorType.InvalidInput, Message = Localizer["InvalidFile"]});
+        await _context.SaveChangesAsync(cancellationToken);
+        return new UploadViewModel
+        {
+            FileId = file.Id
+        };
+        /*var file = request.Form.Files.FirstOrDefault();
+        if (file == null)
+            throw new CustomException(new Error
+                {ErrorType = ErrorType.InvalidInput, Message = Localizer["InvalidFile"]});
 
-            var fileEntity = new FileEntity
-            {
-                Name = file.FileName,
-                Size = file.Length,
-                ContentType = file.ContentType,
-            };
+        var fileEntity = new FileEntity
+        {
+            Name = file.FileName,
+            Size = file.Length,
+            ContentType = file.ContentType,
+        };
 
-            await _context.Files.AddAsync(fileEntity,cancellationToken);
+        await _context.Files.AddAsync(fileEntity,cancellationToken);
 
-            var fileId = fileEntity.Id;
-            var path = _config["StorePath"] + fileId;
+        var fileId = fileEntity.Id;
+        var path = _config["StorePath"] + fileId;
 
-            await using var stream = System.IO.File.Create(path);
-            await file.CopyToAsync(stream,cancellationToken);
+        await using var stream = System.IO.File.Create(path);
+        await file.CopyToAsync(stream,cancellationToken);
 
-            await _context.SaveChangesAsync(cancellationToken);
-            return new UploadViewModel
-            {
-                FileId = fileId
-            };*/
-        }
+        await _context.SaveChangesAsync(cancellationToken);
+        return new UploadViewModel
+        {
+            FileId = fileId
+        };*/
     }
 }

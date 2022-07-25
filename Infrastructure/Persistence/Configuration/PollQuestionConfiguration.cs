@@ -2,28 +2,27 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Persistence.Configuration
+namespace Infrastructure.Persistence.Configuration;
+
+public class PollQuestionConfiguration : IEntityTypeConfiguration<PollQuestion>
 {
-    public class PollQuestionConfiguration : IEntityTypeConfiguration<PollQuestion>
+    public void Configure(EntityTypeBuilder<PollQuestion> builder)
     {
-        public void Configure(EntityTypeBuilder<PollQuestion> builder)
-        {
-            builder.HasKey(question => question.QuestionId);
-            builder.Property(question => question.QuestionId).ValueGeneratedOnAdd();
-            builder.Property(question => question.MultiVote).HasDefaultValue(false);
-            builder.Property(question => question.IsOpen).HasDefaultValue(true);
+        builder.HasKey(question => question.QuestionId);
+        builder.Property(question => question.QuestionId).ValueGeneratedOnAdd();
+        builder.Property(question => question.MultiVote).HasDefaultValue(false);
+        builder.Property(question => question.IsOpen).HasDefaultValue(true);
             
-            // Option 2
-            builder.HasOne(question => question.Course)
-                .WithMany(course => course.Polls)
-                .HasForeignKey(question => question.CourseId);
-            // end of Option 2
+        // Option 2
+        builder.HasOne(question => question.Course)
+            .WithMany(course => course.Polls)
+            .HasForeignKey(question => question.CourseId);
+        // end of Option 2
             
-            builder.Property(question => question.CreatedDate).HasDefaultValueSql("now() at time zone 'utc'")
-                .ValueGeneratedOnAdd();
-            builder.Property(question => question.LastModifiedDate)
-                .HasDefaultValueSql("now() at time zone 'utc'")
-                .ValueGeneratedOnAddOrUpdate();
-        }
+        builder.Property(question => question.CreatedDate).HasDefaultValueSql("now() at time zone 'utc'")
+            .ValueGeneratedOnAdd();
+        builder.Property(question => question.LastModifiedDate)
+            .HasDefaultValueSql("now() at time zone 'utc'")
+            .ValueGeneratedOnAddOrUpdate();
     }
 }

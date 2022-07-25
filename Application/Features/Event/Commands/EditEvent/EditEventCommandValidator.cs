@@ -2,16 +2,15 @@
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Event.Commands.EditEvent
+namespace Application.Features.Event.Commands.EditEvent;
+
+public class EditEventCommandValidator : AbstractValidator<EditEventCommand>
 {
-    public class EditEventCommandValidator : AbstractValidator<EditEventCommand>
+    public EditEventCommandValidator(IStringLocalizer<SharedResource> localizer)
     {
-        public EditEventCommandValidator(IStringLocalizer<SharedResource> localizer)
-        {
-            RuleFor(r => r.EventId)
-                .NotEmpty()
-                .WithMessage(localizer["NotEmpty"]);
+        RuleFor(r => r.EventId)
+            .NotEmpty()
+            .WithMessage(localizer["NotEmpty"]);
                 
-        }
     }
 }

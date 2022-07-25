@@ -1,11 +1,10 @@
-﻿namespace Domain.Enum
+﻿namespace Domain.Enum;
+
+public enum CourseColumn
 {
-    public enum CourseColumn
-    {
-        CourseId = 1,
-        CourseTypeId = 2,
-        EndDate = 3,
-        InstructorId = 4,
-        CreationDate = 5
-    }
+    CourseId = 1,
+    CourseTypeId = 2,
+    EndDate = 3,
+    InstructorId = 4,
+    CreationDate = 5
 }

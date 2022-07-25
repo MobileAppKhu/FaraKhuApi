@@ -2,12 +2,11 @@
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Course.Queries.SearchCourse
+namespace Application.Features.Course.Queries.SearchCourse;
+
+public class SearchCourseQueryValidator : AbstractValidator<SearchCourseQuery>
 {
-    public class SearchCourseQueryValidator : AbstractValidator<SearchCourseQuery>
+    public SearchCourseQueryValidator(IStringLocalizer<SharedResource> localizer)
     {
-        public SearchCourseQueryValidator(IStringLocalizer<SharedResource> localizer)
-        {
-        }
     }
 }

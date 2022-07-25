@@ -5,23 +5,22 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 
-namespace Application.Features.Account.Commands.SignOut
-{
-    public class SignOutCommandHandler : IRequestHandler<SignOutCommand>
-    {
-        private SignInManager<BaseUser> _signInManager { get; }
-        private IHttpContextAccessor HttpContextAccessor { get; }
+namespace Application.Features.Account.Commands.SignOut;
 
-        public SignOutCommandHandler(IHttpContextAccessor httpContextAccessor, SignInManager<BaseUser> signInManager)
-        {
-            _signInManager = signInManager;
-            HttpContextAccessor = httpContextAccessor;
-        }
-        public async Task<Unit> Handle(SignOutCommand request, CancellationToken cancellationToken)
-        {
-            await _signInManager.SignOutAsync();
-            HttpContextAccessor.HttpContext?.Response.Headers.Remove("Roles");
-            return Unit.Value;
-        }
+public class SignOutCommandHandler : IRequestHandler<SignOutCommand>
+{
+    private SignInManager<BaseUser> _signInManager { get; }
+    private IHttpContextAccessor HttpContextAccessor { get; }
+
+    public SignOutCommandHandler(IHttpContextAccessor httpContextAccessor, SignInManager<BaseUser> signInManager)
+    {
+        _signInManager = signInManager;
+        HttpContextAccessor = httpContextAccessor;
+    }
+    public async Task<Unit> Handle(SignOutCommand request, CancellationToken cancellationToken)
+    {
+        await _signInManager.SignOutAsync();
+        HttpContextAccessor.HttpContext?.Response.Headers.Remove("Roles");
+        return Unit.Value;
     }
 }

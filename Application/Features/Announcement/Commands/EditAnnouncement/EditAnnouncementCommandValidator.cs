@@ -2,15 +2,14 @@
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Announcement.Commands.EditAnnouncement
+namespace Application.Features.Announcement.Commands.EditAnnouncement;
+
+public class EditAnnouncementCommandValidator : AbstractValidator<EditAnnouncementCommand>
 {
-    public class EditAnnouncementCommandValidator : AbstractValidator<EditAnnouncementCommand>
+    public EditAnnouncementCommandValidator(IStringLocalizer<SharedResource> localizer)
     {
-        public EditAnnouncementCommandValidator(IStringLocalizer<SharedResource> localizer)
-        {
-            RuleFor(r => r.AnnouncementId)
-                .NotEmpty()
-                .WithMessage(localizer["NotEmpty"]);
-        }
+        RuleFor(r => r.AnnouncementId)
+            .NotEmpty()
+            .WithMessage(localizer["NotEmpty"]);
     }
 }

@@ -1,13 +1,11 @@
 ﻿using System.Collections.Generic;
 using Domain.BaseModels;
-using Domain.Enum;
 
-namespace Domain.Models
+namespace Domain.Models;
+
+public class Student : BaseUser
 {
-    public class Student : BaseUser
-    {
-        public string StudentId { get; set; }
-        public ICollection<Course> Courses { get; set; }
-        public ICollection<PollAnswer> PollAnswers { get; set; }
-    }
+    public string StudentId { get; set; }
+    public ICollection<Course> Courses { get; set; }
+    public ICollection<PollAnswer> PollAnswers { get; set; }
 }

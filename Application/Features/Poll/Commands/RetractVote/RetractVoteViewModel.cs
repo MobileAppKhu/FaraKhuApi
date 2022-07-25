@@ -1,10 +1,7 @@
-﻿using Application.DTOs.Offer;
+﻿namespace Application.Features.Poll.Commands.RetractVote;
 
-namespace Application.Features.Poll.Commands.RetractVote
+public class RetractVoteViewModel
 {
-    public class RetractVoteViewModel
-    {
-        //  : | offerdto ?
-        //public OfferDto Offer { get; set; }
-    }
+    //  : | offerdto ?
+    //public OfferDto Offer { get; set; }
 }

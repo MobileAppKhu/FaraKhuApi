@@ -1,10 +1,8 @@
-﻿using Application.DTOs.Offer;
-using Application.DTOs.Poll;
+﻿using Application.DTOs.Poll;
 
-namespace Application.Features.Poll.Commands.AddQuestion
+namespace Application.Features.Poll.Commands.AddQuestion;
+
+public class AddQuestionViewModel
 {
-    public class AddQuestionViewModel
-    {
-        public PollQuestionDto Poll { get; set; }
-    }
+    public PollQuestionDto Poll { get; set; }
 }

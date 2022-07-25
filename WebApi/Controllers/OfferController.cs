@@ -10,50 +10,49 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Utilities;
 
-namespace WebApi.Controllers
+namespace WebApi.Controllers;
+
+[Authorize]
+[ApiController]
+[Route("api/[controller]/[action]")]
+public class OfferController : ControllerBase
 {
-    [Authorize]
-    [ApiController]
-    [Route("api/[controller]/[action]")]
-    public class OfferController : ControllerBase
+    private IMediator _mediator;
+    public OfferController(IMediator mediator)
     {
-        private IMediator _mediator;
-        public OfferController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+        _mediator = mediator;
+    }
         
-        [HttpPost]
-        [ProducesResponseType(typeof(AddOfferViewModel), 200)]
-        public async Task<IActionResult> AddOffer(AddOfferCommand request)
-        {
-            request.UserId = this.GetUserId();
-            return Ok(await _mediator.Send(request));
-        }
-        [HttpPost]
-        public async Task<IActionResult> DeleteOffer(DeleteOfferCommand request)
-        {
-            request.UserId = this.GetUserId();
-            return Ok(await _mediator.Send(request));
-        }
-        [HttpPost]
-        public async Task<IActionResult> EditOffer(EditOfferCommand request)
-        {
-            request.UserId = this.GetUserId();
-            return Ok(await _mediator.Send(request));
-        }
-        [HttpPost]
-        [ProducesResponseType(typeof(SearchUserOffersViewModel), 200)]
-        public async Task<IActionResult> SearchUserOffers(SearchUserOffersQuery request)
-        {
-            return Ok(await _mediator.Send(request));
-        }
+    [HttpPost]
+    [ProducesResponseType(typeof(AddOfferViewModel), 200)]
+    public async Task<IActionResult> AddOffer(AddOfferCommand request)
+    {
+        request.UserId = this.GetUserId();
+        return Ok(await _mediator.Send(request));
+    }
+    [HttpPost]
+    public async Task<IActionResult> DeleteOffer(DeleteOfferCommand request)
+    {
+        request.UserId = this.GetUserId();
+        return Ok(await _mediator.Send(request));
+    }
+    [HttpPost]
+    public async Task<IActionResult> EditOffer(EditOfferCommand request)
+    {
+        request.UserId = this.GetUserId();
+        return Ok(await _mediator.Send(request));
+    }
+    [HttpPost]
+    [ProducesResponseType(typeof(SearchUserOffersViewModel), 200)]
+    public async Task<IActionResult> SearchUserOffers(SearchUserOffersQuery request)
+    {
+        return Ok(await _mediator.Send(request));
+    }
         
-        [HttpPost]
-        [ProducesResponseType(typeof(SearchOffersViewModel), 200)]
-        public async Task<IActionResult> SearchOffers(SearchOffersQuery request)
-        {
-            return Ok(await _mediator.Send(request));
-        }
+    [HttpPost]
+    [ProducesResponseType(typeof(SearchOffersViewModel), 200)]
+    public async Task<IActionResult> SearchOffers(SearchOffersQuery request)
+    {
+        return Ok(await _mediator.Send(request));
     }
 }

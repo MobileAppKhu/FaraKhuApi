@@ -2,15 +2,14 @@
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.News.Commands.DeleteNews
+namespace Application.Features.News.Commands.DeleteNews;
+
+public class DeleteNewsCommandValidator : AbstractValidator<DeleteNewsCommand>
 {
-    public class DeleteNewsCommandValidator : AbstractValidator<DeleteNewsCommand>
+    public DeleteNewsCommandValidator(IStringLocalizer<SharedResource> localizer)
     {
-        public DeleteNewsCommandValidator(IStringLocalizer<SharedResource> localizer)
-        {
-            RuleFor(r => r.NewsId)
-                .NotEmpty()
-                .WithMessage(localizer["EmptyInput"]);
-        }
+        RuleFor(r => r.NewsId)
+            .NotEmpty()
+            .WithMessage(localizer["EmptyInput"]);
     }
 }

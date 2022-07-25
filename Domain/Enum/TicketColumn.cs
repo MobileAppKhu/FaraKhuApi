@@ -1,12 +1,11 @@
-﻿namespace Domain.Enum
+﻿namespace Domain.Enum;
+
+public enum TicketColumn
 {
-    public enum TicketColumn
-    {
-        TicketId = 1,
-        Description = 2,
-        Priority = 3,
-        Status = 4,
-        DeadLine = 5,
-        CreationDate = 6
-    }
+    TicketId = 1,
+    Description = 2,
+    Priority = 3,
+    Status = 4,
+    DeadLine = 5,
+    CreationDate = 6
 }

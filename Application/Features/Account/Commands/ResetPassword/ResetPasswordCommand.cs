@@ -1,10 +1,9 @@
 ﻿using MediatR;
 
-namespace Application.Features.Account.Commands.ResetPassword
+namespace Application.Features.Account.Commands.ResetPassword;
+
+public class ResetPasswordCommand : IRequest<Unit>
 {
-    public class ResetPasswordCommand : IRequest<Unit>
-    {
-        public string Email { get; set; }
-        public string NewPassword { get; set; }
-    }
+    public string Email { get; set; }
+    public string NewPassword { get; set; }
 }

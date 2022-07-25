@@ -9,36 +9,35 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.News.Commands.CommentApproval
+namespace Application.Features.News.Commands.CommentApproval;
+
+public class CommentApprovalCommandHandler : IRequestHandler<CommentApprovalCommand, Unit>
 {
-    public class CommentApprovalCommandHandler : IRequestHandler<CommentApprovalCommand, Unit>
+    private readonly IDatabaseContext _context;
+    private IStringLocalizer<SharedResource> Localizer { get; }
+
+    public CommentApprovalCommandHandler( IStringLocalizer<SharedResource> localizer,
+        IDatabaseContext context)
     {
-        private readonly IDatabaseContext _context;
-        private IStringLocalizer<SharedResource> Localizer { get; }
+        _context = context;
+        Localizer = localizer;
+    }
 
-        public CommentApprovalCommandHandler( IStringLocalizer<SharedResource> localizer,
-            IDatabaseContext context)
+    public async Task<Unit> Handle(CommentApprovalCommand request, CancellationToken cancellationToken)
+    {
+        var comment = await _context.Comments
+            .FirstOrDefaultAsync(c => c.CommentId == request.CommentId, cancellationToken);
+        if (comment == null)
         {
-            _context = context;
-            Localizer = localizer;
-        }
-
-        public async Task<Unit> Handle(CommentApprovalCommand request, CancellationToken cancellationToken)
-        {
-            var comment = await _context.Comments
-                .FirstOrDefaultAsync(c => c.CommentId == request.CommentId, cancellationToken);
-            if (comment == null)
+            throw new CustomException(new Error()
             {
-                throw new CustomException(new Error()
-                {
-                    ErrorType = ErrorType.CommentNotFound,
-                    Message = Localizer["CommentNotFound"]
-                });
-            }
-
-            comment.Status = request.Status;
-            await _context.SaveChangesAsync(cancellationToken);
-            return Unit.Value;
+                ErrorType = ErrorType.CommentNotFound,
+                Message = Localizer["CommentNotFound"]
+            });
         }
+
+        comment.Status = request.Status;
+        await _context.SaveChangesAsync(cancellationToken);
+        return Unit.Value;
     }
 }

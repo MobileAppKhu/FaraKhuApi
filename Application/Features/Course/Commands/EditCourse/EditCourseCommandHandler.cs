@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common.Exceptions;
@@ -12,107 +11,139 @@ using Domain.BaseModels;
 using Domain.Enum;
 using Domain.Models;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Course.Commands.EditCourse
-{
-    public class EditCourseCommandHandler : IRequestHandler<EditCourseCommand>
-    {
-        private readonly IDatabaseContext _context;
-        private IStringLocalizer<SharedResource> Localizer { get; }
+namespace Application.Features.Course.Commands.EditCourse;
 
-        public EditCourseCommandHandler(IStringLocalizer<SharedResource> localizer, IDatabaseContext context)
+public class EditCourseCommandHandler : IRequestHandler<EditCourseCommand>
+{
+    private readonly IDatabaseContext _context;
+    private IStringLocalizer<SharedResource> Localizer { get; }
+
+    public EditCourseCommandHandler(IStringLocalizer<SharedResource> localizer, IDatabaseContext context)
+    {
+        _context = context;
+        Localizer = localizer;
+    }
+
+    public async Task<Unit> Handle(EditCourseCommand request, CancellationToken cancellationToken)
+    {
+        Instructor user = _context.Instructors.FirstOrDefault(u => u.Id == request.UserId);
+
+        var editingCourse =
+            await _context.Courses.Include(course => course.Students)
+                .Include(course => course.Times)
+                .Include(course => course.CourseEvents)
+                .Include(course => course.Instructor)
+                .Include(course => course.Polls)
+                .FirstOrDefaultAsync(course => course.CourseId == request.CourseId,
+                    cancellationToken: cancellationToken);
+
+        if (editingCourse == null)
         {
-            _context = context;
-            Localizer = localizer;
+            throw new CustomException(new Error
+            {
+                ErrorType = ErrorType.CourseNotFound,
+                Message = Localizer["CourseNotFound"]
+            });
         }
 
-        public async Task<Unit> Handle(EditCourseCommand request, CancellationToken cancellationToken)
+        if (editingCourse.Instructor != user && user.UserType != UserType.Owner)
         {
-            Instructor user = _context.Instructors.FirstOrDefault(u => u.Id == request.UserId);
+            throw new CustomException(new Error
+            {
+                ErrorType = ErrorType.Unauthorized,
+                Message = Localizer["Unauthorized"]
+            });
+        }
 
-            var editingCourse =
-                await _context.Courses.Include(course => course.Students)
-                    .Include(course => course.Times)
-                    .Include(course => course.CourseEvents)
-                    .Include(course => course.Instructor)
-                    .Include(course => course.Polls)
-                    .FirstOrDefaultAsync(course => course.CourseId == request.CourseId,
-                        cancellationToken: cancellationToken);
-
-            if (editingCourse == null)
+        if (!string.IsNullOrWhiteSpace(request.CourseTypeId))
+        {
+            var courseType = await
+                _context.CourseTypes.FirstOrDefaultAsync(type => type.CourseTypeId == request.CourseTypeId,
+                    cancellationToken);
+            if (courseType == null)
             {
                 throw new CustomException(new Error
                 {
-                    ErrorType = ErrorType.CourseNotFound,
-                    Message = Localizer["CourseNotFound"]
+                    ErrorType = ErrorType.CourseTypeNotFound,
+                    Message = Localizer["CourseTypeNotFound"]
                 });
             }
 
-            if (editingCourse.Instructor != user && user.UserType != UserType.Owner)
+            editingCourse.CourseType = courseType;
+            editingCourse.CourseTypeId = request.CourseTypeId;
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.Address))
+        {
+            editingCourse.Address = request.Address;
+        }
+
+        if (request.EndDate != null)
+        {
+            editingCourse.EndDate = request.EndDate.Value;
+        }
+
+        if (request.AvatarId != null)
+        {
+            var avatar =
+                await _context.Files.FirstOrDefaultAsync(avatar => avatar.Id == request.AvatarId,
+                    cancellationToken);
+            if (avatar == null)
             {
                 throw new CustomException(new Error
                 {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
+                    ErrorType = ErrorType.FileNotFound,
+                    Message = Localizer["FileNotFound"]
                 });
             }
 
-            if (!string.IsNullOrWhiteSpace(request.CourseTypeId))
+            editingCourse.AvatarId = request.AvatarId;
+            editingCourse.Avatar = avatar;
+        }
+
+        if (request.AddStudentDto != null && request.AddStudentDto.StudentIds.Count != 0)
+        {
+            List<Student> addStudents = _context.Students
+                .Include(student => student.Courses)
+                .Where(student => request.AddStudentDto.StudentIds.Contains(student.StudentId) &&
+                                  !student.Courses.Contains(editingCourse)).ToList();
+            if (addStudents.Count != request.AddStudentDto.StudentIds.Count)
             {
-                var courseType = await
-                    _context.CourseTypes.FirstOrDefaultAsync(type => type.CourseTypeId == request.CourseTypeId,
-                        cancellationToken);
-                if (courseType == null)
+                throw new CustomException(new Error
                 {
-                    throw new CustomException(new Error
-                    {
-                        ErrorType = ErrorType.CourseTypeNotFound,
-                        Message = Localizer["CourseTypeNotFound"]
-                    });
-                }
-
-                editingCourse.CourseType = courseType;
-                editingCourse.CourseTypeId = request.CourseTypeId;
+                    ErrorType = ErrorType.StudentNotFound,
+                    Message = Localizer["StudentNotFound"]
+                });
             }
 
-            if (!string.IsNullOrWhiteSpace(request.Address))
+            foreach (var student in addStudents)
             {
-                editingCourse.Address = request.Address;
+                editingCourse.Students.Add(student);
+                NotificationAdder.AddNotification(_context,
+                    Localizer["YouHaveBeenAddedToACourse"],
+                    editingCourse.CourseId, NotificationObjectType.Course, NotificationOperation.AddStudentToCourse,
+                    student);
             }
+        }
 
-            if (request.EndDate != null)
+        if (request.DeleteStudentDto != null && request.DeleteStudentDto.StudentIds.Count != 0)
+        {
+            List<Student> deleteStudents = await _context.Students
+                .Where(student => request.DeleteStudentDto.StudentIds.Contains(student.StudentId)).ToListAsync(cancellationToken);
+            if (deleteStudents.Count != request.DeleteStudentDto.StudentIds.Count)
             {
-                editingCourse.EndDate = request.EndDate.Value;
-            }
-
-            if (request.AvatarId != null)
-            {
-                var avatar =
-                    await _context.Files.FirstOrDefaultAsync(avatar => avatar.Id == request.AvatarId,
-                        cancellationToken);
-                if (avatar == null)
+                throw new CustomException(new Error
                 {
-                    throw new CustomException(new Error
-                    {
-                        ErrorType = ErrorType.FileNotFound,
-                        Message = Localizer["FileNotFound"]
-                    });
-                }
-
-                editingCourse.AvatarId = request.AvatarId;
-                editingCourse.Avatar = avatar;
+                    ErrorType = ErrorType.StudentNotFound,
+                    Message = Localizer["StudentNotFound"]
+                });
             }
-
-            if (request.AddStudentDto != null && request.AddStudentDto.StudentIds.Count != 0)
+            foreach (var student in deleteStudents)
             {
-                List<Student> addStudents = _context.Students
-                    .Include(student => student.Courses)
-                    .Where(student => request.AddStudentDto.StudentIds.Contains(student.StudentId) &&
-                                      !student.Courses.Contains(editingCourse)).ToList();
-                if (addStudents.Count != request.AddStudentDto.StudentIds.Count)
+                if (!editingCourse.Students.Contains(student))
                 {
                     throw new CustomException(new Error
                     {
@@ -121,49 +152,26 @@ namespace Application.Features.Course.Commands.EditCourse
                     });
                 }
 
-                foreach (var student in addStudents)
-                {
-                    editingCourse.Students.Add(student);
-                    NotificationAdder.AddNotification(_context,
-                        Localizer["YouHaveBeenAddedToACourse"],
-                        editingCourse.CourseId, NotificationObjectType.Course, NotificationOperation.AddStudentToCourse,
-                        student);
-                }
+                editingCourse.Students.Remove(student);
             }
-
-            if (request.DeleteStudentDto != null && request.DeleteStudentDto.StudentIds.Count != 0)
-            {
-                List<Student> deleteStudents = await _context.Students
-                    .Where(student => request.DeleteStudentDto.StudentIds.Contains(student.StudentId)).ToListAsync(cancellationToken);
-                if (deleteStudents.Count != request.DeleteStudentDto.StudentIds.Count)
-                {
-                    throw new CustomException(new Error
-                    {
-                        ErrorType = ErrorType.StudentNotFound,
-                        Message = Localizer["StudentNotFound"]
-                    });
-                }
-                foreach (var student in deleteStudents)
-                {
-                    if (!editingCourse.Students.Contains(student))
-                    {
-                        throw new CustomException(new Error
-                        {
-                            ErrorType = ErrorType.StudentNotFound,
-                            Message = Localizer["StudentNotFound"]
-                        });
-                    }
-
-                    editingCourse.Students.Remove(student);
-                }
-            }
+        }
             
-            // delete time
-            if (request.DeleteTimeDto != null && request.DeleteTimeDto.TimeIds.Count != 0)
+        // delete time
+        if (request.DeleteTimeDto != null && request.DeleteTimeDto.TimeIds.Count != 0)
+        {
+            var times = await _context.Times.Where(time => request.DeleteTimeDto.TimeIds.Contains(time.TimeId))
+                .ToListAsync(cancellationToken);
+            if (times.Count != request.DeleteTimeDto.TimeIds.Count)
             {
-                var times = await _context.Times.Where(time => request.DeleteTimeDto.TimeIds.Contains(time.TimeId))
-                    .ToListAsync(cancellationToken);
-                if (times.Count != request.DeleteTimeDto.TimeIds.Count)
+                throw new CustomException(new Error
+                {
+                    ErrorType = ErrorType.TimeNotFound,
+                    Message = Localizer["TimeNotFound"]
+                });
+            }
+            foreach (var time in times)
+            {
+                if (!editingCourse.Times.Contains(time))
                 {
                     throw new CustomException(new Error
                     {
@@ -171,65 +179,54 @@ namespace Application.Features.Course.Commands.EditCourse
                         Message = Localizer["TimeNotFound"]
                     });
                 }
-                foreach (var time in times)
-                {
-                    if (!editingCourse.Times.Contains(time))
-                    {
-                        throw new CustomException(new Error
-                        {
-                            ErrorType = ErrorType.TimeNotFound,
-                            Message = Localizer["TimeNotFound"]
-                        });
-                    }
                     
-                    editingCourse.Times.Remove(time);
-                }
+                editingCourse.Times.Remove(time);
             }
+        }
 
-            // add time
-            if (request.AddTimeDtos != null && request.AddTimeDtos.Count != 0)
+        // add time
+        if (request.AddTimeDtos != null && request.AddTimeDtos.Count != 0)
+        {
+            foreach (var addTimeDto in request.AddTimeDtos)
             {
-                foreach (var addTimeDto in request.AddTimeDtos)
+                string[] startTime = addTimeDto.StartTime.Split("-");
+                string[] endTime = addTimeDto.EndTime.Split("-");
+                editingCourse.Times.Add(new Domain.Models.Time
                 {
-                    string[] startTime = addTimeDto.StartTime.Split("-");
-                    string[] endTime = addTimeDto.EndTime.Split("-");
-                    editingCourse.Times.Add(new Domain.Models.Time
+                    Course = editingCourse,
+                    CourseId = editingCourse.CourseId,
+                    WeekDay = addTimeDto.WeekDay,
+                    StartTime = new DateTime(2000, 12, 25, Int32.Parse(startTime[0]),
+                        Int32.Parse(startTime[1]), 0),
+                    EndTime = new DateTime(2000, 12, 25, Int32.Parse(endTime[0]),
+                        Int32.Parse(endTime[1]), 0)
+                });
+            }
+        }
+
+        foreach (var timei in editingCourse.Times)
+        {
+            foreach (var timej in editingCourse.Times)
+            {
+                if (timei.Equals(timej))
+                {
+                    continue;
+                }
+
+                if ((timei.WeekDay == timej.WeekDay) &&
+                    ((timei.StartTime < timej.StartTime && timei.EndTime > timej.StartTime) ||
+                     (timei.EndTime > timej.EndTime && timei.StartTime < timej.EndTime)))
+                {
+                    throw new CustomException(new Error
                     {
-                        Course = editingCourse,
-                        CourseId = editingCourse.CourseId,
-                        WeekDay = addTimeDto.WeekDay,
-                        StartTime = new DateTime(2000, 12, 25, Int32.Parse(startTime[0]),
-                            Int32.Parse(startTime[1]), 0),
-                        EndTime = new DateTime(2000, 12, 25, Int32.Parse(endTime[0]),
-                            Int32.Parse(endTime[1]), 0)
+                        ErrorType = ErrorType.TimeConflict,
+                        Message = Localizer["TimeConflict"]
                     });
                 }
             }
-
-            foreach (var timei in editingCourse.Times)
-            {
-                foreach (var timej in editingCourse.Times)
-                {
-                    if (timei.Equals(timej))
-                    {
-                        continue;
-                    }
-
-                    if ((timei.WeekDay == timej.WeekDay) &&
-                        ((timei.StartTime < timej.StartTime && timei.EndTime > timej.StartTime) ||
-                         (timei.EndTime > timej.EndTime && timei.StartTime < timej.EndTime)))
-                    {
-                        throw new CustomException(new Error
-                        {
-                            ErrorType = ErrorType.TimeConflict,
-                            Message = Localizer["TimeConflict"]
-                        });
-                    }
-                }
-            }
-
-            await _context.SaveChangesAsync(cancellationToken);
-            return Unit.Value;
         }
+
+        await _context.SaveChangesAsync(cancellationToken);
+        return Unit.Value;
     }
 }

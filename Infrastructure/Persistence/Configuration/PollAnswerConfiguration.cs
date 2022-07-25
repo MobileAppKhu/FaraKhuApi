@@ -2,24 +2,23 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Persistence.Configuration
+namespace Infrastructure.Persistence.Configuration;
+
+public class PollAnswerConfiguration : IEntityTypeConfiguration<PollAnswer>
 {
-    public class PollAnswerConfiguration : IEntityTypeConfiguration<PollAnswer>
+    public void Configure(EntityTypeBuilder<PollAnswer> builder)
     {
-        public void Configure(EntityTypeBuilder<PollAnswer> builder)
-        {
-            builder.HasKey(answer => answer.AnswerId);
-            builder.Property(answer => answer.AnswerId).ValueGeneratedOnAdd();
-            builder.HasOne(answer => answer.Question)
-                .WithMany(question => question.Answers)
-                .HasForeignKey(answer => answer.QuestionId);
-            builder.HasMany(answer => answer.Voters)
-                .WithMany(student => student.PollAnswers);
-            builder.Property(answer => answer.CreatedDate).HasDefaultValueSql("now() at time zone 'utc'")
-                .ValueGeneratedOnAdd();
-            builder.Property(answer => answer.LastModifiedDate)
-                .HasDefaultValueSql("now() at time zone 'utc'")
-                .ValueGeneratedOnAddOrUpdate();
-        }
+        builder.HasKey(answer => answer.AnswerId);
+        builder.Property(answer => answer.AnswerId).ValueGeneratedOnAdd();
+        builder.HasOne(answer => answer.Question)
+            .WithMany(question => question.Answers)
+            .HasForeignKey(answer => answer.QuestionId);
+        builder.HasMany(answer => answer.Voters)
+            .WithMany(student => student.PollAnswers);
+        builder.Property(answer => answer.CreatedDate).HasDefaultValueSql("now() at time zone 'utc'")
+            .ValueGeneratedOnAdd();
+        builder.Property(answer => answer.LastModifiedDate)
+            .HasDefaultValueSql("now() at time zone 'utc'")
+            .ValueGeneratedOnAddOrUpdate();
     }
 }

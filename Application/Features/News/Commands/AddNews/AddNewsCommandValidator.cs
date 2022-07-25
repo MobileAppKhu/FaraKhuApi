@@ -2,18 +2,17 @@
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.News.Commands.AddNews
+namespace Application.Features.News.Commands.AddNews;
+
+public class AddNewsCommandValidator : AbstractValidator<AddNewsCommand>
 {
-    public class AddNewsCommandValidator : AbstractValidator<AddNewsCommand>
+    public AddNewsCommandValidator(IStringLocalizer<SharedResource> localizer)
     {
-        public AddNewsCommandValidator(IStringLocalizer<SharedResource> localizer)
-        {
-            RuleFor(r => r.Title)
-                .NotEmpty()
-                .WithMessage(localizer["EmptyInput"]);
-            RuleFor(r => r.Description)
-                .NotEmpty()
-                .WithMessage(localizer["EmptyInput"]);
-        }
+        RuleFor(r => r.Title)
+            .NotEmpty()
+            .WithMessage(localizer["EmptyInput"]);
+        RuleFor(r => r.Description)
+            .NotEmpty()
+            .WithMessage(localizer["EmptyInput"]);
     }
 }

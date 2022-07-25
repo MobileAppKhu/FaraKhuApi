@@ -2,15 +2,14 @@
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Notification.Commands.DeleteNotification
+namespace Application.Features.Notification.Commands.DeleteNotification;
+
+public class DeleteNotificationCommandValidator : AbstractValidator<DeleteNotificationCommand>
 {
-    public class DeleteNotificationCommandValidator : AbstractValidator<DeleteNotificationCommand>
+    public DeleteNotificationCommandValidator(IStringLocalizer<SharedResource> localizer)
     {
-        public DeleteNotificationCommandValidator(IStringLocalizer<SharedResource> localizer)
-        {
-            RuleFor(r => r.NotificationId)
-                .NotEmpty()
-                .WithMessage("NotEmpty");
-        }
+        RuleFor(r => r.NotificationId)
+            .NotEmpty()
+            .WithMessage("NotEmpty");
     }
 }

@@ -1,9 +1,8 @@
 ﻿using Application.DTOs.Course;
 
-namespace Application.Features.Course.Commands.AddCourse
+namespace Application.Features.Course.Commands.AddCourse;
+
+public class AddCourseViewModel
 {
-    public class AddCourseViewModel
-    {
-        public SearchCourseDto Course { get; set; }
-    }
+    public SearchCourseDto Course { get; set; }
 }

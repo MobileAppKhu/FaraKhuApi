@@ -1,11 +1,10 @@
-﻿namespace Domain.Enum
+﻿namespace Domain.Enum;
+
+public enum EventColumn
 {
-    public enum EventColumn
-    {
-        EventId = 1,
-        EventName = 2,
-        EventDescription = 3,
-        EventTime = 4,
-        CreationDate = 5
-    }
+    EventId = 1,
+    EventName = 2,
+    EventDescription = 3,
+    EventTime = 4,
+    CreationDate = 5
 }

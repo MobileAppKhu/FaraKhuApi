@@ -1,7 +1,6 @@
-﻿namespace Application.Features.User.Queries.GetUserId
+﻿namespace Application.Features.User.Queries.GetUserId;
+
+public class GetUserViewModel
 {
-    public class GetUserViewModel
-    {
-        public string UserId { get; set; }
-    }
+    public string UserId { get; set; }
 }

@@ -1,6 +1,5 @@
-﻿namespace Application.Resources
+﻿namespace Application.Resources;
+
+public class SharedResource
 {
-    public class SharedResource
-    {
-    }
 }

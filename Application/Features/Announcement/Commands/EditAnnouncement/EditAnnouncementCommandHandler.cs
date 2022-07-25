@@ -3,80 +3,78 @@ using System.Threading.Tasks;
 using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Resources;
-using AutoMapper;
 using Domain.BaseModels;
 using Domain.Enum;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Announcement.Commands.EditAnnouncement
+namespace Application.Features.Announcement.Commands.EditAnnouncement;
+
+public class EditAnnouncementCommandHandler : IRequestHandler<EditAnnouncementCommand>
 {
-    public class EditAnnouncementCommandHandler : IRequestHandler<EditAnnouncementCommand>
+    private readonly IDatabaseContext _context;
+    private IStringLocalizer<SharedResource> Localizer { get; }
+
+    public EditAnnouncementCommandHandler(IStringLocalizer<SharedResource> localizer
+        , IDatabaseContext context)
     {
-        private readonly IDatabaseContext _context;
-        private IStringLocalizer<SharedResource> Localizer { get; }
+        _context = context;
+        Localizer = localizer;
+    }
 
-        public EditAnnouncementCommandHandler(IStringLocalizer<SharedResource> localizer
-            , IDatabaseContext context)
+    public async Task<Unit> Handle(EditAnnouncementCommand request, CancellationToken cancellationToken)
+    {
+        var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == request.UserId,
+            cancellationToken);
+
+        var editingAnnouncement = await _context.Announcements.FirstOrDefaultAsync(
+            announcement => announcement.AnnouncementId == request.AnnouncementId, cancellationToken);
+        if (editingAnnouncement == null)
         {
-            _context = context;
-            Localizer = localizer;
+            throw new CustomException(new Error
+            {
+                ErrorType = ErrorType.AnnouncementNotFound,
+                Message = Localizer["AnnouncementNotFound"]
+            });
         }
 
-        public async Task<Unit> Handle(EditAnnouncementCommand request, CancellationToken cancellationToken)
+        if (user.UserType != UserType.Owner && editingAnnouncement.UserId != user.Id)
         {
-            var user = await _context.BaseUsers.FirstOrDefaultAsync(baseUser => baseUser.Id == request.UserId,
-                cancellationToken);
+            throw new CustomException(new Error
+            {
+                ErrorType = ErrorType.Unauthorized,
+                Message = Localizer["Unauthorized"]
+            });
+        }
 
-            var editingAnnouncement = await _context.Announcements.FirstOrDefaultAsync(
-                announcement => announcement.AnnouncementId == request.AnnouncementId, cancellationToken);
-            if (editingAnnouncement == null)
+        if (!string.IsNullOrWhiteSpace(request.Description))
+        {
+            editingAnnouncement.AnnouncementDescription = request.Description;
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.Title))
+        {
+            editingAnnouncement.AnnouncementTitle = request.Title;
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.AvatarId))
+        {
+            var avatar = await
+                _context.Files.FirstOrDefaultAsync(entity => entity.Id == request.AvatarId, cancellationToken);
+            if (avatar == null)
             {
                 throw new CustomException(new Error
                 {
-                    ErrorType = ErrorType.AnnouncementNotFound,
-                    Message = Localizer["AnnouncementNotFound"]
+                    ErrorType = ErrorType.FileNotFound,
+                    Message = Localizer["FileNotFound"]
                 });
             }
-
-            if (user.UserType != UserType.Owner && editingAnnouncement.UserId != user.Id)
-            {
-                throw new CustomException(new Error
-                {
-                    ErrorType = ErrorType.Unauthorized,
-                    Message = Localizer["Unauthorized"]
-                });
-            }
-
-            if (!string.IsNullOrWhiteSpace(request.Description))
-            {
-                editingAnnouncement.AnnouncementDescription = request.Description;
-            }
-
-            if (!string.IsNullOrWhiteSpace(request.Title))
-            {
-                editingAnnouncement.AnnouncementTitle = request.Title;
-            }
-
-            if (!string.IsNullOrWhiteSpace(request.AvatarId))
-            {
-                var avatar = await
-                    _context.Files.FirstOrDefaultAsync(entity => entity.Id == request.AvatarId, cancellationToken);
-                if (avatar == null)
-                {
-                    throw new CustomException(new Error
-                    {
-                        ErrorType = ErrorType.FileNotFound,
-                        Message = Localizer["FileNotFound"]
-                    });
-                }
-                editingAnnouncement.Avatar = avatar;
-                editingAnnouncement.AvatarId = request.AvatarId;
-            }
-
-            await _context.SaveChangesAsync(cancellationToken);
-            return Unit.Value;
+            editingAnnouncement.Avatar = avatar;
+            editingAnnouncement.AvatarId = request.AvatarId;
         }
+
+        await _context.SaveChangesAsync(cancellationToken);
+        return Unit.Value;
     }
 }

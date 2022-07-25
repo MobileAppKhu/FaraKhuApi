@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Application.DTOs.Time
+namespace Application.DTOs.Time;
+
+public class DeleteTimeDto
 {
-    public class DeleteTimeDto
-    {
-        public List<string> TimeIds { get; set; }
-    }
+    public List<string> TimeIds { get; set; }
 }

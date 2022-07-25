@@ -1,9 +1,8 @@
 ﻿using Application.DTOs.User;
 
-namespace Application.Features.User.Commands.AddUser
+namespace Application.Features.User.Commands.AddUser;
+
+public class AddUserViewModel
 {
-    public class AddUserViewModel
-    {
-        public ProfileDto ProfileDto { get; set; }
-    }
+    public ProfileDto ProfileDto { get; set; }
 }

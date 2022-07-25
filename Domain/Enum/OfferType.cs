@@ -1,8 +1,7 @@
-﻿namespace Domain.Enum
+﻿namespace Domain.Enum;
+
+public enum OfferType
 {
-    public enum OfferType
-    {
-        Buy = 1,
-        Sell = 2
-    }
+    Buy = 1,
+    Sell = 2
 }

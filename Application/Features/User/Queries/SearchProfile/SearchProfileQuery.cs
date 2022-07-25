@@ -1,9 +1,8 @@
 ﻿using MediatR;
 
-namespace Application.Features.User.Queries.SearchProfile
+namespace Application.Features.User.Queries.SearchProfile;
+
+public class SearchProfileQuery : IRequest<SearchProfileViewModel>
 {
-    public class SearchProfileQuery : IRequest<SearchProfileViewModel>
-    {
-        public string UserId { get; set; }
-    }
+    public string UserId { get; set; }
 }

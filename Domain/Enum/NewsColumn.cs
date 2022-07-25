@@ -1,10 +1,9 @@
-﻿namespace Domain.Enum
+﻿namespace Domain.Enum;
+
+public enum NewsColumn
 {
-    public enum NewsColumn
-    {
-        NewsId = 1,
-        Title = 2,
-        Description = 3,
-        CreationDate = 4
-    }
+    NewsId = 1,
+    Title = 2,
+    Description = 3,
+    CreationDate = 4
 }

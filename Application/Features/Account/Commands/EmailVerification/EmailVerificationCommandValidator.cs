@@ -3,17 +3,16 @@ using Application.Utilities;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 
-namespace Application.Features.Account.Commands.EmailVerification
+namespace Application.Features.Account.Commands.EmailVerification;
+
+public class EmailVerificationCommandValidator : AbstractValidator<EmailVerificationCommand>
 {
-    public class EmailVerificationCommandValidator : AbstractValidator<EmailVerificationCommand>
+    public EmailVerificationCommandValidator(IStringLocalizer<SharedResource> localizer)
     {
-        public EmailVerificationCommandValidator(IStringLocalizer<SharedResource> localizer)
-        {
-            RuleFor(r => r.Email)
-                .NotEmpty()
-                .WithMessage(localizer["EmptyInput"])
-                .Must(e => e.IsEmail())
-                .WithMessage(localizer["InvalidEmail"]);
-        }
+        RuleFor(r => r.Email)
+            .NotEmpty()
+            .WithMessage(localizer["EmptyInput"])
+            .Must(e => e.IsEmail())
+            .WithMessage(localizer["InvalidEmail"]);
     }
 }

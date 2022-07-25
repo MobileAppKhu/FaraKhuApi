@@ -1,9 +1,8 @@
 ﻿using Domain.Models;
 
-namespace Application.Features.News.Commands.AddComment
+namespace Application.Features.News.Commands.AddComment;
+
+public class AddCommentViewModel
 {
-    public class AddCommentViewModel
-    {
-        public Comment Comment { get; set; }
-    }
+    public Comment Comment { get; set; }
 }
